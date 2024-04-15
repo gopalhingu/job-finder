@@ -1,0 +1,147 @@
+.job-board-box-body {padding: 0px !important;}
+.job-board-main-container {margin-right:0px !important; margin-left:0px !important;}
+.job-board-inner-container {width: 100%; min-height: 800px !important;}
+.job-board-top{background: #ecf0f5; min-height: 200px; padding: 10px; margin: 0px 0px 10px 0px; border: 1px solid #e2e2e2;}
+.job-board-filters-heading {padding: 5px 12px; margin: -5px 0px; background: #3c8dbc; color: white;}
+/*******************************
+* Job Board Left Styles
+*******************************/
+.job-board-left-container {border-right: 1px solid #e6e6e6; padding: 0px;}
+.job-board-left{max-height: 560px; padding: 10px; margin: 0px; overflow-x: hidden;}
+.job-board-left-top {background:white;  min-height: 131px;}
+.job-board-left-top-heading {}
+.job-board-left-jobs-container {position: relative; padding: 0px 5px 15px 15px; border-bottom: 1px solid #e6e6e6;}
+.job-board-job-filter {margin-top: -5px; position: absolute;}
+.job-board-job-filter .dropdown-menu {padding: 0px !important;}
+.job-board-job-filter .form-group {margin-bottom: 0px !important;}
+.job-board-job-filter label {margin-bottom: 0px !important;}
+.job-board-job-filter .form-control {height: 24px !important; padding: 0px 6px !important; font-size:12px !important;}
+.job-board-job-search {width: 85%; border-top: 0px; border-right: 0px; border-left: 0px; float: left; margin-left: -5px;}
+.job-board-jobs-pagination {position: absolute; top:25px; right: 8px;}
+.job-board-jobs-perpage-btn {margin-right: 5px;}
+/*******************************
+* Job Board Right Styles
+*******************************/
+.job-board-right-container{padding: 0px;}
+.job-board-right {min-height: 20px; padding: 10px; margin: 0px;}
+.job-board-right-controls {border-bottom: 1px solid #e6e6e6; padding: 0px 0px 10px 10px; margin: 0px;}
+.job-board-right-controls-inner {width: 100%; padding: 0px;}
+.job-board-candidate-filter {margin-top: -5px;}
+.job-board-candidate-filter ul {margin-left: -140px; width: 250px;}
+.job-board-candidate-filter .form-group {margin-bottom: 0px !important; }
+.job-board-candidate-filter label {margin-bottom: 0px !important; }
+.job-board-candidate-filter .form-control {height: 24px !important; padding: 0px 6px !important; font-size:12px !important;}
+.job-board-candidate-search {width: 75%; border-top: 0px; border-right: 0px; border-left: 0px; float: left;}
+.job-board-job-wrap {background: #f4f4f4; border: 1px solid gainsboro; padding: 10px; margin-bottom: 10px; border-left: 3px solid #dd4b39;}
+.job-board-job-wrap-active {background: #d6d6d6; }
+.job-board-job-title {cursor: pointer;}
+.job-board-job-wrap h3 {padding: 7px; margin: 0px; font-size: 18px; font-weight: bold; background: #f9fafc; border: 1px solid #afafaf; margin-bottom: 10px;}
+.job-board-job-item {padding: 2px; margin: 2px 0px; display: inline-block; color: white; border: 1px solid #a5a5a5; font-size: 10px; line-height: 1.5em; cursor: pointer;}
+.job-board-job-item-blue {background: #3c8dbc;}
+.job-board-job-item-green {background: #00C875;}
+.job-board-job-item-red {background: #dd4b39;}
+.job-board-job-item-yellow {background: #fdab3d;}
+.job-board-job-item-green {background: #00C875;}
+.job-board-job-item-maroon {background: #D81B60;}
+.job-board-job-item-general {background: #009aff;}
+.job-board-job-item-separator-line {height: 1px; background: #dd4b39; margin-top: 5px !important; margin-bottom: 5px !important; display: block;}
+.job-board-candidate-wrap {background: #f4f4f4; border: 1px solid gainsboro; margin-bottom: 10px; border-left: 3px solid #dd4b39; overflow: auto;}
+.job-board-candidate-wrap-not {padding: 15px 0px 5px 15px; font-size: 20px;}
+.loader-div {margin-bottom: 10px; overflow: auto; text-align: center; font-size: 100px;}
+.job-board-candidate-wrap-active {background: #d6d6d6;}
+.job-board-candidate-profile {padding: 2px; position: relative;}
+.job-board-candidate-self {border-left: 2px solid white; padding: 2px; position: relative;}
+.job-board-candidate-quiz {border-left: 2px solid white; padding: 2px; position: relative;}
+.job-board-candidate-interview {border-left: 2px solid white; padding: 2px; position: relative;}
+.job-board-candidate-overall {border-left: 2px solid white; padding: 2px; position: relative;}
+.job-board-candidate-profile-heading {padding: 0px 0px 0px 5px; margin: 0px;}
+.job-board-candidate-self-heading {padding: 0px 0px 0px 5px; margin: 0px; background: #009aff; color: white; font-weight: bold;}
+.job-board-candidate-quiz-heading {padding: 0px 0px 0px 5px; margin: 0px; background: #009aff; color: white; font-weight: bold;}
+.job-board-candidate-interview-heading {padding: 0px 0px 0px 5px; margin: 0px; background: #009aff; color: white; font-weight: bold;}
+.job-board-candidate-overall-heading {padding: 0px 0px 0px 5px; margin: 0px; background: #00c875; color: white; font-weight: bold; text-align: center;}
+.job-board-candidate-overall-result {font-size: 20px; text-align: center; margin-top: 16px;}
+.assign-additional {position: absolute; right: 5px; top: 5px; cursor: pointer;}
+.job-board-candidate-item-list {list-style: none; padding: 0px; margin: 0px; height: 96px; overflow-x: hidden;}
+.job-board-candidate-item-list li {display: block; background: #f9fafc; border: 1px solid #d4d4d4; margin: 2px; padding: 2px;}
+.job-board-candidate-avatar {width: 85px; border-radius: 45px; background: #00c0ef; padding: 2px; margin: 13px 15px; cursor: pointer;}
+.job-board-candidate-name {margin: 0px; font-size: 25px; cursor: pointer;}
+.job-board-candidate-profile-right {padding: 0px;}
+.job-board-candidate-profile-item {margin: 0px;}
+.job-board-candidate-left .icheckbox_minimal-blue {position: absolute;}
+.job-board-candidate-pagination {position: absolute; top:25px; right: 30px;}
+.job-board-candidate-perpage-btn {margin-right: 5px;}
+.job-board-candidate-status {font-size: 12px; font-size: 12px; padding: 2px 4px; color: white; border-radius: 4px;}
+.job-board-candidate-applied {background: #fdab3d;}
+.job-board-candidate-hired {background: #00c875;}
+.job-board-candidate-interviewed {background: #fdab3d;}
+.job-board-candidate-rejected {background: #dd4b39;}
+.job-board-candidate-shortlisted {background: #fdab3d;}
+/*******************************
+* Resume View Styles
+*******************************/
+.circles-content-element {margin: 23px 0px 0px 10px; overflow: auto; overflow-y: hidden; padding-top: 10px;}
+.circles-list ol {list-style-type: none; margin-left: 1.25em; padding-left: 2.5em; counter-reset: li-counter;
+  border-left: 1px solid #367FA9; position: relative;}
+.circles-list ol > li {position: relative; margin-bottom: 3.125em; clear: both; }
+.circles-list ol > li:before {
+    position: absolute;
+    top: 0em;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    left: -3.75em;
+    width: 2.25em;
+    height: 2.25em;
+    line-height: 2.25em;
+    text-align: center;
+    z-index: 9;
+    color: white;
+    border: 2px solid #367FA9;
+    border-radius: 50%;
+    content: counter(li-counter);
+    background-color: #367FA9;
+    counter-increment: li-counter; 
+}
+.circles-list ol > li:last-child:after {
+    position: absolute;
+    bottom: 0;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    left: -3.15em;
+    width: 1.25em;
+    height: 1.25em;
+    line-height: 1.25em;
+    text-align: center;
+    z-index: 9;
+    color: #dd4b39;
+    border: 2px solid #dd4b39;
+    border-radius: 50%;
+    content: counter(li-counter);
+    background-color: #dd4b39;
+    counter-increment: li-counter;
+}
+.job-board-resume-section-title {font-size: 22px;}
+.job-board-resume-job-duration {font-size: 12px;}
+.job-board-resume-job-description {font-size: 14px;}
+.job-board-resume-job-title {font-size: 18px;}
+.delete-candidate-quiz, .delete-candidate-interview {cursor: pointer;}
+.job-board-resume-item {display: inline-block; background: #fdab3d; padding: 2px; border-radius: 3px; color: white; border: 1px solid #a5a5a5; cursor: pointer;}
+@media (max-width: 768px) {
+  .job-board-jobs-pagination {margin-top: -15px !important;}
+  .job-board-candidate-pagination {top:-60px !important;}
+  .job-board-left {max-height:148px !important; overflow-x:hidden; min-height: 148px !important;}
+  .job-board-candidate-search {margin-top: 10px !important;}
+  .job-board-candidate-filter {margin-top: 5px !important;}
+}
+@media (max-width: 360px) {
+  .job-board-jobs-pagination {margin-top: -15px !important;}
+  .job-board-candidate-pagination {top:-30px !important;}
+  .job-board-left {max-height: 148px !important; overflow-x: hidden; min-height: 148px !important; clear: both;}
+  .job-board-candidate-search {margin-top: 10px !important;}
+  .job-board-candidate-filter {margin-top: 5px !important;}
+}
+@media (max-width: 640px) {
+  .job-board-candidate-search {margin-top: 10px !important;}
+  .job-board-candidate-filter {margin-top: 5px !important;}
+}

@@ -1,0 +1,10 @@
+:root {
+--body-bg:#FBFBFB;
+--main-menu-bg:#FBFBFB;
+--main-menu-font-color:#484848;
+--main-menu-font-highlight-color:#286EFB;
+--main-banner-bg:#FBFBFB;
+--main-banner-height:500px;
+--breadcrumb-image:url(http://127.0.0.1:3036/uploads/identities/site-breadcrumb-image.png);
+--main-banner:url(http://127.0.0.1:3036/uploads/identities/site-banner.png);
+}

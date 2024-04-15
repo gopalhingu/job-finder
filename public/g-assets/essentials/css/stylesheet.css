@@ -1,0 +1,63 @@
+body{margin:0px; padding:0px; font-family: 'ProximaNova-Regular'; overflow-x:hidden;}
+h1,h2,h3,h4,h5,h6{ margin:0px; padding:0px; font-weight:normal;}
+p{ margin:0px; padding:0px;}
+a{ text-decoration:none; -webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	-o-transition: all 0.3s linear;
+	-ms-transition: all 0.3s linear;
+	transition: all 0.3s linear;}
+.btn{ -webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	-o-transition: all 0.3s linear;
+	-ms-transition: all 0.3s linear;
+	transition: all 0.3s linear; }
+a:hover, a:focus, a:active{ outline:none; text-decoration:none;}
+input:hover, input:focus, input:active{ outline:none;}
+ul{ margin:0px; padding:0px;}
+ul li{ list-style-type:none;}
+img{ border:0px; -webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	-o-transition: all 0.3s linear;
+	-ms-transition: all 0.3s linear;
+	transition: all 0.3s linear;}
+:before, :after{ -webkit-transition: all 0.3s linear; -moz-transition: all 0.3s linear; -o-transition: all 0.3s linear; -ms-transition: all 0.3s linear; transition: all 0.3s linear;}
+.pull-left{ float:left;}
+.pull-right{ float:right;}
+.clearfix{ clear:both; overflow:hidden;}
+.container{ max-width:1200px;}
+.btn:focus, .btn.focus{ box-shadow:0 0 0 0rem rgba(0, 0, 0, 0);}
+.large-box-hp{ border-radius:4px; overflow:hidden;}
+.img-box-hp{ position:relative;}
+.img-box-hp img{ width:100%;}
+.overlay-box-hp{ position:absolute; top:0; left:0; width:100%; height:100%; background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); }
+.text-box-hp{ position:absolute; bottom:0px; left:0px; width:100%; padding:30px; }
+.text-box-title-hp{ font-family: 'proximanova-semibold'; font-size:24px; line-height:28px; color:#fff; padding-bottom:20px; }
+.text-box-content-hp{ font-family: 'proximanova-light'; font-size:16px; line-height:26px; color:#fff; }
+.install-block-lp{ padding:30px 0; }
+.install-block-in-lp{}
+.install-box-lp{ width:100%; max-width:730px; margin:auto; background:#fff; border-radius:13px; box-shadow:0px 0px 40px rgba(0,0,0,0.11); padding:20px 0px 20px 0px; }
+.install-box-in-lp{ width:100%; max-width:436px; margin:auto; }
+.install-title-lp{ text-align:center; font-size:17px; color:#141414;}
+.install-input-lp{ width:100%; padding-top:40px;}
+.install-input-lp input{ height:46px; border:0px; border-bottom:3px solid #1D3352; width:100%; font-size:16px; color:#565656; -webkit-transition: all 0.3s linear; -moz-transition: all 0.3s linear; -o-transition: all 0.3s linear; -ms-transition: all 0.3s linear; transition: all 0.3s linear; }
+.install-input-lp input:focus, .install-input-lp input:active, .install-input-lp input:hover{ border-bottom:3px solid #56C7FF;}
+.install-checkbox-lp{ padding:36px 0;}
+.install-checkbox-lp .custom-control-label::after{ width:20px; height:20px; border:2px solid #1D3352; border-radius:3px; left:0px; top:0; }
+.install-checkbox-lp .custom-control-label::before{ border:0px; width:12px; height:12px; top:4px; left:4px; border-radius:2px; box-shadow:0px 0px 0px;  }
+.install-checkbox-lp .custom-control-input:checked~.custom-control-label::before{ background:#1D3352; box-shadow:0px 0px 0px; }
+.install-checkbox-lp .custom-control-label{ padding-left:36px; line-height:20px; font-size:15px; color:#0E1724; cursor:pointer; }
+.install-btn-lp{ text-align:center; }
+.btn-common{ height:50px; line-height:50px; border:0px; text-align:center; color:#fff; background:#1D3352; width:100%; display:block; border-radius:3px; font-size:16px; font-family: 'proximanova-semibold'; -webkit-transition: all 0.3s linear; -moz-transition: all 0.3s linear; -o-transition: all 0.3s linear; -ms-transition: all 0.3s linear; transition: all 0.3s linear;  }
+.btn-common:hover{ background:#56C7FF; }
+.install-other-btn-lp{ padding-top:36px;}
+.install-with-btn-lp{ text-align:center; }
+.install-with-btn-lp img{ height:20px; padding-right:10px;}
+.install-with-btn-lp a:hover{ border:2px solid #1D3352; }
+.errors-container .close {display: none;}
+.requirement-heading {font-size: 30px;}
+.requirement-label {font-size: 22px; margin:10px 0px;}
+.requirement-info-text {font-size: 16px; margin-left: 25px; display: block;}
+.error {background: red; border-radius: 5px; margin: 5px; color: white; font-weight: bold; padding: 5px;}
+.success {background: green; border-radius: 5px; margin: 5px; color: white; font-weight: bold; padding: 5px;}
+.admin-user-install-form .form-group{margin-bottom: 10px;}
+.database-form .form-group{margin-bottom: 10px;}

@@ -1,0 +1,37 @@
+.pattern-dots {background-image: radial-gradient(var(--site-btn-highlight-bg) 2px,transparent 2.5px); opacity: 0.5; background-size: 0.75rem 0.75rem;
+    width: 6rem!important; height: 7rem!important;}
+.pattern-lines {opacity: .5; width: 6rem!important; height: 6rem!important;
+    background-image: repeating-linear-gradient(-55deg,rgba(255,255,255,0) 0.8px,var(--site-btn-bg) 1.6px,var(--site-btn-highlight-bg) 3px,rgba(255,255,255,0) 3.8px,rgba(255,255,255,0) 10px);}
+
+.pattern-triangle {position: relative; background-color: var(--site-btn-bg); text-align: left; opacity: 0.8;}
+.pattern-triangle:before, .pattern-triangle:after {content: ''; position: absolute; background-color: inherit;}
+.pattern-triangle, .pattern-triangle:before, .pattern-triangle:after {width:  6em; height: 6em; border-top-right-radius: 30%;}
+.pattern-triangle {transform: rotate(-133deg) skewX(-30deg) scale(1,.866);}
+.pattern-triangle:before {transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);}
+.pattern-triangle:after {transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);}
+
+.pattern-flares {width: 200px; height: 200px; border: 0px solid; opacity: 0.5; transform: rotate(-128deg);
+    background: 
+        radial-gradient(farthest-side,#ccf2f6 90%,transparent) 43px 63px/100px 100px, 
+        radial-gradient(farthest-side,#f1b1b5 90%,transparent) 48px 25px/80px 80px; 
+    background-repeat: no-repeat;
+}
+
+.pattern-hexagone {display:inline-block; width:160px; color:var(--site-btn-bg); margin:20px; filter:url(#round);}
+.pattern-hexagone::before {content:""; display:block; padding-top:86.6%; background:currentColor; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);}
+
+.pattern-triangle-image {display:inline-block; width:150px; color:red; margin:20px; filter:url(#round);}
+.pattern-triangle-image::before {content:""; display:block; padding-top:86.6%; background:url(https://picsum.photos/id/1061/300/300) center/cover;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);}
+
+.pattern-star {display:inline-block; width:160px; filter:url(#round);}
+.pattern-star::before {content:""; display:block; padding-top:100%; background:var(--site-btn-bg);
+   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);}
+
+.pattern-arrow {display:inline-block; width:150px; color:red; margin:20px; filter:url(#round);}
+.pattern-arrow::before {content:""; display:block; padding-top:70%; background:var(--site-btn-bg);
+   clip-path: polygon(40% 0%, 40% 40%, 100% 40%, 100% 60%, 40% 60%, 40% 100%, 0% 50%);}
+
+.pattern-pacman {display:inline-block; width:150px; color:red; margin:20px; filter:url(#round);}
+.pattern-pacman::before {content:""; display:block; padding-top:100%; background: conic-gradient(at 53% 47%, #d8e5f8,#ccf2f6,#f8d8da);
+   clip-path: polygon(50% 0%, 50% 50%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);}

@@ -1,0 +1,16 @@
+/*******************************
+* Questions Bank Left Styles
+*******************************/
+.question-bank-question-filter {margin-top: 15px; position: absolute;}
+.question-bank-question-filter .form-group {margin-bottom: 0px !important;}
+.question-bank-question-filter label {margin-bottom: 0px !important;}
+.question-bank-question-filter .form-control {height: 24px !important; padding: 0px 6px !important; font-size:12px !important;}
+.question-bank-question-search {margin-top: 20px; width: 85%; border-top: 0px; border-right: 0px; border-left: 0px; float: left; margin-left: -5px;}
+.question-bank-filters-heading {padding: 5px 12px; margin: 0px; background: #3c8dbc; color: white;}
+.quiz-page-question-bank-title {}
+.quiz-page-quizes-title {}
+.add-question-btn {margin-top: -2px;}
+.clone-quiz-btn {margin-top: -2px;}
+.add-quiz-btn {margin-top: -2px;}
+.quiz-page-question-bank-pagination {margin-top: -1px;}
+.quiz-page-quiz-select-group {margin-top: 19px;}

@@ -1,0 +1,150 @@
+/*------------------------------*/
+/*      Menu and header styles  */
+/*------------------------------*/
+
+.navbar-main {direction: rtl;}
+.navbar-main a {text-align: right;}
+.navbar-main .dropdown-menu {text-align: right;}
+.navbar-main ul li ul li ul {left: 10px !important;}
+.navbar-main .fa-chevron-right {right: unset; left: 10px; transform: rotate(180deg);}
+
+.navbar-left .dropdown .dropdown-menu {left: -84px !important;}
+.navbar-left .dropdown .dropdown .dropdown-menu {left: -180px !important;}
+.navbar-left .dropdown .flag-menu {left: -62px !important;}
+.navbar-left {margin-left: auto!important;}
+
+.navbar-right .dropdown .dropdown-menu {left: 16px !important;}
+.navbar-right .dropdown .icon-dropdown-list {left: 0px !important !important;}
+.navbar-right {margin-left: unset !important;}
+
+.front-menu-search input {border-top-right-radius: 4px !important; border-bottom-right-radius: 4px !important; border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important; border-left: 0px; border-right:1px solid #ced4da;}
+.front-menu-search .btn {border-top-left-radius: 4px !important; border-bottom-left-radius: 4px !important; border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important; border-left: 1px solid #ced4da; border-right: 0px;}
+
+.banner-normal-section {direction: rtl;}
+.banner-normal-search .btn {margin: 3px -20px 0px 0px !important;}
+.banner-normal-search .fa-icon-tag {left: unset; right: 22px;}
+.banner-normal-search .fa-icon {left: unset; right: 20px;}
+.banner-normal-search select { border-right: 1px solid #ced4da; border-left: 0px; padding: 6px 28px 6px 0px;}
+.banner-normal-search input { padding-left:0px; padding-right: 28px; }
+.banner-normal-section-left-tag-item {float: right !important; padding: 3px 24px 3px 10px;}
+.banner-normal-section-left-tag-item-dot { left: unset; right: 3px; }
+
+.banner-absolute-section {direction: rtl;}
+.banner-absolute-search input {padding: 5px 36px 0px 0px !important;}
+.banner-absolute-search select {border-left: 0px; border-right:1px solid #ced4da; padding: 6px 30px 6px 0px;}
+.banner-absolute-search .fa-icon-tag {left: unset; right: 22px;}
+.banner-absolute-search .fa-icon {left: unset; right: 22px;}
+
+.section-make-account-alpha {direction: rtl;}
+.section-make-account-alpha-item-right {float: right; text-align: right; padding: 40px 35px 20px 0px; margin-right: -14px; border-left: 0px; border-right: 1px solid #e5e5e5;}
+.section-make-account-alpha-item-left {float: left; text-align: left; padding: 40px 0px 20px 25px;}
+.section-make-account-alpha-item-left-image {right: 0; left: auto;}
+.section-make-account-alpha-item-right-image {left: 0; right: auto;}
+
+.section-carousel-alpha-container-item {direction: rtl;}
+.section-carousel-alpha-container-item-content {text-align: right;}
+.section-carousel-alpha-container-item-heading {text-align: right;}
+.section-carousel-alpha-container-item-rating {float: right;}
+.section-carousel-alpha-container-item-avatar {left: 20px; right: unset;}
+
+.section-heading-style-ten {direction: rtl;}
+.section-heading-style-ten .section-heading {float: right;}
+.section-heading-style-ten .section-intro-text {float: right;}
+.section-heading-style-ten .section-intro-text {margin: 30px 10px 0px 0px;}
+.section-heading-style-ten .section-intro-button {float: left; margin: 25px 15px 0px 6px;}
+
+.section-heading-style-seven {direction: rtl;}
+
+.section-heading-style-gamma {direction: rtl;}
+.section-heading-style-gamma .section-heading h2 {text-align:right;}
+.section-heading-style-gamma h2:before {left: none; right: 0;}
+.section-heading-style-gamma h2:after {left: none; right: 0;}
+.section-heading-style-gamma .section-intro-text {float: right;}
+.section-heading-style-gamma .section-intro-button {float: left; margin: 4px 6px 0px 0px;}
+
+.section-sidebar-alpha {direction: rtl;}
+.section-sidebar-alpha input[type="checkbox"] {float: left;}
+.section-sidebar-alpha input[type="radio"] {float: left;}
+.section-sidebar-alpha-item-heading .fa-icon {float: left;}
+
+.section-sidebar-beta-item-heading .fa-icon {float: left;}
+.section-sidebar-beta input[type="checkbox"] {float: left;}
+.section-sidebar-beta input[type="radio"] {float: left;}
+.section-jobs-alpha-item-right {border-left: 0px; border-right: 1px solid #ebebeb; padding: 10px 20px 0px 0px;}
+.section-jobs-alpha-item-right-controls {left: 10px; right: unset;}
+.section-jobs-alpha-item {direction: rtl;}
+
+.jobs-list-page .section-sidebar-beta-container {margin: 20px 0px 20px -20px;}
+.jobs-list-page {direction: rtl;}
+
+.section-job-detail-alpha-breadcrumb {direction: rtl;}
+.section-job-detail-alpha-breadcrumb h1 {text-align: right !important;}
+.section-job-detail-alpha-breadcrumb ul {text-align: right !important;}
+.section-job-detail-alpha-content {direction: rtl;}
+.section-job-detail-alpha-company-detail-item i {float: left !important;}
+
+.section-profile-detail-alpha-breadcrumb {direction: rtl;}
+.section-profile-detail-alpha-breadcrumb h1 {text-align: right !important;}
+.section-profile-detail-alpha-breadcrumb ul {text-align: right !important;}
+.section-profile-detail-alpha-content {direction: rtl;}
+.section-profile-detail-alpha-company-detail-item i {float: left !important;}
+
+.section-jobs-gamma {direction: rtl;}
+.section-jobs-gamma-item {direction: rtl;}
+
+.section-profile-detail-alpha-res-pf-item {border-right: 2px solid var(--site-btn-bg) !important; border-left: 0px !important; padding: 0px 10px 5px 0px !important;}
+.section-profile-detail-alpha-res-pf-item-timelime-dot {top: -2px; right: -24px; left: unset;}
+.section-profile-detail-alpha-res-pf-item-timelime p {padding: 3px 20px 4px 8px !important; right: -10px !important; left: unset !important;
+    border-top-left-radius: 14px !important; border-bottom-left-radius: 14px !important; border-top-right-radius: 0px !important; border-bottom-right-radius: 0px !important;}
+
+.section-account-alpha-container {direction: rtl;}
+.section-account-alpha-navigation li a.active, .section-account-alpha-navigation li a:hover {padding: 10px 20px 10px 0px; border-right: 5px solid var(--site-btn-highlight-bg);
+	border-left: 0px !important;}
+
+.section-make-account-beta {direction: rtl;}
+.section-make-account-beta-left img {float: left; margin: 20px 0px 20px 40px;}
+
+.section-steps-alpha {direction: rtl;}
+
+.section-search-alpha-container {direction: rtl;}
+.section-search-alpha-container select {border-left: 0px; border-right: 1px solid #ced4da; padding: 6px 30px 6px 0px;}
+.section-search-alpha-container input {padding: 5px 34px 0px 0px;}
+.section-search-alpha-container .fa-icon-tag {left: unset; right: 22px;}
+.section-search-alpha-container .fa-icon {left: unset; right: 22px;}
+
+.section-blogs-detail-alpha-item {direction: rtl;}
+
+.section-incremental-form-alpha .box-open-close {float: left; right: unset; left: 20px;}
+.section-quiz-alpha-container input[type="radio"] {float: right;}
+.section-quiz-alpha-answers-container label {margin-right: 8px;}
+
+.modal-alpha {direction: rtl;}
+.modal-beta {direction: rtl;}
+.modal-alpha .modal-header .close-login {right: -426px !important;}
+.modal-alpha input[type="checkbox"] {float: right;}
+.modal-alpha .modal-dialog span.input-group-addon {border-radius: 0px 4px 4px 0px !important;}
+.modal-alpha input.form-control {border-radius: 4px 0px 0px 4px !important;}
+.modal-alpha .btn-login-type-label {border-radius: 0px !important;}
+
+.modal-gamma {direction: rtl;}
+.modal-gamma .close-modal {padding: 1px 6px 0px 20px;}
+.modal-gamma .modal-dialog .form-control {padding: 0 32px;}
+.modal-gamma .modal-dialog .form-control ~ i {left: unset; right: 15px;}
+
+.section-highlights-alpha {direction: rtl;}
+
+.section-contact-alpha-form label {float: right;}
+.section-heading-style-beta h2 {float: right;}
+.section-blogs-alpha-item {direction: rtl;}
+.section-blogs-alpha-item-more {left: 10px !important; right: unset;}
+
+@media all and (max-width: 991px) {
+}
+@media (min-width: 200px)  and (max-width: 767px) {
+    .banner-normal-search .btn {margin: 3px 8px 0px 8px !important;}
+}
+@media all and (min-width: 992px) {
+    .navbar .nav-item:hover .dropdown-menu {visibility: visible; opacity: 1; height: auto;}
+}

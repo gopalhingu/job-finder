@@ -1,0 +1,21 @@
+:root {
+--main-banner:url(http://dev.cf-saas.com/uploads/identities/site-banner.png);
+--breadcrumb-image:url(http://dev.cf-saas.com/uploads/identities/site-breadcrumb-image.png);
+--body-bg:#FBFBFB;
+--main-menu-bg:#FBFBFB;
+--main-menu-font-color:#484848;
+--main-menu-font-highlight-color:#286EFB;
+--main-banner-bg:#FBFBFB;
+--main-banner-height:500px;
+--main-menu-btn-bg:;
+--main-menu-sticky-bg:;
+--main-menu-sticky-font-color:;
+--mobile-menu-bg:;
+--mobile-menu-sidebar-bg:;
+--mobile-menu-font-color:;
+--icons-color:;
+--breadcrumb-background:#EDF8FF;
+--breadcrumb-font-color:;
+--site-btn-bg:;
+--site-btn-font-color:;
+}

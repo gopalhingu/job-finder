@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Candidate Finder SaaS - Developer Guide</title>
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/prettify.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <h2 class="docs-header"> Candidate Finder SaaS - Developer Guide</h2>
+            </div>
+        </header>
+        <section>
+            <div class="container">
+                <ul class="docs-nav" id="menu-left" style="height: 600px; overflow-x: hidden;">
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#middlewares">Middlewares</a></li>
+                    <li><a href="#routes">Routes</a></li>
+                    <li><a href="#controllers">Controllers</a></li>
+                    <li><a href="#models">Models</a></li>
+                    <li><a href="#views">Views</a></li>
+                    <li><a href="#assets">Assets</a></li>
+                    <li><a href="#helpers">Helpers</a></li>
+                    <li><a href="#schema">Schema / Database</a></li>
+                    <li><a href="#apis">Apis</a></li>
+                    <li><a href="#datatables">Datatables</a></li>
+                    <li><a href="#app.js">app.js</a></li>
+                    <li><a href="#crud">CRUD Operations</a></li>
+                    <li><a href="#csrf">CSRF</a></li>
+                    <li><a href="#sql">SQL Injections</a></li>
+                    <li><a href="#install">Installation & 'env'</a></li>
+                    <li><a href="#help">Help</a></li>
+                </ul>
+                <div class="docs-content">
+                    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+                    <h3> Introduction</h3>
+                    <p>
+                        The system is built on laravel with the standards and code practices recommended in official documentation. The system is fully tested and have no major bugs at it's core. Still there are any mis expectations, they will be fixed shortly in the updates.<Br />
+                        The system is built on a "modular" approach. Every module like 'user / candidate / quiz' has separate files. e.g. (Controller, Model, Views Folder, Routes, Js). Like for a department module in employer section, there is
+                    <ol>
+                        <li>app->Http->Controllers->Employer->DepartmentsController.php</li>
+                        <li>app->Models->Model->Department.php</li>
+                        <li>app->resources->views->employer->departments->list.blade.php</li>
+                        <li>app->resources->views->employer->departments->create-or-edit.blade.php</li>
+                        <li>assets->admin->js->cf->department.js</li>
+                    </ol>
+                    All modules in all sections (admin, employer, candidate) of the app are following the same convention (upto 85%) with very few exceptions in the system. Furthermore, the code for Admin, Employer, Candidate and Front site is in different all together.
+                    </p>
+                    <div id="middlewares" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Middlewares</h3>
+                    <p>
+                        Along with other default middlewares provided by Laravel, following are custom made middlewares created as per the convetions of laravel for different purposes. Middlewares can be located at <strong>"app -> Http -> Middleware"</strong><br />
+                    <ol>
+                        <li>EssentialsSettings -> Simple middleware used in all routes to check if the installation is done and set selected laravel language.</li>
+                        <li>IsAdmin -> To protect admin auth routes.</li>
+                        <li>IsEmployer -> To protect employer auth routes.</li>
+                        <li>IsCandidate -> To protect candidate auth routes.</li>
+                        <li>SetEmployerSlug -> It sets the slug of the selected employer in session so that the candidate experience for a particular/single employer site can be maintained. It's used in both candidate public and auth routes</li>
+                        <li>XssSanitizer -> User in post routes to clean data from xss.</li>
+                    </ol>
+                    </p>
+                    <div id="routes" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Routes</h3>
+                    <p>
+                        As recommended by Laravel and other MVC frameworks, routes are used to simplify and create an ease in the request structure for the application. The Routes file can be located at <br />
+                        <strong>"root -> routes -> web.php"</strong><br />
+                        As per the conventions of laravel<br />
+                    <ol>
+                        <li>1a : Employer public routes are grouped together.</li>
+                        <li>1b : Employer auth routes are grouped together.</li>
+                        <li>2a : Admin public routes are grouped together.</li>
+                        <li>2b : Admin auth routes are grouped together.</li>
+                        <li>3a : Candidate public routes are grouped together with subdomain slug.</li>
+                        <li>3b : Candidate auth routes are grouped together with subdomain slug.</li>
+                        <li>4 : Front site routes are grouped together.</li>
+                        <li>3c : Candidate public routes are grouped together with folder slug.</li>
+                        <li>3d : Candidate auth routes are grouped together with folder slug.</li>
+                    </ol>
+                    </p>
+                    <a class="img-link" href="images/dev-routes-1.jpg"><img src="images/dev-routes-1.jpg" /></a><br />
+                    <a class="img-link" href="images/dev-routes-2.jpg"><img src="images/dev-routes-2.jpg" /></a><br />
+                    <a class="img-link" href="images/dev-routes-3.jpg"><img src="images/dev-routes-3.jpg" /></a><br />
+                    <a class="img-link" href="images/dev-routes-4.jpg"><img src="images/dev-routes-4.jpg" /></a><br />
+                    <a class="img-link" href="images/dev-routes-5.jpg"><img src="images/dev-routes-5.jpg" /></a><br />
+                    and son on ....
+                    <div id="controllers" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Controllers</h3>
+                    <p>
+                        Controllers are core part of any MVC framework. All http requests lands on controller functions resolved via routes.<Br />
+                        Admin controllers are located at : <strong>"app -> Http -> Controllers -> Admin"</strong><br />
+                        Employer controllers are located at : <strong>"app -> Http -> Controllers -> Employer"</strong><br />
+                        Candidate controllers are located at : <strong>"app -> Http -> Controllers -> Candidate"</strong><br />
+                        Front (website) controllers are located at : <strong>"app -> Http -> Controllers -> Front"</strong><br />
+                        The approach is followed to separate the each concerns functionality to a more cleaner code.
+                    </p>
+                    <a class="img-link" href="images/dev-controllers.jpg"><img src="images/dev-controllers.jpg" /></a>
+                    <div id="models" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Models</h3>
+                    <p>
+                        Models are core part of any MVC framework. Models are called via controller functions. All Database queries are written in in "Query Builder" feature of the Laravel framework in models. The models for Admin/Employer/Candidate/Front are separated from each other to accomplish "Loose Coupling" and to have an ease to modify the code. Models are located at <Br />
+                        <strong>"app -> Models"</strong><br />
+                        The separation is similar as in controllers.
+                    </p>
+                    <a class="img-link" href="images/dev-models.jpg"><img src="images/dev-models.jpg" /></a>
+                    <div id="views" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Views</h3>
+                    <p>
+                        Views are third most integral part of any MVC framework. <Br />
+                        The views are again separated on the basis of concerns (Admin / Employer / Candidate / Front)
+                        As in the pictures, views are arranged module wise.<br />
+                        <a class="img-link" href="images/dev-views.jpg"><img src="images/dev-views.jpg" /></a>
+                    </p>
+                    <div id="helpers" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Helpers</h3>
+                    <p>
+                        Like any other software application, there are classes as helpers which are essentials for the application functioning and part of few or all concerns of an application. So, we have the following helpers located at <strong>"app -> Helpers"</strong>
+                        <ol>
+                            <li>Helper : This file contains a lot of granular/small functions required in all aspects and modules of the application whether it be view, model or controller. So, it is loaded globall via composed.json file.</li>
+                            <li>DbImport : It has dummy data in it which can be used to see application in action. It can be accessed via a route "maindomain/data"</li>
+                            <li>DbTables : Laravel has a very unique way of declaring the whole database within the application code which can be accessed via artisan commands. Since this application is also intended for non technical users, this class can be simply access via route "schema" or during installtion</li>
+                            <li>EmployerSettingsHelper : Built on singleton, it provides settings for any employer.</li>
+                            <li>SettingsHelper : Built on singleton, it provides settings for admin.</li>
+                            <li>EmployerPermissionsHelper : Built on singleton, it provides permission for any employer.</li>
+                            <li>MembershipHelper : Built on singleton, it checks whether an employer has some particular feature in his/her membership or not.</li>
+                            <li>StripeHelper : Since stripe does not provide any sdk, this helper has an organized way of dealing with stripe apis.</li>
+                            <li>LinkedinHelper : Since Linkedin does not provide any sdk, this helper has an organized way of dealing with linkedin apis.</li>
+                        </ol>
+                    </p>
+                    <div id="assets" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Assets</h3>
+                    <p>
+                        Assets are all in the public folder in the root where all the theme files (js, css and image) are stored. Also, as stated above this folder also contains the functional javascript files. Folders are separated again on the basis of concerns (Admin / Employer / Candidate / Front).<Br />
+                    </p>
+                    <div id="schema" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Schema / Database</h3>
+                    <p>
+                        To avoid the hassle of creating ".sql files" and importing them manually, the complete database structure is written inside the application itself in the <strong>"app -> Helpers -> DbTables.php"</strong> file. With the help of Laravel's schema class, all table definitions are written as separate functions in this file. You need to simply access the url like below and the whole database will be created.<br />
+                        Note : The database credentials should already be there in "root -> .env" file.<Br />
+                        Route for creating schema : <strong>"https://www.example.com/schema"</strong><br />
+                        <a class="img-link" href="images/dev-schema.jpg"><img src="images/dev-schema.jpg" /></a><br />
+                    </p>
+                    <div id="apis" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Apis</h3>
+                    <p>
+                        <strong>Google Login</strong> Google client library is installed via composer and cleaned a bit to only have relevant code. The credentials for it to work are stored in database.<br /><br />
+                        <a class="img-link" href="images/dev-google.jpg"><img src="images/dev-google.jpg" /></a><br />
+                        <strong>Linkedin Login</strong> The linkedin client is served via a helper stored in "app -> Helpers -> LinkedinHelper.php". The credentials are again stored in database.<br /><br />
+                        <a class="img-link" href="images/dev-linkedin.jpg"><img src="images/dev-linkedin.jpg" /></a><br />
+                        Candidates.php (Front Controller) class where the above two features are implemented.
+                        <a class="img-link" href="images/dev-login.jpg"><img src="images/dev-login.jpg" /></a><br />
+                    </p>
+                    <div id="datatables" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Datatables</h3>
+                    <p>
+                        Datatables are used natively without any external dependency to avoid performance overhead. So, in five simple steps, datatable requests are done.
+                        <br />
+                        <strong>1. Request initiated from .js file with all the filters.</strong><br />
+                        <a class="img-link" href="images/dev-dt-1.jpg"><img src="images/dev-dt-1.jpg" /></a><br />
+                        <strong>2. Request goes to routes/web.php file on this line as post request.</strong><br />
+                        <a class="img-link" href="images/dev-dt-2.jpg"><img src="images/dev-dt-2.jpg" /></a><br />
+                        <strong>3. Request goes to controller function.</strong><br />
+                        <a class="img-link" href="images/dev-dt-4.jpg"><img src="images/dev-dt-4.jpg" /></a><br />
+                        <strong>4. Request goes relevant model function and filters are implemented.</strong><br />
+                        <a class="img-link" href="images/dev-dt-3.jpg"><img src="images/dev-dt-3.jpg" /></a><br />
+                        <strong>5. Request then goes to sort function and then finally returned to view from controller.</strong><br />
+                        <a class="img-link" href="images/dev-dt-5.jpg"><img src="images/dev-dt-5.jpg" /></a><br />
+                        In this way, all of the admin datatables are working.
+                    </p>
+                    <div id="app.js" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> App.js</h3>
+                    <p>
+                        This file is one of the most important one in the system as it is the wrapper / abstract class for all the javascript functionalities like AJAX requests, form submissions, message display and other things. It is included in the main footer file for both admin and front end as separate copies. <Br />
+                        The file is located at <strong>"root -> app -> public -> -> admin -> js -> cf -> app.js"</strong><br />
+                        and at <strong>"root -> app -> public -> -> front -> js ->  app.js"</strong><br />
+                        <br />
+                        All of the module js files are using functionalities from this class to maintain modifications and reusability. Module files as mentioned above are included in every module's index.php/list.php file.
+                    </p>
+                    <div id="crud" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> CRUD Operations</h3>
+                    <p>
+                        Almost all crud operations are following this convention of routes in the whole application. 
+                        <br />
+                        <a class="img-link" href="images/dev-crud-routes.jpg"><img src="images/dev-crud-routes.jpg" /></a><br />
+                        <strong>1a 'admin/departments'.</strong> First is for main page of module.<br />
+                        <a class="img-link" href="images/dev-list.jpg"><img src="images/dev-list.jpg" /></a><br />
+                        <strong>1b 'admin/departments/data'.</strong> This one is for main page as well which is requested as an ajax get request after the main page is loaded.<br />
+                        <a class="img-link" href="images/dev-data-2.jpg"><img src="images/dev-data-2.jpg" /></a><br />
+                        <a class="img-link" href="images/dev-data-3.jpg"><img src="images/dev-data-3.jpg" /></a><br />
+                        <strong>2a 'admin/departments/create-or-edit'.</strong> This routes is also requested via ajax get request and it loads the form from view partial into the modal.<br />
+                        <strong>2b 'admin/departments/create-or-edit/(:any)'.</strong> This is same is above but the difference here is that, it happens in "EDIT" scenario and the above happens in create scenario<br />
+                        <a class="img-link" href="images/dev-create-or-edit.jpg"><img src="images/dev-create-or-edit.jpg" /></a><br />
+                        <a class="img-link" href="images/dev-create-or-edit-2.jpg"><img src="images/dev-create-or-edit-2.jpg" /></a><br />
+                        <strong>3 'admin/departments/save'.</strong> When the forms loaded in '2a' and '2b' are submitted, they are submitted to this as ajax post request which either successfully stores the data or return any errors if any. <br />
+                        <a class="img-link" href="images/dev-save.jpg"><img src="images/dev-save.jpg" /></a><br />
+                        <a class="img-link" href="images/dev-save-2.jpg"><img src="images/dev-save-2.jpg" /></a><br />
+                        <strong>4 'admin/departments/status'.</strong> This route is again accessed via ajax get request and used to change the resource information to either active or inactive. <br />
+                        <a class="img-link" href="images/dev-change-status.jpg"><img src="images/dev-change-status.jpg" /></a><br />
+                        <a class="img-link" href="images/dev-change-status-2.jpg"><img src="images/dev-change-status-2.jpg" /></a><br />
+                        <strong>5 'admin/departments/bulk-action'.</strong> In listing screens of the application, there is an "Actions" menu which on selecting any item hit on this route via the below function. <br />
+                        <a class="img-link" href="images/dev-bulk-action.jpg"><img src="images/dev-bulk-action.jpg" /></a><br />
+                        <a class="img-link" href="images/dev-bulk-action-2.jpg"><img src="images/dev-bulk-action-2.jpg" /></a><br />
+                    </p>
+                    <div id="csrf" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> CSRF Protection</h3>
+                    <p>
+                        CSRF protection is implemented in app.js with every request<Br />
+                        CSRF token is generated and added in header.php file and adds to every request from app.js<br />
+                        Whenever any request is not via app.js, then "csrf" function of laravel is used which automatically adds token variable.
+                    </p>
+                    <div id="sql" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> SQL Injection Prevention & XSS</h3>
+                    <p>
+                        All queries are used with the help of laravel's Eloquent which automatically prevents sql injection attacks.
+                        <br />
+                        XSS is implemented via middleware XssSanitizer.
+                    </p>
+                    <div id="install" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Installation</h3>
+                    <p>
+                        The installation procedure/mechanism is all written inside the "app -> Controllers -> EssentialsController". The process simply reads some env variables and see if the values are there or not, if not, it redirects to installation routes and does not allow any other application routes via the "app -> Http -> Middleware -> EssentialSettings" middleware. On the db credentials screen, it asks for db credentials and first check by making connection. If successfull, it writes credentials to .env file and then run the DbTables class. In the next step it redirects the wizard for admin credentials. Once successfully created, it redirects to main application. As long as the db credentials are in .env file, install routes can not be accessed again.
+                        <a class="img-link" href="images/dev-env.jpg"><img src="images/dev-env.jpg" /></a><br />
+                    </p>
+                    <div id="help" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Help</h3>
+                    <p>
+                        If you are still not clear with any thing in technical terms, Please feel free to contact us via our codecanyon support link.
+                    </p>
+
+                </div>
+            </div>
+        </section>
+        <footer></footer>
+        <script src="js/jquery.min.js"></script> 
+        <script type="text/javascript" src="js/prettify/prettify.js"></script> 
+        <script type="text/javascript" src="js/magnific-popup.js"></script> 
+        <script src="js/layout.js"></script>
+        <script src="js/jquery.localscroll-1.2.7.js" type="text/javascript"></script>
+        <script src="js/jquery.scrollTo-1.4.3.1.js" type="text/javascript"></script>
+        <script src="js/functions.js" type="text/javascript"></script>
+    </body>
+</html>

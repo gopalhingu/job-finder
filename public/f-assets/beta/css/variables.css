@@ -1,0 +1,22 @@
+:root {
+--body-bg:#FBFBFB;
+--main-menu-bg:#FBFBFB;
+--main-menu-btn-bg:#fe9961;
+--main-menu-font-color:#484848;
+--main-menu-font-highlight-color:#286EFB;
+--main-menu-sticky-bg:#72c2f8;
+--main-menu-sticky-font-color:#FFF;
+--main-banner-bg:#FBFBFB;
+--mobile-menu-bg:#85d4f3;
+--mobile-menu-sidebar-bg:#85d4f3;
+--mobile-menu-font-color:#484848;
+--main-banner-height:500px;
+--icons-color:#fe9961;
+--breadcrumb-background:#edf8ff;
+--breadcrumb-font-color:#626262;
+--site-btn-bg:#fe9961;
+--site-btn-font-color:#FFF;
+--main-banner:url(http://127.0.0.1:3036/uploads/identities/site-banner.jpg);
+--breadcrumb-image:url(http://127.0.0.1:3036/uploads/identities/site-breadcrumb-image.png);
+--testimonials-banner:url(http://127.0.0.1:3036/uploads/identities/site-breadcrumb-image.jpg);
+}

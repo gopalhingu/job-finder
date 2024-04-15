@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Candidate Finder SaaS - Admin Guide</title>
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/prettify.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <h2 class="docs-header"> Candidate Finder SaaS - Admin Guide</h2>
+            </div>
+        </header>
+        <section>
+            <div class="container">
+                <ul class="docs-nav" id="menu-left" style="height: 600px; overflow-x: hidden;">
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#requirements">Server Requirements</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#subdomain">Subdomain Setup</a></li>
+                    <li><a href="#navigation">Admin Navigation</a></li>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#packages">Packages</a></li>
+                    <li><a href="#portalmt">Portal Vs Multitenancy</a></li>
+                    <li><strong>CMS</strong></li>
+                    <li><a href="#pages">Pages</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#menu">Menu (For front site)</a></li>
+                    <li><strong>Settings</strong></li>
+                    <li><a href="#setting_general">General</a></li>
+                    <li><a href="#setting_email">Email / Smtp Settings</a></li>
+                    <li><a href="#setting_apis">Apis</a></li>
+                    <li><a href="#setting_language">Languages</a></li>
+                    <li><a href="#setting_overrides">Employer Overrides</a></li>
+                    <li><a href="#update">Update</a></li>
+                </ul>
+                <div class="docs-content">
+                    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+                    <h3> Introduction</h3>
+                    <p>
+                        Candidate finder SaaS is an advance recruitment portal where employers can signup and pay for unique features like their own web section with branding, conducting online quizes and interviews from candidates. It's unique job board allows employers to do an analysis and scruitny among applying candidates before having them onboard. Admin/Owner of the system can make any number of packages with monthly and annual subscription against which employers can have paid memberships. With the extensive CMS features, the content on the front website from menus, pages, news and other necessary things can be easily controlled.
+                    </p>
+                    <p>
+                        The system is built on laravel with a complete and easy to use admin panel to review and control content and features on the system. With the minimum set of installation requirements, it can be set up on any apache or nginx hosting.
+                    </p>
+                    <div id="requirements" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Server Requirements</h3>
+                    <p>The set of requirements are very simple and are available/enabled on most of the hosting providers.</p>
+                    <ul>
+                        <li>Apache or nginx</li>
+                        <li>Database support (e.g. mysql or mssql)</li>
+                        <li>PHP 7.3 or greater</li>
+                        <li>PDO extension support</li>
+                        <li>PHP GD library support</li>
+                        <li>OpenSSL support</li>
+                        <li>CURL support</li>
+                        <li>Public folder needs to be writeable</li>
+                    </ul>
+                    <div id="installation" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Installation</h3>
+                    <p>
+                        <strong>Case 1 to resolve public:</strong><br />
+                        Before installation, you should learn a main thing about the laravel's public directory. Laravel's original setup is shipped with a mechanism to hide the main files and provide a "Virtualization" for requests as the "public" directory. <br />
+                        Laravel recommends to point your domain's root to the public directory instead of the main root of the script.
+                    </p>
+                    <a class="img-link" href="images/admin-public.jpg"><img src="images/admin-public.jpg" /></a>
+                    <p>
+                        <strong>Case 2 to resolve public (when case1 is not possible for you):</strong><br />
+                        But in some cases, you are unable to do it, so simply create a file named ".htaccess" at the project root and copy the below code.
+                        <br /><strong>
+                        RewriteEngine On<br />
+                        RewriteCond %{REQUEST_URI} !^/public/<br />
+                        RewriteRule ^(.*)$ /public/$1 [L,QSA]<br />
+                        </strong>
+                    </p>
+                    <a class="img-link" href="images/admin-htaccess.jpg"><img src="images/admin-htaccess.jpg" /></a>
+                    <p>
+                    </p>
+                    <p>
+                        Now that you have understand the public directory case of laravel. It's very easy with the built in three step "Installation Wizard". Simply put the content <Strong>"script"</Strong> folder from the main zip (which you have downloaded from codecanyon) on your hosting's destination folder, point your domain or create .htaccess file and access the url like below (depending on what you choose) to get to the installation wizard 
+                    <ol>
+                        <li>If On Root -> <strong>https://www.example.com/install</strong></li>
+                        <li>If On Sub Domain -> <strong>https://subdomain.example.com/install</strong></li>
+                        <li>If On Sub Folder -> <strong>https://www.example.com/desired-folder/public/install</strong><br />
+                            Note : This case is not recommended with laravel and in this case 1 and case 2 will not work for this scenario.
+                        </li>
+                    </ol>
+                    The wizard will then guide you through the process. 
+                    <Br />
+                    Note : You need to have database credentials while running the installation wizard. You can take help from this 
+                    <a target="_blank" href="https://www.youtube.com/watch?v=AcsGFlc965w">video</a> for creating database credentials and installation.        
+                    <a class="img-link" href="images/install.jpg"><img src="images/install.jpg" /></a>
+                    </p>
+                    <div id="subdomain" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Subdomain Setup</h3>
+                    <a class="img-link" href="images/dev-subdomain-1.jpg"><img src="images/dev-subdomain-1.jpg" /></a>
+                    <p>
+                        For this you need to create a wildcard subdomain like in below steps and point to the same public directory.
+                    </p>
+                    <a class="img-link" href="images/dev-subdomain-2.jpg"><img src="images/dev-subdomain-2.jpg" /></a>
+                    <a class="img-link" href="images/dev-subdomain-3.jpg"><img src="images/dev-subdomain-3.jpg" /></a>
+                    <div id="navigation" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Admin Navigation</h3>
+                    <p>
+                        The system is built together with a bunch of modules to acheive the intended results. Eeach item in a menu is a module to control different aspects of system. Below all the features are explained for what those can do and how you can use these.<br />
+                        <a class="img-link" href="images/admin-menu.jpg"><img src="images/admin-menu.jpg" /></a>
+                    </p>
+                    <div id="dashboard" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Dashboard</h3>
+                    <p>
+                        The dashboard gives you summary of the whole system in one picture. It has charts for sales and signups which can be filtered as monthly or annually etc. Dashboard can be accessed from the main navigation menu via the "Dashboard" item<br />
+                        <a class="img-link" href="images/admin-dashboard.jpg"><img src="images/admin-dashboard.jpg" /></a>
+                    </p>
+                    <div id="packages" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Packages</h3>
+                    <p>
+                        The first thing an admin needs to do after installation is creating the necessary free package (can exist only one) and paid packages as many as you like. A package can be created by going to admin menu -> packages -> Create Package <br />
+                        <a class="img-link" href="images/admin-packages.jpg"><img src="images/admin-packages.jpg" /></a>
+                        <a class="img-link" href="images/admin-packages-free.jpg"><img src="images/admin-packages-free.jpg" /></a>
+                        <a class="img-link" href="images/admin-packages-2.jpg"><img src="images/admin-packages-2.jpg" /></a>
+                        <a class="img-link" href="images/admin-packages-3.jpg"><img src="images/admin-packages-3.jpg" /></a>
+                    </p>
+                    <div id="portalmt" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Portal Vs Multitenancy</h3>
+                    <p>
+                        Portal means a regular job portal where all employers and candidates create jobs and apply to jobs on the main/front site <br />
+                        Whereas in multitenancy, each employer will have a separate interface where only that employer's job will appear. On the main site, only employer can signup and login while candidates signup and applies to job on employer's separate site/interface.<br />
+                        As we have set two different demos for Multitenancy and Regular on two different domains on the product's page. You need to do a combination of settings to achieve like in the demos depending on your choice.
+                        <br />
+                        The sections you'll be doing changes to achieve above will be in the following sections.
+                        <ul>
+                            <li>Admin -> Portal vs Multitenancy</li>
+                            <li>Admin -> CMS -> Menus</li>
+                            <li>Admin -> CMS -> Home</li>
+                        </ul>
+                    </p>
+                    <div id="pages" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Pages</h3>
+                    <p>
+                        You might want to create site pages like "terms and conditions", "faqs" etc which you can create by going to "Menu -> Pages -> Create Page" <br />
+                        <a class="img-link" href="images/admin-page.jpg"><img src="images/admin-page.jpg" /></a>
+                    </p>
+                    <div id="news" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> News</h3>
+                    <p>
+                        Similarly as pages, You might want to create site news like "your events" etc which you can create by going to "Menu -> News -> Create News" <br />
+                        <a class="img-link" href="images/admin-news.jpg"><img src="images/admin-news.jpg" /></a>
+                    </p>
+                    <div id="menu" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3> Menu</h3>
+                    <p>
+                        When you have contents in the system, you can update the front site menu as given in the image below. <br />
+                        Unlike pages and news, there are pre defined pages in the system like the "All Companies Pages", "All Jobs Pages" which you can keep or remove as per your needs.<br />
+                        <a class="img-link" href="images/front-menu-editor.jpg"><img src="images/front-menu-editor.jpg" /></a>
+                        <a class="img-link" href="images/front-menu-editor-2.jpg"><img src="images/front-menu-editor-2.jpg" /></a>
+                    </p>
+                    <div id="setting_general" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Settings : General</h3>
+                    <a class="img-link" href="images/settings-general.png" /><b"><img src="images/settings-general.png" /><br /></a>
+                    <p>General Settings can be accessed by clicking on "Settings -> General" item in the main navigation menu. As displayed in the image, From this screen some default settings for the system can be set like the site logo, home page banner, site favicon, admin email and other settings.</p>
+                    <div id="setting_email" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Settings : Email</h3>
+                    <a class="img-link" href="images/settings-email.png" /><b"><img src="images/settings-email.png" /><br /></a>
+                    <p>From this setting you can either select to have on site smtp (hosting's built in smtp server) or an external smtp depending on your requirements.</p>
+                    <div id="setting_apis" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Settings : Apis</h3>
+                    <a class="img-link" href="images/settings-apis.png" /><b"><img src="images/settings-apis.png" /><br /></a>
+                    <p>From this settings, the google and linkedin login can be enabled or disabled. To make google and linkedin login to work, you need to have credentials from google/linkedin which are very easy to make and obtain. You can follow our main site for the tutorials on how you can create them. Similarly credentials for stripe and paypal can be obtained and entered here.</p>
+                    <div id="setting_language" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Settings : Languages</h3>
+                    <a class="img-link" href="images/settings-languages.jpg" /><b"><img src="images/settings-languages.jpg" /><br /></a>
+                    <p>Any number of languages can be added to the system with the ten languages shipped with the system. Once any language is "selected" from the selected, the whole interface will be converted to that language.</p>
+                    <a class="img-link" href="images/settings-languages-edit.jpg" /><b"><img src="images/settings-languages-edit.jpg" /><br /></a>
+                    <div id="setting_overrides" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Settings : Employer Settings Overrides</h3>
+                    <a class="img-link" href="images/admin-settings-employer.png" /><b"><img src="images/admin-settings-employer.png" /><br /></a>
+                    <p>When an employer does not have "Branding" or "Custom Emails" enabled in their membership, these settings will take their respective place for them. An admin needs to maintain these as an override for the absence of membership features.</p>
+                    <div id="update" style="border-bottom:1px dashed; border-top: 1px dashed; height: 100px; width: 100%;"></div>
+                    <h3>Update Application</h3>
+                    <p>Step 1</p>
+                    <a class="img-link" href="images/updates-1.png" /><b"><img src="images/updates-1.png" /><br /></a>
+                    <p>Step 2</p>
+                    <a class="img-link" href="images/updates-2.png" /><b"><img src="images/updates-2.png" /><br /></a>
+                    <p>Step 3</p>
+                    <a class="img-link" href="images/updates-3.png" /><b"><img src="images/updates-3.png" /><br /></a>
+                    <p>Step 4</p>
+                    <a class="img-link" href="images/updates-4.png" /><b"><img src="images/updates-4.png" /><br /></a>
+                    <p>Step 5</p>
+                    <a class="img-link" href="images/updates-5.png" /><b"><img src="images/updates-5.png" /><br /></a>
+                    <a class="img-link" href="images/updates-6.png" /><b"><img src="images/updates-6.png" /><br /></a>
+                    <p>Step 6</p>
+                    <a class="img-link" href="images/updates-7.png" /><b"><img src="images/updates-7.png" /><br /></a>
+                    <p>Step 7</p>
+                    <a class="img-link" href="images/updates-8.png" /><b"><img src="images/updates-8.png" /><br /></a>
+                </div>
+            </div>
+        </section>
+        <footer></footer>
+        <script src="js/jquery.min.js"></script> 
+        <script type="text/javascript" src="js/prettify/prettify.js"></script> 
+        <script type="text/javascript" src="js/magnific-popup.js"></script> 
+        <script src="js/layout.js"></script>
+        <script src="js/jquery.localscroll-1.2.7.js" type="text/javascript"></script>
+        <script src="js/jquery.scrollTo-1.4.3.1.js" type="text/javascript"></script>
+        <script src="js/functions.js" type="text/javascript"></script>
+    </body>
+</html>
