@@ -32,8 +32,20 @@
             </ul>
         </li>                    
     @else
-        @if ($item['type'] == 'login_button' && ((candidateSession() && setting('front_login_type') != 'only_employers') || (employerSession() && setting('front_login_type') != 'only_candidates')))
-            @php 
+        <?php
+            // echo "<pre>";
+            // echo "item-";
+            // print_r($item);
+            // echo "c-";
+            // print_r(candidateSession());
+            // echo "e-";
+            // print_r(employerSession());
+            // echo "c-";
+            // print_r(companySession());
+            // die;
+        ?>
+        @if($item['type'] == 'login_button' && ((candidateSession() && setting('front_login_type') != 'only_employers') || (employerSession() && setting('front_login_type') != 'only_candidates') || companySession()))
+            @php
                 $type = setting('front_login_type') == 'only_employers' ? 'employer' : 'candidate';
                 $img = candidateOrEmployerThumb($type); 
             @endphp
@@ -58,9 +70,15 @@
                             <i class="fa-solid fa-sign-out"></i> {{__('message.logout')}}
                         </a>
                     </li>
+                    @elseif (employerSession() && setting('front_login_type') != 'only_candidates')
+                        <li><a class="dropdown-item" href="{{route('employer-dashboard')}}">{{__('message.dashboard')}}</a></li>
+                        <li><a class="dropdown-item" href="{{route('employer-logout')}}">{{__('message.logout')}}</a></li>
+                    @elseif (companySession())
+                        <li><a class="dropdown-item" href="{{route('company-dashboard')}}">{{__('message.dashboard')}}</a></li>
+                        <li><a class="dropdown-item" href="{{route('company-logout')}}">{{__('message.logout')}}</a></li>
                     @else
-                    <li><a class="dropdown-item" href="{{route('employer-dashboard')}}">{{__('message.dashboard')}}</a></li>
-                    <li><a class="dropdown-item" href="{{route('employer-logout')}}">{{__('message.logout')}}</a></li>
+                    <li><a class="dropdown-item" href="#">{{__('message.dashboard')}}</a></li>
+                    <li><a class="dropdown-item" href="#">{{__('message.logout')}}</a></li>
                     @endif
                 </ul>
             </li>                        

@@ -23,6 +23,17 @@ function Team() {
         });
     };
 
+    this.initProfileUpdateCompamy = function () {
+        application.onSubmit('#company_profile_form', function (result) {
+            application.showLoader('company_profile_form_button');
+            application.post('/company/profile-save', '#company_profile_form', function (res) {
+                var result = JSON.parse(application.response);
+                application.hideLoader('company_profile_form_button');
+                application.showMessages(result.messages, 'company_profile_form');
+            });
+        });
+    };
+
     this.initPasswordUpdate = function () {
         application.onSubmit('#employer_password_form', function (result) {
             application.showLoader('employer_password_form_button');
@@ -174,5 +185,6 @@ $(document).ready(function() {
     team.initTeamsDatatable();
     team.initPasswordUpdate();
     team.initProfileUpdate();
+    team.initProfileUpdateCompamy();
     $('.dropify').dropify();
 });

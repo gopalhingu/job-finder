@@ -55,7 +55,6 @@ Route::group(['prefix'=>'employer', 'middleware'=>['essset']], function() {
 /*----------------------------------------------*/
 /*----------------------------------------------*/
 /*----------------------------------------------*/
-
 Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitizer', 'essset']], function() {
 
 	$EmEmpCont = 'App\Http\Controllers\Employer\EmployersController';
@@ -317,6 +316,53 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	$EmPagesCont = 'App\Http\Controllers\Employer\PagesController';
 	Route::get('/sidebar-toggle', $EmPagesCont.'@sidebarToggle')->name('employer-sidebar-toggle');
 });
+
+
+
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*		 5a : Company outer/public routes 		*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+Route::group(['prefix'=>'company', 'middleware'=>['essset']], function() {
+	$CoComCont = 'App\Http\Controllers\Company\CompanysController';
+	Route::get('', $CoComCont.'@loginView')->name('company-login');
+	Route::get('/login', $CoComCont.'@loginView')->name('company-login-with');
+	Route::post('/login-post', $CoComCont.'@login')->name('company-login-post');
+	Route::get('/forgot-password', $CoComCont.'@forgotPasswordView')->name('company-forgot-password');
+	Route::post('/forgot-password-post', $CoComCont.'@forgotPassword')->name('company-forgot-password-post');
+	Route::get('/reset-password/{token}', $CoComCont.'@resetPasswordView')->name('company-reset-password');
+	Route::post('/reset-password-post', $CoComCont.'@resetPassword')->name('company-reset-password-post');
+	Route::get('/activate-account/{token}', $CoComCont.'@activateAccount')->name('company-activate-account');
+});
+
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*		 5b : Company inner/auth routes 		*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+Route::group(['prefix'=>'company','middleware'=>['company.auth', 'xss.sanitizer', 'essset']], function() {
+
+	$CoComCont = 'App\Http\Controllers\Company\CompanysController';
+	Route::get('/profile', $CoComCont.'@profileView')->name('company-profile');
+	Route::post('/profile-save', $CoComCont.'@updateProfile')->name('company-update-profile');
+	Route::get('/password', $CoComCont.'@passwordView')->name('company-password-view');
+	Route::post('/password-save', $CoComCont.'@updatePassword')->name('company-update-password');
+	Route::get('/logout', $CoComCont.'@logout')->name('company-logout');
+
+	//Company Dashboard Routes
+	$CoDashboardCont = 'App\Http\Controllers\Company\DashboardController';
+	Route::get('/dashboard', $CoDashboardCont.'@index')->name('company-dashboard');
+});
+
 
 
 /*----------------------------------------------*/

@@ -208,19 +208,33 @@ function candidateSession($field = '') {
     if (isset($candidate['candidate_id']) && $field == '') {
         return $candidate['candidate_id'];
     } else if (isset($candidate[$field])) {
-        return $candidate[$field];    }
-
+        return $candidate[$field];    
+    }
+    return false;
 }
 }
 
 if(!function_exists('employerSession')) {
 function employerSession($field = '') {
-	$employer = getSession('employer');
+    $employer = getSession('employer');
     if (isset($employer['employer_id']) && $field == '') {
         return $employer['employer_id'];
     } else if (isset($employer[$field])) {
         return $employer[$field];
     }
+    return false;
+}
+}
+
+if(!function_exists('companySession')) {
+function companySession($field = '') {
+    $company = getSession('company');
+    if (isset($company['company_id']) && $field == '') {
+        return $company['company_id'];
+    } else if (isset($company[$field])) {
+        return $company[$field];
+    }
+    return false;
 }
 }
 
@@ -412,12 +426,29 @@ function employerThumb($image, $forLogo = false) {
 }
 }
 
+if(!function_exists('companyThumb')) {
+    function companyThumb($image, $forLogo = false) {
+        if (strpos($image, 'http') !== false) {
+            return $image;
+        }
+        $not_found_image = $forLogo ? 'company-not-found.png' : 'avatar-not-found.png';
+        $data['error'] = url('/g-assets').'/essentials/images/'.$not_found_image;
+        $data['image'] = $image ? route('uploads-view', $image) : '';
+        return $data;
+    }
+    }
+
 if (!function_exists('candidateOrEmployerThumb')) {
 function candidateOrEmployerThumb($type = 'candidate') {
+    $image = [];
     if(candidateSession() && $type == 'candidate') {
         $image = candidateThumb(candidateSession('image'));
-    } else {
+    } 
+    else if(employerSession()) {
         $image = employerThumb(employerSession('image'));
+    }
+    else if(companySession()) {
+        $image = companyThumb(companySession('image'));
     }
     return $image;
 }
@@ -1647,6 +1678,22 @@ function employerId($column = '') {
 }
 }
 
+if (!function_exists('companyId')) {
+function companyId($column = '') {
+    $current = companySession('type');
+    if ($current == 'main') {
+        return $column ? companySession($column) : companySession();
+    } else {
+        $child = App\Models\Admin\Company::getCompany('company.company_id', companySession());
+        if ($column) {
+            $parent = App\Models\Admin\Company::getCompany('company.company_id', $child['parent_id']);
+            return $parent[$column];
+        }
+        return $child['parent_id'];
+    }
+}
+}
+
 if (!function_exists('employerIdBySlug')) {
 function employerIdBySlug($column = '') {
     $slugEmp = getSession('slug_emp');
@@ -1675,6 +1722,16 @@ function isEmpRoute() {
     return false;
 }
 }
+
+if(!function_exists('isCompany')) {
+    function isCompany() {
+        $route = \Request::url();
+        if (strpos($route, 'company') !== false) {
+            return true;
+        }
+        return false;
+    }
+    }
 
 if(!function_exists('isAdminRoute')) {
 function isAdminRoute() {
@@ -1951,6 +2008,31 @@ function employerLanguage() {
     $selected_title = getSession('employer_selected_language_title');
     $selected_slug = getSession('employer_selected_language_slug');
     $selected_direction = getSession('employer_selected_language_direction');
+    if ($selected_flag) {
+        return array(
+            'flag' => $selected_flag, 
+            'title' => $selected_title,
+            'slug' => $selected_slug,
+            'direction' => $selected_direction
+        );
+    } else {
+        return array(
+            'flag' => $default['flag'],
+            'title' => $default['title'],
+            'slug' => $default['slug'],
+            'direction' => $default['direction']
+        );
+    }
+}
+}
+
+if(!function_exists('companyLanguage')) {
+function companyLanguage() {
+    $default = App\Models\Admin\Language::getDefault(true);
+    $selected_flag = getSession('company_selected_language_flag');
+    $selected_title = getSession('company_selected_language_title');
+    $selected_slug = getSession('company_selected_language_slug');
+    $selected_direction = getSession('company_selected_language_direction');
     if ($selected_flag) {
         return array(
             'flag' => $selected_flag, 

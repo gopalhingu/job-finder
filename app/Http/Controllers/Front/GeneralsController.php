@@ -30,6 +30,10 @@ use App\Models\Front\Job as FrontJob;
 use App\Rules\MinString;
 use App\Rules\MaxString;
 
+use App\Models\Front\Company;
+use App\Models\Company\Company as CompanyCompany;
+
+
 class GeneralsController extends Controller
 {
     /**
@@ -273,9 +277,145 @@ class GeneralsController extends Controller
      * @return html/string
      */
 
-    public function registerCompany(Request $request){
-        echo 'Tester';die;
-    }
+    public function registerCompany(Request $request)
+    {
+        $this->checkIfDemo();
+
+        //Checking for reserved words to avoid any conflict with routes
+        if (reservedWord(slugify($request->input('company')))) {
+            die(json_encode(array(
+                'success' => 'false',
+                'messages' => $this->ajaxErrorMessage(array('error' => __('message.choose_different_company_name')))
+            )));
+        }
+
+        //Checking if there is any free package or not
+        $freePackage = Package::where('is_free', 1)->first();
+        if (!$freePackage) {
+            die(json_encode(array(
+                'success' => 'false',
+                'messages' => $this->ajaxErrorMessage(array('error' => __('message.no_free_package')))
+            )));
+        }
+
+        //Doing form validations
+        $rules['first_name'] = ['required', new MinString(2), new MaxString(50)];
+        $rules['last_name'] = ['required', new MinString(2), new MaxString(50)];
+        $rules['company'] = ['required', new MinString(2), new MaxString(100), 'unique:company'];
+        $rules['email'] = 'required|email|unique:company';
+        $rules['password'] = 'required|required_with:retype_password|same:retype_password';
+        $rules['retype_password'] = 'required';
+        $messages = [
+            'first_name.required' => __('validation.required'),
+            'first_name.min' => __('validation.min_string'),
+            'first_name.max' => __('validation.max_string'),
+            'last_name.required' => __('validation.required'),
+            'last_name.min' => __('validation.min_string'),
+            'last_name.max' => __('validation.max_string'),
+            'company.required' => __('validation.required'),
+            'company.min' => __('validation.min_string'),
+            'company.max' => __('validation.max_string'),
+            'email.required' => __('validation.required'),
+            'email.email' => __('validation.email'),
+            'password.required' => __('validation.required'),
+            'retype_password.required' => __('validation.required'),
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            die(json_encode(array(
+                'success' => 'false',
+                'messages' => $this->ajaxErrorMessage(array('validation_errors' => $validator->messages()->toArray()))
+            )));
+        }
+
+        //Creating company
+        $company['first_name'] = $request->input('first_name');
+        $company['last_name'] = $request->input('last_name');
+        $company['email'] = $request->input('email');
+        $company['company'] = $request->input('company');
+        $company['slug'] = slugify($request->input('company'));
+        $company['companyname'] = $company['slug'];
+        $company['password'] = Hash::make($request->input('password'));
+        $company['status'] = 1;
+        $company['created_at'] = date('Y-m-d G:i:s');
+        $company['updated_at'] = date('Y-m-d G:i:s');
+        $successMessage = __('message.account_created_please_login');
+
+        // Sending email to employer if verification is enabled
+        if (setting('enable_employer_email_verification') == 'yes') {
+            $token = token();
+            $tagsWithValues = array(
+                '((site_link))' => url('/'),
+                '((site_logo))' => setting('site_logo'),
+                '((first_name))' => $company['first_name'],
+                '((last_name))' => $company['last_name'],
+                '((email))' => $company['email'],
+                '((link))' => route('employer-activate-account', $token),
+            );
+            $message = replaceTagsInTemplate2(setting('employer_verify_email'), $tagsWithValues);
+            $subject = setting('site_name').' : '.__('message.verify_account');
+            $this->sendEmail($message, $company['email'], $subject);
+            $company['token'] = $token;
+            // $company['status'] = 0;
+            $successMessage = __('message.a_verification_email_has_been_sent');
+        }
+        // echo "<pre>"; print_r($company);die;
+        //Inserting company
+        Company::insert($company);
+        // $employer_id = \DB::getPdo()->lastInsertId();
+
+        //Creating employer settings if no verification is required
+        //IF not created at this step, settings will be created when employer activates account
+        // if (setting('enable_employer_email_verification') == 'no') {
+        //     Employer::importEmployerSettings($employer_id);
+
+        //     if (setting('import_employer_dummy_data_on_signup') == 'yes') {
+        //         Employer::importEmployerDummyData($employer_id);
+        //     }
+        // }
+
+        // //Creating membership
+        // $membership['employer_id'] = $employer_id;
+        // $membership['package_id'] = $freePackage->package_id;
+        // $membership['title'] = $freePackage->title;
+        // $membership['payment_type'] = 'Free';
+        // $membership['package_type'] = 'Free';
+        // $membership['price_paid'] = '0.00';
+        // $membership['details'] = json_encode($freePackage->toArray());
+        // $membership['separate_site'] = $freePackage->separate_site;
+        // $membership['status'] = 1;
+        // $membership['created_at'] = date('Y-m-d G:i:s');
+        // $membership['expiry'] = packageExpiry('free');
+        // Membership::insert($membership);
+
+        //Inserting notification for admin
+        // $newSignupMessage = __('message.new_employer_msg', array(
+        //     'name' => $request->input('company'), 
+        //     'package' => $freePackage->title, 
+        //     'date' => date('D M, Y h:i a'),
+        // ));
+        // Notification::do('employer_signup', __('message.new_employer').' ('.$request->input('company').')');
+
+        // //Sending email to admin
+        // if (setting('enable_employer_register_notification') == 'yes') {
+        //     $tagsWithValues = array(
+        //         '((site_link))' => url('/'),
+        //         '((site_logo))' => setting('site_logo'),
+        //         '((first_name))' => $employer['first_name'],
+        //         '((last_name))' => $employer['last_name'],
+        //         '((email))' => $employer['email'],
+        //         '((package))' => $membership['details'],
+        //     );
+        //     $message = replaceTagsInTemplate2(setting('employer_signup'), $tagsWithValues);
+        //     $this->sendEmail($message, setting('admin_email'), setting('site_name').' : '.__('message.new_employer_signup'));
+        // }
+        
+        die(json_encode(array(
+            'success' => 'true',
+            'messages' => $this->ajaxErrorMessage(array('success' => $successMessage))
+        )));
+    }  
+    
 
     /**
      * View Function to display register page for user
@@ -697,8 +837,8 @@ class GeneralsController extends Controller
         }
 
         $type = $request->input('type') ? $request->input('type') : 'candidate';
-
         if ($type == 'candidate') {
+
             $candidate = FrontCandidate::login($request->input('email'), $request->input('password'));
             if ($candidate) {
                 setSession('candidate', objToArr($candidate));
@@ -709,7 +849,20 @@ class GeneralsController extends Controller
                     'messages' => $this->ajaxErrorMessage(array('error' => __('message.email_password_error')))
                 )));
             }
-        } else {
+        } else if($type == 'company'){
+            
+            $company = objToArr(CompanyCompany::login($request->input('email'), $request->input('password')));
+            if ($company) {
+                setSession('company', objToArr($company));
+                $this->setRememberMe($request->input('email'), $request->input('remember'), 'company');
+            } else {
+                die(json_encode(array(
+                    'success' => 'false',
+                    'messages' => $this->ajaxErrorMessage(array('error' => __('message.email_password_error')))
+                )));
+            }  
+        }else {
+
             $employer = objToArr(EmployerEmployer::login($request->input('email'), $request->input('password')));
             if ($employer) {
                 $employer['user_type'] = 'employer';

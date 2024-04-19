@@ -21,7 +21,7 @@ class Controller extends BaseController
      */
     public function ajaxErrorMessage($data)
     {
-        if (isEmpRoute() || isAdminRoute()) {
+        if (isEmpRoute() || isAdminRoute() || isCompany()) {
             return view('admin.partials.messages-3', $data)->render();
         } else {
     	   return view('admin.partials.messages', $data)->render();
