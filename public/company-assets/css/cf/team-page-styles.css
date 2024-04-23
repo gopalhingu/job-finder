@@ -1,0 +1,26 @@
+.roles-list{margin:0;padding:0;list-style:none;overflow:auto;height: 210px;overflow: auto;padding: 0px 2px 0px 2px;}
+.roles-list>li{border-radius:2px;padding:10px;background:#f4f4f4;margin-bottom:2px;border-left:2px solid #e6e7e8;color:#444}
+.roles-list>li:last-of-type{margin-bottom:0}
+.roles-list>li>input[type='checkbox']{margin:0 10px 0 5px}
+.roles-list>li .text{display:inline-block;margin-left:5px;font-weight:600}
+.roles-list>li .label{margin-left:10px;font-size:9px}.roles-list>li .tools{display:none;float:right;color:#dd4b39}
+.roles-list>li .tools>.fa,.roles-list>li .tools>.glyphicon,.roles-list>li .tools>.ion{margin-right:5px;cursor:pointer}
+.roles-list>li:hover .tools{display:inline-block}
+.roles-list>li.done{color:#999}
+.roles-list>li.done .text{text-decoration:line-through;font-weight:500}
+.roles-list>li.done .label{background:#d2d6de !important}
+.roles-list .danger{border-left-color:#dd4b39}
+.roles-list .warning{border-left-color:#f39c12}
+.roles-list .info{border-left-color:#00c0ef}
+.roles-list .success{border-left-color:#00a65a}
+.roles-list .primary{border-left-color:#3c8dbc}
+.roles-list .handle{display:inline-block;cursor:move;margin:0 5px}
+.roles-list li.selected {background: #00c0ef;}
+.roles-list .role-title {cursor: pointer;}
+.roles-create-btn-row {margin:10px 0px 10px -13px;}
+.ms-container {width: 100% !important;}
+.ms-optgroup-label {margin: 0 !important; padding: 5px 0px 5px 5px !important; cursor: pointer !important; color: white !important;
+    font-weight: bold !important; background: #009aff !important;}
+.errors-container {margin: 10px 0px 0px 0px;}
+.user-thumb-table {height: 20px;}
+.role-cog {font-size: 10px; margin-left: -20px; position: absolute;}

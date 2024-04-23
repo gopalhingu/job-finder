@@ -1662,6 +1662,19 @@ function employerPath($bySlug = false, $adminSlug = '') {
 }
 }
 
+if (!function_exists('companyPath')) {
+    function companyPath($bySlug = false, $adminSlug = '') {
+        if ($adminSlug) { //Since admin can create departments as well, so adjustment for that
+            return config('constants.upload_dirs.company').$adminSlug;
+        } elseif ($bySlug) {
+            $slug_emp = getSession('slug_emp');
+            return config('constants.upload_dirs.company').issetVal($slug_emp, 'slug');
+        } else {
+            return config('constants.upload_dirs.company').companyId('slug');
+        }
+    }
+    }
+
 if (!function_exists('employerId')) {
 function employerId($column = '') {
     $current = employerSession('type');

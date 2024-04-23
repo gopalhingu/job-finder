@@ -9,11 +9,11 @@
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/bootstrap.min.css">
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/AdminLTE.min.css">
         <!-- iCheck -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/plugins/iCheck/square/blue.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/plugins/iCheck/square/blue.css">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -26,15 +26,15 @@
     <body class="hold-transition login-page">
         @yield('content')
         <!-- jQuery -->
-        <script src="{{url('e-assets')}}/js/jquery.min.js"></script>
+        <script src="{{url('company-assets')}}/js/jquery.min.js"></script>
         <!-- Bootstrap -->
-        <script src="{{url('e-assets')}}/js/bootstrap.min.js"></script>
+        <script src="{{url('company-assets')}}/js/bootstrap.min.js"></script>
         <!-- iCheck -->
-        <script src="{{url('e-assets')}}/plugins/iCheck/iCheck.js"></script>
+        <script src="{{url('company-assets')}}/plugins/iCheck/iCheck.js"></script>
         <!-- dropify -->
-        <script src="{{url('e-assets')}}/js/dropify.min.js"></script>
+        <script src="{{url('company-assets')}}/js/dropify.min.js"></script>
         <!-- Site -->
-        <script src="{{url('e-assets')}}/js/cf/app.js"></script>
-        <script src="{{url('e-assets')}}/js/cf/general.js"></script>
+        <script src="{{url('company-assets')}}/js/cf/app.js"></script>
+        <script src="{{url('company-assets')}}/js/cf/general.js"></script>
     </body>
 </html>

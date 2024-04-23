@@ -1,0 +1,39 @@
+.sidebar-menu li {direction: rtl; text-align: right;}
+.sidebar-menu li.header {padding: 10px 4px 10px 15px !important;}
+.main-sidebar .fa, .main-sidebar .fas, .main-sidebar .far {}
+.form-group {text-align: right !important;}
+.sidebar-menu li>a>.pull-right-container {right: 80% !important;}
+.content-header {direction: rtl;}
+.content-header>.breadcrumb {left: 10px !important; right: auto !important;}
+.dashboard-content-wrap {direction: rtl !important; text-align: right !important;}
+.dashboard-jobs-tools, .dashboard-jobs-list-tools, .dashboard-top-candidates-tools, .dashboard-todos-tools {float: left !important;}
+.dashboard-jobs-list-tools .btn-group {direction: ltr !important;}
+.dashboard-todos-tools .btn-group {direction: ltr !important;}
+#modal-default {direction: rtl !important;}
+#modal-right {direction: rtl !important;}
+.table-responsive th {text-align: right;}
+.todo-list .tools {float: left !important;}
+.job-board-main-container {}
+.job-board-candidate-wrap {direction: rtl; overflow: hidden; text-align: right;}
+.job-board-candidate-left {float: right !important;}
+.dropdown-menu {direction: rtl; text-align: right;}
+.job-board-left-top {margin: 0px 15px 0px 0px;}
+.job-board-left {direction: rtl;}
+.job-board-right-controls-inner {text-align: right; direction: rtl;}
+.job-board-candidate-pagination {direction: ltr;}
+.datatable-top-controls {direction: rtl; float: right;}
+.table-bordered {direction: rtl; float: right;}
+.table-bordered th {text-align: right;}
+.dataTables_wrapper .row {direction: rtl;}
+.dataTables_length {float: left;}
+#admin_job_create_update_form ul {direction: rtl; text-align: right;}
+.box-header {direction: rtl; text-align: right;}
+.job-create-edit {direction: rtl;}
+#admin_blog_create_update_form {direction: rtl;}
+#admin_settings_form {direction: rtl;}
+#admin_profile_form {direction: rtl;}
+#admin_password_reset_form {direction: rtl;}
+#questions-bank {direction: rtl;}
+#quiz-questions {direction: rtl;}
+#interview-questions {direction: rtl;}
+#admin_language_update_form {direction: rtl;}

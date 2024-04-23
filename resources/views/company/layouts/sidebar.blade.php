@@ -56,7 +56,7 @@
                 </ul>
             </li>
             @endif
-            @if(empAllowedTo(array('view_quizes', 'view_interviews', 'view_traites')))
+            <!-- @if(empAllowedTo(array('view_quizes', 'view_interviews', 'view_traites')))
             <li class="header">{{ __('message.scaling_tools_management') }}</li>
             @if(empAllowedTo('view_quizes'))
             <li {{ selMenu($menu, 'quizes') }}>
@@ -183,7 +183,7 @@
                 <a href="{{ rtrim(empUrlBySlug(companyId('slug')), '/') }}" target="_blank">
                 <i class="fas fa-external-link-alt"></i> <span>{{__('message.candidate_area')}}</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
     </section>
     <!-- /.sidebar -->

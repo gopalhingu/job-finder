@@ -1,0 +1,20 @@
+.departments-list{margin:0;padding:0;list-style:none;overflow:auto;height: 210px;overflow: auto;padding: 0px 2px 0px 2px;}
+.departments-list>li{border-radius:2px;padding:10px;background:#f4f4f4;margin-bottom:2px;border-left:2px solid #e6e7e8;color:#444}
+.departments-list>li:last-of-type{margin-bottom:0}
+.departments-list>li>input[type='checkbox']{margin:0 10px 0 5px}
+.departments-list>li .text{display:inline-block;margin-left:5px;font-weight:600}
+.departments-list>li .label{margin-left:10px;font-size:9px}.departments-list>li .tools{display:none;float:right;color:#dd4b39}
+.departments-list>li .tools>.fa,.departments-list>li .tools>.glyphicon,.departments-list>li .tools>.ion{margin-right:5px;cursor:pointer}
+.departments-list>li:hover .tools{display:inline-block}
+.departments-list>li.done{color:#999}
+.departments-list>li.done .text{text-decoration:line-through;font-weight:500}
+.departments-list>li.done .label{background:#d2d6de !important}
+.departments-list .danger{border-left-color:#dd4b39}
+.departments-list .warning{border-left-color:#f39c12}
+.departments-list .info{border-left-color:#00c0ef}
+.departments-list .success{border-left-color:#00a65a}
+.departments-list .primary{border-left-color:#3c8dbc}
+.departments-list .handle{display:inline-block;cursor:move;margin:0 5px}
+.departments-list li.selected {background: #00c0ef;}
+.departments-list .department-name {cursor: pointer;}
+.departments-create-btn-row {margin:10px 0px 10px -13px;}

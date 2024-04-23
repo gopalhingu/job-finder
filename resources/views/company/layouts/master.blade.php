@@ -11,44 +11,44 @@
         <!-- Favicon -->
         <link href="{{ settingEmp('site_favicon') }}" rel="icon">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/font-awesome.min.css">
         <!-- DataTables -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/dataTables.bootstrap.min.css">
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/select2.min.css"/ />
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/select2.min.css"/ />
         <!-- Bootstrap -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/bootstrap.min.css">
         <!-- jQuery Multiselect -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/jquery.multi-select.css" />
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/jquery.multi-select.css" />
         <!-- jQuery UI -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/jquery-ui.css" />
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/jquery-ui-timepicker-addon.css" />
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/jquery-ui.css" />
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/jquery-ui-timepicker-addon.css" />
         <!-- iCheck for checkboxes and radio inputs -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/plugins/iCheck/all.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/plugins/iCheck/all.css">
         <!-- dropify for images -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/dropify.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/dropify.min.css">
         <!-- css beautify -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/css-beautify.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/css-beautify.css">
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/AdminLTE.min.css">
         <!-- AdminLTE Skins -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/skin-black-light.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/skin-black-light.css">
         <!-- Pill Rating -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/bar-rating-pill.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/bar-rating-pill.css">
         <!-- Toggle -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/toggle.min.css" >
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/toggle.min.css" >
         <!-- Candidate Finder CSS. -->
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/dashboard-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/team-page-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/candidate-page-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/job-listing-page-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/quiz-page-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/interview-page-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/job-board-styles.css">
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/general-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/dashboard-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/team-page-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/candidate-page-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/job-listing-page-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/quiz-page-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/interview-page-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/job-board-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/general-styles.css">
         @php $lang = companyLanguage(); @endphp
         @if($lang['direction'] == 'rtl')
-        <link rel="stylesheet" href="{{url('e-assets')}}/css/cf/rtl-styles.css">
+        <link rel="stylesheet" href="{{url('company-assets')}}/css/cf/rtl-styles.css">
         @endif
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -92,44 +92,44 @@
 
     
     <!-- jQuery -->
-    <script src="{{url('e-assets/')}}/js/jquery.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/jquery.min.js"></script>
     <!-- jQuery UI -->
-    <script src="{{url('e-assets/')}}/js/jquery-ui.min.js"></script>
-    <script src="{{url('e-assets/')}}/js/jquery-ui-timepicker-addon.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/jquery-ui.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/jquery-ui-timepicker-addon.min.js"></script>
     <!-- Bootstrap -->
-    <script src="{{url('e-assets/')}}/js/popper.min.js"></script>
-    <script src="{{url('e-assets/')}}/js/bootstrap.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/popper.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/bootstrap.min.js"></script>
     <!-- Dashboard charts -->
-    <script src="{{url('e-assets/')}}/js/raphael.min.js"></script>
-    <script src="{{url('e-assets/')}}/js/morris.min.js"></script>
-    <script src="{{url('e-assets/')}}/js/Chart.js"></script>
+    <script src="{{url('company-assets/')}}/js/raphael.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/morris.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/Chart.js"></script>
     <!-- Slimscroll -->
-    <script src="{{url('e-assets/')}}/js/jquery.slimscroll.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/jquery.slimscroll.min.js"></script>
     <!-- DataTables -->
-    <script src="{{url('e-assets/')}}/js/jquery.dataTables.min.js"></script>
-    <script src="{{url('e-assets/')}}/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/jquery.dataTables.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/dataTables.bootstrap.min.js"></script>
     <!-- iCheck -->
-    <script src="{{url('e-assets/')}}/plugins/iCheck/iCheck.min.js"></script>
+    <script src="{{url('company-assets/')}}/plugins/iCheck/iCheck.min.js"></script>
     <!-- Select2 -->
-    <script src="{{url('e-assets/')}}/js/select2.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/select2.min.js"></script>
     <!-- dropify -->
-    <script src="{{url('e-assets/')}}/js/dropify.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/dropify.min.js"></script>
     <!-- jQuery Multiselect -->
-    <script src="{{url('e-assets/')}}/js/jquery.multi-select.js"></script>
+    <script src="{{url('company-assets/')}}/js/jquery.multi-select.js"></script>
     <!-- CKEditor -->
-    <script src="{{url('e-assets')}}/plugins/ckeditor5/upload-adapter.js"></script>
-    <script src="{{url('e-assets/')}}/plugins/ckeditor5/ckeditor.js"></script>
+    <script src="{{url('company-assets')}}/plugins/ckeditor5/upload-adapter.js"></script>
+    <script src="{{url('company-assets/')}}/plugins/ckeditor5/ckeditor.js"></script>
     <!-- Pill Bar Rating -->
-    <script src="{{url('e-assets/')}}/js/bar-rating.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/bar-rating.min.js"></script>
     <!-- Toggle -->
-    <script src="{{url('e-assets/')}}/js/toggle.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/toggle.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="{{url('e-assets/')}}/js/adminlte.min.js"></script>
+    <script src="{{url('company-assets/')}}/js/adminlte.min.js"></script>
     <!-- Candidate Finder Lang -->
     <script src="{{url('g-assets/')}}/js/lang.js"></script>
     <!-- Candidate Finder App -->
-    <script src="{{url('e-assets/')}}/js/cf/app.js"></script>
-    <script src="{{url('e-assets/')}}/js/cf/general.js"></script>
+    <script src="{{url('company-assets/')}}/js/cf/app.js"></script>
+    <script src="{{url('company-assets/')}}/js/cf/general.js"></script>
     @yield('page-scripts')
     
     {!! setting('company_footer_scripts') !!}

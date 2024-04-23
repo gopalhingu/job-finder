@@ -338,7 +338,69 @@ Route::group(['prefix'=>'company', 'middleware'=>['essset']], function() {
 	Route::get('/reset-password/{token}', $CoComCont.'@resetPasswordView')->name('company-reset-password');
 	Route::post('/reset-password-post', $CoComCont.'@resetPassword')->name('company-reset-password-post');
 	Route::get('/activate-account/{token}', $CoComCont.'@activateAccount')->name('company-activate-account');
+
+
+	$CoJobCont = 'App\Http\Controllers\Company\JobsController';
+	Route::get('/jobs/create-or-edit/{job_id?}', $CoJobCont.'@createOrEdit')->name('company-jobs-create-or-edit');
+	Route::get('/jobs', $CoJobCont.'@listView')->name('company-jobs');
+	Route::get('/all-jobs', $CoJobCont.'@allJobListView')->name('all-company-jobs');
+	Route::post('/jobs/data', $CoJobCont.'@data')->name('company-jobs-data');
+	Route::post('/all-jobs/data', $CoJobCont.'@allData')->name('company-all-jobs-data');
+	Route::post('/job/transfer', $CoJobCont.'@jobTransfer')->name('company-jobs-transfer');
+	Route::get('/jobs/create-or-edit/{job_id?}', $CoJobCont.'@createOrEdit')->name('company-jobs-create-or-edit');
+	Route::post('/jobs/save', $CoJobCont.'@save')->name('company-jobs-save');
+	Route::get('/jobs/status/{job_id}/{status}', $CoJobCont.'@changeStatus')->name('company-jobs-status');
+	Route::get('/jobs/delete/{job_id}', $CoJobCont.'@delete')->name('company-jobs-delete');
+	Route::post('/jobs/excel', $CoJobCont.'@excel')->name('company-jobs-excel');
+	Route::get('/jobs/add-custom-field', $CoJobCont.'@addCustomField')->name('company-jobs-add-custom-field');
+	Route::get('/jobs/remove-custom-field/{job_id}', $CoJobCont.'@removeCustomField')->name('company-jobs-remove-custom-field');
+
+	$CoDepaFilCont = 'App\Http\Controllers\Company\DepartmentsController';
+	Route::get('/departments', $CoDepaFilCont.'@listView')->name('company-depa');
+	Route::post('/departments/data', $CoDepaFilCont.'@data')->name('company-depa-data');
+	Route::get('/departments/create-or-edit/{department_id?}', $CoDepaFilCont.'@createOrEdit')->name('company-depa-create-or-edit');
+	Route::post('/departments/save', $CoDepaFilCont.'@save')->name('company-depa-save');
+	Route::get('/departments/status/{department_id}/{status}', $CoDepaFilCont.'@changeStatus')->name('company-depa-status');
+	Route::post('/departments/bulk-action', $CoDepaFilCont.'@bulkAction')->name('company-depa-bulk-action');
+	Route::get('/departments/delete/{department_id}', $CoDepaFilCont.'@delete')->name('company-depa-delete');
+
+	//Company job filter module routes
+	$CoJobFilCont = 'App\Http\Controllers\Company\JobFiltersController';
+	Route::get('/job-filters', $CoJobFilCont.'@listView')->name('Company-job-fil');
+	Route::post('/job-filters/data', $CoJobFilCont.'@data')->name('Company-job-fil-data');
+	Route::get('/job-filters/create-or-edit/{filter_id?}', $CoJobFilCont.'@createOrEdit')->name('Company-job-fil-create-or-edit');
+	Route::post('/job-filters/save', $CoJobFilCont.'@save')->name('Company-job-fil-');
+	Route::get('/job-filters/update-values/{filter_id}', $CoJobFilCont.'@updateValuesForm')->name('Company-job-fil-values-form');
+	Route::post('/job-filters/update-values', $CoJobFilCont.'@updateValues')->name('Company-job-fil-update-values');
+	Route::get('/job-filters/new-value', $CoJobFilCont.'@newValue')->name('Company-job-fil-new-value');
+	Route::get('/job-filters/status/{filter_id}/{status}', $CoJobFilCont.'@changeStatus')->name('Company-job-fil-change-status');
+	Route::get('/job-filters/delete/{filter_id}', $CoJobFilCont.'@delete')->name('Company-job-fil-delete');
+
+
+	//company Job Board routes
+	$CoJobBoaCont = 'App\Http\Controllers\Company\JobBoardController';
+	Route::get('/job-board', $CoJobBoaCont.'@index')->name('Company-job-boa');
+	Route::post('/job-board/jobs-list', $CoJobBoaCont.'@jobsList')->name('Company-job-boa-jobs-list');
+	Route::post('/job-board/candidates-list/{job_id?}', $CoJobBoaCont.'@candidatesList')->name('Company-job-boa-candidates-list');
+	Route::get('/job-board/assign-view/{type}/{job_id}', $CoJobBoaCont.'@assignView')->name('Company-job-boa-assign-view');
+	Route::post('/job-board/assign', $CoJobBoaCont.'@assign')->name('Company-job-boa-assign');
+	Route::get('/job-board/delete-interview/{job_id}', $CoJobBoaCont.'@deleteInterview')->name('Company-job-boa-delete-interview');
+	Route::get('/job-board/delete-quiz/{job_id}', $CoJobBoaCont.'@deleteQuiz')->name('Company-job-boa-delete-quiz');
+	Route::post('/job-board/candidate-status', $CoJobBoaCont.'@candidateStatus')->name('Company-job-boa-candidate-status');
+	Route::post('/job-board/delete-app', $CoJobBoaCont.'@deleteApplication')->name('Company-job-boa-delete-app');
+	Route::get('/job-board/job/{job_id}', $CoJobBoaCont.'@viewJob')->name('Company-job-boa-job');
+	Route::get('/job-board/resume/{job_id}', $CoJobBoaCont.'@viewResume')->name('Company-job-boa-resume');
+	Route::post('/job-board/overall-result', $CoJobBoaCont.'@overallResult')->name('Company-job-boa-overall-result');
+	Route::post('/job-board/pdf-result', $CoJobBoaCont.'@pdfResult')->name('Company-job-boa-pdf-result');
+	Route::get('/job-board/{job_id}', $CoJobBoaCont.'@index')->name('Company-job-boa-para');
+
+	
 });
+
+
+
+
+
 
 /*----------------------------------------------*/
 /*----------------------------------------------*/
