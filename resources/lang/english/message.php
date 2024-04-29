@@ -154,6 +154,7 @@ $lang["only_employers"] = "Only Employers";
 $lang["both"] = "Both";
 $lang["display_jobs_front"] = "Display Jobs on Main/Front Site.";
 $lang["employers_without_separate_site"] = "From employers without separate site.";
+$lang["company_without_separate_site"] = "From companys without separate site.";
 $lang["from_all_employers"] = "From all employers.";
 $lang["display_departments_front"] = "Display departments on main/front site.";
 $lang["display_employers_front"] = "Display employers on main/front site.";

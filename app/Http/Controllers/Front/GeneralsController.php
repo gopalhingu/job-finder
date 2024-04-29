@@ -68,7 +68,13 @@ class GeneralsController extends Controller
             $orderBy = explode(' ', setting('home_jobs_section_sort_order'));
             $orderByCol = issetVal($orderBy, 0, 'jobs.job_id');
             $orderByDir = issetVal($orderBy, 1, 'DESC');
-            $data['jobs'] = FrontJob::getForFront(true, $limit, $orderByCol, $orderByDir);
+            if ( candidateSession() ) {
+                $data['jobs'] = FrontJob::getForFrontwithCandidate(true, candidateSession(), $limit, $orderByCol, $orderByDir);
+            } else if ( companySession() ) {
+                $data['jobs'] = FrontJob::getForFrontwithCompany(true, companySession(), $limit, $orderByCol, $orderByDir);
+            } else{
+                $data['jobs'] = FrontJob::getForFront(true, $limit, $orderByCol, $orderByDir);
+            }
             $data['favorites'] = FrontJob::getFavorites();
         }
         if (setting('home_candidates_section') == 'enabled') {
@@ -269,14 +275,8 @@ class GeneralsController extends Controller
             'success' => 'true',
             'messages' => $this->ajaxErrorMessage(array('success' => $successMessage))
         )));
-    }  
-
-    /**
-     * View Function to submit register company form
-     *
-     * @return html/string
-     */
-
+    }
+    
     public function registerCompany(Request $request)
     {
         $this->checkIfDemo();
@@ -415,7 +415,6 @@ class GeneralsController extends Controller
             'messages' => $this->ajaxErrorMessage(array('success' => $successMessage))
         )));
     }  
-    
 
     /**
      * View Function to display register page for user
@@ -837,8 +836,8 @@ class GeneralsController extends Controller
         }
 
         $type = $request->input('type') ? $request->input('type') : 'candidate';
-        if ($type == 'candidate') {
 
+        if ($type == 'candidate') {
             $candidate = FrontCandidate::login($request->input('email'), $request->input('password'));
             if ($candidate) {
                 setSession('candidate', objToArr($candidate));
@@ -849,7 +848,7 @@ class GeneralsController extends Controller
                     'messages' => $this->ajaxErrorMessage(array('error' => __('message.email_password_error')))
                 )));
             }
-        } else if($type == 'company'){
+        }  else if($type == 'company'){
             
             $company = objToArr(CompanyCompany::login($request->input('email'), $request->input('password')));
             if ($company) {
@@ -862,7 +861,6 @@ class GeneralsController extends Controller
                 )));
             }  
         }else {
-
             $employer = objToArr(EmployerEmployer::login($request->input('email'), $request->input('password')));
             if ($employer) {
                 $employer['user_type'] = 'employer';

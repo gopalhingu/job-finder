@@ -822,14 +822,20 @@ function Main() {
         $('.btn-login-type-label').on('click', function() {
             $(this).parent().find('.btn').removeClass('active');
             $(this).addClass('active');
-            var type = $('input[name="type"]:checked').val();
-            if (type == 'candidate' || type == 'company') {
+            var type = $(this).prev('input[type="radio"]').val();
+            if (type == 'candidate' ) {
                 $('#register-company-field-container').show();
                 $('#register-company-field').show();
                 $('#register-company-field').prop('disabled', false);
                 $('#linkedin-link').prop('href', $('#linkedin-link-employer').val());
                 $('#google-link').prop('href', $('#google-link-employer').val());
-            } else {
+            } else if( type == 'company') {
+                $('#register-company-field-container').show();
+                $('#register-company-field').show();
+                $('#register-company-field').prop('disabled', false);
+                $('#linkedin-link').prop('href', $('#linkedin-link-employer').val());
+                $('#google-link').prop('href', $('#google-link-employer').val());
+            }else {
                 $('#register-company-field-container').hide();
                 $('#register-company-field').hide();
                 $('#register-company-field').prop('disabled', true);

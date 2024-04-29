@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Validator;
 use SimpleExcel\SimpleExcel;
 use Dompdf\Dompdf;
 
-use App\Models\Employer\Job;
-use App\Models\Employer\Candidate;
-use App\Models\Employer\JobBoard;
-use App\Models\Employer\Interview;
-use App\Models\Employer\Dashboard;
+use App\Models\Company\Job;
+use App\Models\Company\Candidate;
+use App\Models\Company\JobBoard;
+use App\Models\Company\Interview;
+use App\Models\Company\Dashboard;
 
 use App\Models\Front\Company;
 use App\Models\Company\Company as CompanyCompany;
