@@ -746,6 +746,31 @@ class Job extends Model
         DB::table('job_favorites')->where($data)->delete();
     }
 
+    public static function followJob($job_id)
+    {
+        $existing = DB::table('job_follow')->where('job_id', decode($job_id))
+            ->where('employer_id', employerSession())
+            ->first();
+        if (!$existing) {
+            $job_id = decode($job_id);
+            $detail = Self::getSingle('jobs.job_id', $job_id);
+            $data['job_id'] = $job_id;
+            $data['created_at'] = date('Y-m-d G:i:s');
+            $data['employer_id'] = employerSession();
+            DB::table('job_follow')->insert($data);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function unfollowJob($job_id)
+    {
+        $data['job_id'] = decode($job_id);
+        $data['employer_id'] = employerSession();
+        DB::table('job_follow')->where($data)->delete();
+    }
+
     public static function sorted($jobs, $multiple = true)
     {
         $return = array();

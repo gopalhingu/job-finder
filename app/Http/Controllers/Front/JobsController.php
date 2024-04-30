@@ -197,6 +197,34 @@ class JobsController extends Controller
         echo json_encode(array('success' => 'true', 'messages' => ''));
     }
 
+
+     /**
+     * Function to mark jobs as favorite
+     *
+     * @return html/string
+     */
+    public function followJob($id = null)
+    {
+        if (employerSession()) {
+            if (Job::followJob($id)) {
+                echo json_encode(array('success' => 'true', 'messages' => ''));
+            }
+        } else {
+            echo json_encode(array('success' => 'false', 'messages' => ''));
+        }
+    } 
+
+    /**
+     * Function to unmark jobs as favorite
+     *
+     * @return html/string
+     */
+    public function unfollowJob($id = null)
+    {
+        Job::unfollowJob($id);
+        echo json_encode(array('success' => 'true', 'messages' => ''));
+    }
+
     /**
      * Function to display refer job form
      *

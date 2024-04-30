@@ -4,6 +4,8 @@ $lang["all_job"] = "All jobs";
 $lang["all_listing"] = "All listing";
 $lang["job_type"] = "Job Type";
 $lang["as_company"] = "As Company";
+$lang["follow_job"] = "Follow Job";
+$lang["unfollow_job"] = "Follow Job";
 
 $lang["email_password_error"] = "Email and/or password was not found.";
 $lang["add_employer"] = "Add Employer";

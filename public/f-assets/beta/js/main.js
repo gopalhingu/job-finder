@@ -891,6 +891,42 @@ function Main() {
         });
     };
 
+    // $('.follow-job').on('click', function() {
+    //     alert("ASd")
+    // });
+
+    this.initFollowUnfollowJob = function () {
+        $('.follow-job').on('click', function() {
+            var item = $(this);
+            if (item.hasClass('followjob')) {
+                console.log("Asd1")
+                application.load('/unmark-favorite/'+$(this).data('id'), '', function (result) {
+                    var result = JSON.parse(application.response);
+                    if (result.success == 'true') {
+                        item.removeClass('followedjob');
+                        item.removeClass('fa-solid');
+                        item.addClass('fa-regular');
+                        item.attr('title', lang['mark_favorite']);
+                    }
+                });
+            } else {
+            console.log("Asd")
+
+                application.load('/mark-favorite/'+$(this).data('id'), '', function (result) {
+                    var result = JSON.parse(application.response);
+                    if (result.success == 'true') {
+                        item.addClass('followjob');
+                        item.addClass('fa-solid');
+                        item.removeClass('fa-regular');
+                        item.attr('title', lang['unfollow_job']);
+                    } else {
+                        $('.global-login-btn').trigger('click');
+                    }
+                });
+            }
+        });
+    };
+
     this.initMarkUnmarkCandidateFavorite = function () {
         $('.mark-candidate-favorite').off();
         $('.mark-candidate-favorite').on('click', function() {
@@ -1007,6 +1043,7 @@ $(document).ready(function() {
 
     main.initMarkUnmarkCandidateFavorite();
     main.initMarkUnmarkJobFavorite();
+    main.initFollowUnfollowJob();
     main.initJobRefer();
 
 });

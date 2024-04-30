@@ -50,6 +50,10 @@
                         {{__('message.mark_favorite')}}
                         @endif                        
                     </button>
+                    <button class="btn">
+                        <i class="fa-regular fa-heart follow-job" data-id="{{encode($job['job_id'])}}"></i>
+                        {{__('message.follow_job')}}
+                    </button>
                     <button class="btn refer-job" data-id="{{encode($job['job_id'])}}">
                         <i class="fa-regular fa-paper-plane"></i> {{__('message.refer_this_job')}}
                     </button>

@@ -52,6 +52,7 @@ class DbTables
         Self::createJobTraiteAnswersTable();
         Self::createJobApplicationsTable();
         Self::createJobFavoritesTable();
+        Self::createJobFollowTable();
         Self::createCandidateFavoritesTable();
         Self::createJobReferredTable();
         Self::createNewsCategoriesTable();
@@ -847,6 +848,17 @@ class DbTables
             Schema::create('job_favorites', function (Blueprint $table) {
                 $table->bigInteger('job_id')->unsigned()->nullable();
                 $table->bigInteger('candidate_id')->unsigned()->nullable();
+                $table->bigInteger('employer_id')->unsigned()->nullable();
+                $table->timestamps();
+            });
+        }
+    }
+
+    private static function createJobFollowTable()
+    {
+        if (!Schema::hasTable('job_follow')) {
+            Schema::create('job_follow', function (Blueprint $table) {
+                $table->bigInteger('job_id')->unsigned()->nullable();
                 $table->bigInteger('employer_id')->unsigned()->nullable();
                 $table->timestamps();
             });
