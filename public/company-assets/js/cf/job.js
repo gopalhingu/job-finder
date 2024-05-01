@@ -42,6 +42,7 @@ function Job() {
                     self.initJobCreateOrEditForm();
                     self.initJobChangeStatus();
                     self.initJobDelete();
+                    self.initJobFollowGetValuesForm();
                     $('.table-bordered').parent().attr('style', 'overflow:auto'); //For responsive
                 },
             },
@@ -52,6 +53,33 @@ function Job() {
             'autoWidth': true,
             'destroy':true,
             'stateSave': true
+        });
+    };
+
+    this.initJobFollowGetValuesForm = function () {
+        $('.get-job-follow-values').off();
+        $('.get-job-follow-values').on('click', function () {
+            var modal = '#modal-default';
+            var id = $(this).data('id');
+            var title = $(this).data('title');
+            $(modal).modal('show');
+            $(modal+' .modal-title').html(lang['update'] + " : " + title);
+            application.load('/company/job-follow/get-values/'+id, modal+' .modal-body-container', function (result) {
+                console.log(result)
+                // self.initJobFilterValuesSave();
+                self.initJobFollowAddValue();
+                // self.initJobFilterRemoveValue();
+            });
+        });
+    };
+
+    this.initJobFollowAddValue = function () {
+        $('.add-value').off();
+        $('.add-value').on('click', function () {
+            application.load('/company/job-follow/new-value', '', function (result) {
+                $('.values-container').append(result);
+                // self.initJobFilterRemoveValue();
+            });
         });
     };
 

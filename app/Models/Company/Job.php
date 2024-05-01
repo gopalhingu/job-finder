@@ -531,6 +531,9 @@ class Job  extends Model
                 <button type="button" class="btn btn-danger btn-xs delete-job" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
             ';
             }
+            $actions .= '
+                <button type="button" class="btn btn-warning btn-xs get-job-follow-values" data-id="'.$id.'" data-title="'.$j['title'].'"><i class="fas fa-list"></i></button>
+            ';
             $sorted[] = array(
                 "<input type='checkbox' class='minimal single-check' data-id='".$id."' />",
                 esc_output($j['title']),
@@ -546,6 +549,20 @@ class Job  extends Model
             );
         }
         return $sorted;
+    }
+
+    public static function getAllValues($id)
+    {
+        // $query = DB::table('jobs')->where('job_id', decode($id))->get();
+        $decodedId = decode($id);
+        $query = DB::table('jobs')
+                ->where('jobs.job_id', $decodedId)
+                ->select('jobs.*')
+                ->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id')
+                ->groupBy('jobs.job_id')
+                ->get();
+
+        return $query ? $query->toArray() : array();
     }
 
     public static function getSlug($title, $slug, $edit)
