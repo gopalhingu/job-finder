@@ -900,7 +900,7 @@ function Main() {
             var item = $(this);
             if (item.hasClass('followjob')) {
                 console.log("Asd1")
-                application.load('/unmark-favorite/'+$(this).data('id'), '', function (result) {
+                application.load('/unfollow-job/'+$(this).data('id'), '', function (result) {
                     var result = JSON.parse(application.response);
                     if (result.success == 'true') {
                         item.removeClass('followedjob');
@@ -912,7 +912,7 @@ function Main() {
             } else {
             console.log("Asd")
 
-                application.load('/mark-favorite/'+$(this).data('id'), '', function (result) {
+                application.load('/follow-job/'+$(this).data('id'), '', function (result) {
                     var result = JSON.parse(application.response);
                     if (result.success == 'true') {
                         item.addClass('followjob');
