@@ -112,16 +112,14 @@ class JobsController extends Controller
         echo json_encode(APIjob::jobsList($request->all()));
     }
 
-     /**
-     * View Function (for ajax) to display update values view page via modal
-     *
-     * @param integer $job_filter_id
-     * @return html/string
-     */
     public function getValuesForm($job_id = NULL)
     {
-        $values = objToArr(Job::getAllValues($job_id));
-        echo view('company.job-board.values', compact('values', 'job_id'))->render();
+        $data['page'] = __('message.jobs');
+        $data['menu'] = 'jobs';
+        // $data['job_filters'] =  objToArr(Job::getAllValues($job_id));
+        $data['departments'] = objToArr(Department::getAll());
+        $data['job_filters'] = objToArr(JobFilter::getAll());
+        return view('company.job-board.values', $data);
     }
     /**
      * View Function (for ajax) to display new value field
@@ -129,9 +127,9 @@ class JobsController extends Controller
      * @param integer $job_filter_id
      * @return html/string
      */
-    public function newValue($job_id = NULL)
+    public function newValue(Request $request)
     {
-        echo view('company.job-board.values')->render();
+        echo json_encode(Job::jobsList($request->all()));
     }
 
     /**
