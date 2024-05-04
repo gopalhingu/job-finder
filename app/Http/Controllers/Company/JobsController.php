@@ -112,6 +112,25 @@ class JobsController extends Controller
         echo json_encode(APIjob::jobsList($request->all()));
     }
 
+    public function getValuesForm($job_id = NULL)
+    {
+        $data['page'] = __('message.jobs');
+        $data['menu'] = 'jobs';
+        // $data['job_filters'] =  objToArr(Job::getAllValues($job_id));
+        // $data['departments'] = objToArr(Department::getAll());
+        // $data['job_filters'] = objToArr(JobFilter::getAll());
+        return view('company.jobs.values', $data);
+    }
+    /**
+     * View Function (for ajax) to display new value field
+     *
+     * @param integer $job_filter_id
+     * @return html/string
+     */
+    public function newValue(Request $request)
+    {
+        echo json_encode(Job::getAllValues($request->all()));
+    }
     /**
      * View Function (for ajax) to display create or edit job
      *
@@ -196,6 +215,17 @@ class JobsController extends Controller
         }
 
         Job::changeStatus($job_id, $status);
+    }
+
+    public function changeJobFollowStatus($job_follow_id = null, $job_follow_status = null)
+    {
+        $this->checkIfDemo();
+
+        // if ($job_follow_status == '0') {
+        //     $this->checkActiveJobs();
+        // }
+
+        Job::changeFollowStatus($job_follow_id, $job_follow_status);
     }
 
     /**

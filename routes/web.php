@@ -354,6 +354,9 @@ Route::group(['prefix'=>'company', 'middleware'=>['essset']], function() {
 	Route::post('/jobs/excel', $CoJobCont.'@excel')->name('company-jobs-excel');
 	Route::get('/jobs/add-custom-field', $CoJobCont.'@addCustomField')->name('company-jobs-add-custom-field');
 	Route::get('/jobs/remove-custom-field/{job_id}', $CoJobCont.'@removeCustomField')->name('company-jobs-remove-custom-field');
+	Route::get('/job-follow/get-values/{filter_id}', $CoJobCont.'@getValuesForm')->name('Company-job-follow-values-form');
+	Route::post('/jobs/job-follow/new-value', $CoJobCont.'@newValue')->name('Company-job-follow-new-value');
+	Route::get('/jobs/job-follow-status/{job_follow_id}/{status}', $CoJobCont.'@changeJobFollowStatus')->name('company-jobs-status');
 
 	$CoDepaFilCont = 'App\Http\Controllers\Company\DepartmentsController';
 	Route::get('/departments', $CoDepaFilCont.'@listView')->name('company-depa');

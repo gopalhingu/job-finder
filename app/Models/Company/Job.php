@@ -253,6 +253,11 @@ class Job  extends Model
         Self::where('job_id', decode($job_id))->update(array('status' => ($status == 1 ? 0 : 1)));
     }
 
+    public static function changeFollowStatus($job_follow_id, $job_follow_status)
+    {
+        DB::table('job_follow')->where('id', decode($job_follow_id))->update(array('status' => ($job_follow_status == 1 ? 0 : 1)));
+    }
+
     public static function remove($job_id)
     {
         $job_id = decode($job_id);
@@ -359,7 +364,7 @@ class Job  extends Model
 
         $query = Self::whereNotNull('jobs.job_id');
         $query->select(
-            'jobs.job_id',
+            'jobs.job_ids',
             'jobs.department_id',
             'jobs.title',
             'jobs.status',
@@ -439,6 +444,107 @@ class Job  extends Model
         );
 
         return $result;
+    }
+
+    
+    public static function getAllValues($request)
+    {
+        $columns = array(
+            "",
+            "jobs.title",
+            "",
+            "jobs.created_at",
+            "job_follow_1.status",
+        );
+        $orderColumn = $columns[($request['order'][0]['column'] == 0 ? 5 : $request['order'][0]['column'])];
+        $orderDirection = $request['order'][0]['dir'];
+        $srh = $request['search']['value'];
+        $limit = $request['length'];
+        $offset = $request['start'];
+        $jobid = decode($request['jobid']);
+
+        $query = Self::whereNotNull('jobs.job_id');
+        $query->select(
+            "employers.first_name",
+            "job_follow_1.status as jobFollowStatus",
+            "job_follow_1.id as jobFollowId",
+            'jobs.job_id',
+            'jobs.title',
+            'jobs.status',
+            'jobs.created_at',
+        );
+        if ($srh) {
+            $query->where(function($q) use($srh) {
+                $q->where('employers.first_name', 'like', '%'.$srh.'%');
+            });
+        }
+        
+        if (isset($request['jobFollowStatus']) && $request['jobFollowStatus'] != '') {
+            $query->where('job_follow_1.status', $request['jobFollowStatus']);
+        }
+       
+        $combined = array();
+      
+        $query->where('jobs.company_id', companyId());
+        $query->where('jobs.job_id', $jobid);
+        $query->leftJoin('job_follow as job_follow_1', 'job_follow_1.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('employers', 'employers.employer_id', '=', 'job_follow_1.employer_id');
+        $query->groupBy('jobs.job_id');
+        
+        //Enabling multi cross relationed filter search
+        if (isset($request['job_filters']) && $combined) {
+            $combined = combinationsOfArray($combined, count($combined));
+            $c = 1;
+            foreach ($combined as $comb) {
+                if ($c == 1) {
+                    $query->havingRaw('combined', [$comb]);
+                } else {
+                    $query->orHavingRaw('combined', [$comb]);
+                }
+                $c++;
+            }
+        }
+
+        $query->orderBy($orderColumn, $orderDirection);
+        $query->skip($offset);
+        $query->take($limit);
+        $result = $query->get();
+        $result = $result ? $result->toArray() : array();
+
+        $result = array(
+            'data' => Self::prepareDataJobFollowForTable($result),
+            'recordsTotal' => Self::getTotal(),
+            'recordsFiltered' => Self::getTotal($srh, $request),
+        );
+
+        return $result;
+    }
+
+    private static function prepareDataJobFollowForTable($jobs)
+    {
+        $sorted = array();
+        foreach ($jobs as $j) {
+            $j = objToArr($j);
+            $id = encode($j['job_id']);
+            $jobFollowId = encode($j['jobFollowId']);
+            
+            if ($j['jobFollowStatus'] == 1) {
+                $button_text = __('message.active');
+                $button_class = 'success';
+                $button_title = __('message.click_to_deactivate');
+            } else {
+                $button_text = __('message.inactive');
+                $button_class = 'danger';
+                $button_title = __('message.click_to_activate');
+            }
+            $sorted[] = array(
+                "<input type='checkbox' class='minimal single-check' data-id='".$id."' />",
+                esc_output($j['first_name']),
+                date('d M, Y', strtotime($j['created_at'])),
+                '<button type="button" title="'.$button_title.'" class="btn btn-'.$button_class.' btn-xs change-job-follow-status" data-status="'.$j['jobFollowStatus'].'" data-id="'.$jobFollowId.'">'.$button_text.'</button>',
+            );
+        }
+        return $sorted;
     }
 
     public static function getTotal($srh = false, $request = '')
@@ -531,6 +637,9 @@ class Job  extends Model
                 <button type="button" class="btn btn-danger btn-xs delete-job" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
             ';
             }
+            $actions .= '
+                <button type="button" class="btn btn-primary btn-xs get-job-follow-values" data-id="'.$id.'"><i class="fas fa-list"></i></button>
+            ';
             $sorted[] = array(
                 "<input type='checkbox' class='minimal single-check' data-id='".$id."' />",
                 esc_output($j['title']),

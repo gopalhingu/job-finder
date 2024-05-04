@@ -42,6 +42,7 @@ function Job() {
                     self.initJobCreateOrEditForm();
                     self.initJobChangeStatus();
                     self.initJobDelete();
+                    self.initJobFollowList();
                     $('.table-bordered').parent().attr('style', 'overflow:auto'); //For responsive
                 },
             },
@@ -52,6 +53,81 @@ function Job() {
             'autoWidth': true,
             'destroy':true,
             'stateSave': true
+        });
+    };
+
+    this.initJobFollowFilters = function () {
+        $("#jobFollowstatus").off();
+        $("#jobFollowstatus").on('change', function () {
+            var urlParts = window.location.pathname.split('/');
+            var idFromUrl = urlParts[urlParts.length - 1]; 
+            self.initJobsFollowDatatable(idFromUrl);
+        });
+        $('.select2').select2();
+    };
+
+    this.initJobsFollowDatatable = function (jobid) {
+        $('#jobs_follow_datatable').DataTable({
+            "aaSorting": [[ 3, 'desc' ]],
+            "columnDefs": [{"orderable": false, "targets": [0,3,3]}],
+            "lengthMenu": [[3, 25, 50, 100000000], [3, 25, 50, "All"]],
+            "searchDelay": 1000,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "type": "POST",
+                "url": application.url+'/company/jobs/job-follow/new-value',
+                "data": function ( d ) {
+                    console.log(d)
+                    d.jobFollowStatus = $('#jobFollowstatus').val();
+                    d.jobid = jobid;
+                    // d.job_filters = job_filters;
+                    d._token = application._token;
+                },
+                "complete": function (response) {
+                    self.initiCheck();
+                    self.initAllCheck();
+                    self.initJobFollowChangeStatus();
+                    $('.table-bordered').parent().attr('style', 'overflow:auto'); //For responsive
+                },
+            },
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'info': true,
+            'autoWidth': true,
+            'destroy':true,
+            'stateSave': true
+        });
+    };
+
+    this.initJobFollowChangeStatus = function () {
+        $('.change-job-follow-status').off();
+        $('.change-job-follow-status').on('click', function () {
+            var button = $(this);
+            var id = $(this).data('id');
+            var status = parseInt($(this).data('status'));
+            button.html("<i class='fa fa-spin fa-spinner'></i>");
+            button.attr("disabled", true);
+            application.load('/company/jobs/job-follow-status/'+id+'/'+status, '', function (result) {
+                if (application.response != '') {
+                    var result = JSON.parse(application.response);
+                    if (result.success == 'false') {
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        $('.messages-container').html(result.messages);
+                        button.html(lang['inactive']);
+                        button.attr("disabled", false);
+                        return false;
+                    }
+                }
+                button.removeClass('btn-success');
+                button.removeClass('btn-danger');
+                button.addClass(status === 1 ? 'btn-danger' : 'btn-success');
+                button.html(status === 1 ? lang['inactive'] : lang['active']);
+                button.data('status', status === 1 ? 0 : 1);
+                button.attr("disabled", false);
+                button.attr("title", status === 1 ? lang['click_to_activate'] : lang['click_to_deactivate']);
+            });
         });
     };
 
@@ -75,6 +151,15 @@ function Job() {
             var id = $(this).data('id');
             id = id ? '/'+id : '';
             window.location = application.url+'/company/jobs/create-or-edit'+id;            
+        });
+    };
+
+    this.initJobFollowList = function () {
+        $('.get-job-follow-values').off();
+        $('.get-job-follow-values').on('click', function () {
+            var id = $(this).data('id');
+            id = id ? '/'+id : '';
+            window.location = application.url+'/company/job-follow/get-values'+id;            
         });
     };
 
@@ -247,12 +332,18 @@ function Job() {
 $(document).ready(function() {
     var job = new Job();
 
+    var urlParts = window.location.pathname.split('/');
+    var idFromUrl = urlParts[urlParts.length - 1]; 
+
     //For both screens
     job.initiCheck();
 
     //For listing screen
     job.initFilters();
     job.initJobsDatatable();
+    
+    job.initJobFollowFilters();
+    job.initJobsFollowDatatable(idFromUrl);
     job.initJobsListBulkActions();
     
     //For create edit screen
