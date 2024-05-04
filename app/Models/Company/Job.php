@@ -364,7 +364,7 @@ class Job  extends Model
 
         $query = Self::whereNotNull('jobs.job_id');
         $query->select(
-            'jobs.job_ids',
+            'jobs.job_id',
             'jobs.department_id',
             'jobs.title',
             'jobs.status',
