@@ -445,6 +445,147 @@ class Job  extends Model
 
         return $result;
     }
+    
+
+    public static function getAllValues($request)
+    {
+        $columns = array(
+            "",
+            "jobs.title",
+            "departments.department_id",
+            "",
+            "applications_count",
+            "favorites_count",
+            "referred_count",
+            "traites_count",
+            "jobs.created_at",
+            "jobs.status",
+        );
+        $orderColumn = $columns[($request['order'][0]['column'] == 0 ? 5 : $request['order'][0]['column'])];
+        $orderDirection = $request['order'][0]['dir'];
+        $srh = $request['search']['value'];
+        $limit = $request['length'];
+        $offset = $request['start'];
+
+        $query = Self::whereNotNull('jobs.job_id');
+        $query->select(
+            'jobs.job_id',
+            'jobs.department_id',
+            'jobs.title',
+            'jobs.status',
+            'jobs.created_at',
+            'departments.title as department',
+            DB::Raw('COUNT(DISTINCT('.dbprfx().'job_applications.job_application_id)) as applications_count'),
+            DB::Raw('COUNT(DISTINCT(CONCAT('.dbprfx().'job_favorites.candidate_id, '.dbprfx().'job_favorites.job_id))) as favorites_count'),
+            DB::Raw('COUNT(DISTINCT(CONCAT('.dbprfx().'job_referred.candidate_id, '.dbprfx().'job_referred.job_id))) as referred_count'),
+            DB::Raw('COUNT(DISTINCT('.dbprfx().'job_traites.traite_id)) as traites_count'),
+            DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_filter_values.title) SEPARATOR ",") as job_filter_values'),
+            DB::Raw('GROUP_CONCAT(DISTINCT(CONCAT('.dbprfx().'job_filter_value_assignments.job_filter_id, "-", '.dbprfx().'job_filter_value_assignments.job_filter_value_id))) AS combined')
+        );
+        if ($srh) {
+            $query->where(function($q) use($srh) {
+                $q->where('jobs.title', 'like', '%'.$srh.'%')
+                ->orWhere('jobs.description', 'like', '%'.$srh.'%');
+            });
+        }
+        if (isset($request['status']) && $request['status'] != '') {
+            $query->where('jobs.status', $request['status']);
+        }
+        if (isset($request['department']) && $request['department'] != '') {
+            $query->where('departments.department_id', decode($request['department']));
+        }
+        $combined = array();
+        if (isset($request['job_filters'])) {
+            $job_filter_ids = array();
+            $job_filter_value_ids = array();
+            foreach ($request['job_filters'] as $job_filter_id => $job_filter_value_id) {
+                if ($job_filter_id && $job_filter_value_id) {
+                    $combined[] = decode($job_filter_id).'-'.decode($job_filter_value_id);
+                    $job_filter_ids[] = $job_filter_id;
+                    $job_filter_value_ids[] = $job_filter_value_id;
+                }
+            }
+            if ($job_filter_ids && $job_filter_value_ids) {
+                $query->where(function($q) use($srh, $job_filter_ids, $job_filter_value_ids) {
+                    $q->whereIn('job_filter_value_assignments.job_filter_id', decodeArray($job_filter_ids));
+                    $q->whereIn('job_filter_value_assignments.job_filter_value_id', decodeArray($job_filter_value_ids));
+                });
+            }
+        }
+        $query->where('jobs.company_id', companyId());
+        $query->leftJoin('departments', 'departments.department_id', '=', 'jobs.department_id');
+        $query->leftJoin('job_applications', 'job_applications.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_favorites', 'job_favorites.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_referred', 'job_referred.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_filter_values', 'job_filter_values.job_filter_value_id', '=', 'job_filter_value_assignments.job_filter_value_id');
+        // $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
+        $query->groupBy('jobs.job_id');
+        
+        //Enabling multi cross relationed filter search
+        if (isset($request['job_filters']) && $combined) {
+            $combined = combinationsOfArray($combined, count($combined));
+            $c = 1;
+            foreach ($combined as $comb) {
+                if ($c == 1) {
+                    $query->havingRaw('combined', [$comb]);
+                } else {
+                    $query->orHavingRaw('combined', [$comb]);
+                }
+                $c++;
+            }
+        }
+
+        $query->orderBy($orderColumn, $orderDirection);
+        $query->skip($offset);
+        $query->take($limit);
+        $result = $query->get();
+        $result = $result ? $result->toArray() : array();
+
+        $result = array(
+            'data' => Self::prepareDataForTable($result),
+            'recordsTotal' => Self::getTotal(),
+            'recordsFiltered' => Self::getTotal($srh, $request),
+        );
+
+        return $result;
+    }
+
+    // public static function getAllValues($id)
+    // {
+    //     $columns = array(
+    //         "",
+    //         "jobs.title",
+    //         "",
+    //         "jobs.created_at",
+    //         "jobs.status",
+    //     );
+    //     $orderColumn = $columns[($request['order'][0]['column'] == 0 ? 5 : $request['order'][0]['column'])];
+    //     $orderDirection = $request['order'][0]['dir'];
+    //     $srh = $request['search']['value'];
+    //     $limit = $request['length'];
+    //     $offset = $request['start'];
+
+    //     // $query = DB::table('jobs')->where('job_id', decode($id))->get();
+    //     $decodedId = decode($id);
+    //     $result = DB::table('jobs')
+    //             ->where('jobs.job_id', $decodedId)
+    //             ->select('jobs.*')
+    //             ->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id')
+    //             ->groupBy('jobs.job_id')
+    //             ->get();
+
+    //     $result = $result ? $result->toArray() : array();
+
+    //     $result = array(
+    //         'data' => Self::prepareDataForJobFollowTable($result),
+    //         'recordsTotal' => Self::getTotal(),
+    //         'recordsFiltered' => Self::getTotal($srh, $request),
+    //     );
+
+    //     return $result;
+    // }
 
     
     public static function getAllValues($request)

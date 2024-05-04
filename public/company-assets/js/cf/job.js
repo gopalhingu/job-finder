@@ -81,7 +81,6 @@ function Job() {
                     console.log(d)
                     d.jobFollowStatus = $('#jobFollowstatus').val();
                     d.jobid = jobid;
-                    // d.job_filters = job_filters;
                     d._token = application._token;
                 },
                 "complete": function (response) {
