@@ -892,10 +892,10 @@ function Main() {
     };
 
     this.initFollowUnfollowJob = function () {
+        $('.follow-job').off();
         $('.follow-job').on('click', function() {
             var item = $(this);
             if (item.hasClass('followjob')) {
-                console.log("Asd1")
                 application.load('/unfollow-job/'+$(this).data('id'), '', function (result) {
                     var result = JSON.parse(application.response);
                     if (result.success == 'true') {
@@ -906,8 +906,6 @@ function Main() {
                     }
                 });
             } else {
-            console.log("Asd")
-
                 application.load('/follow-job/'+$(this).data('id'), '', function (result) {
                     var result = JSON.parse(application.response);
                     if (result.success == 'true') {

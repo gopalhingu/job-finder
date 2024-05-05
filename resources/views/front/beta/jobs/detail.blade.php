@@ -43,7 +43,7 @@
                 <div class="section-job-detail-alpha-breadcrumb-btns">
                     <button class="btn">
                         @if(in_array($job['job_id'], $favorites))
-                        <i class="fa-solid fa-heart mark-favorite favorited" data-id="{{encode($job['job_id'])}}"></i>
+                        <i class="fa- fa-heart mark-favorite favorited" data-id="{{encode($job['job_id'])}}"></i>
                         {{__('message.unmark_favorite')}}
                         @else
                         <i class="fa-regular fa-heart mark-favorite" data-id="{{encode($job['job_id'])}}"></i>
@@ -52,10 +52,10 @@
                     </button>
                     <button class="btn">
                         @if(in_array($job['job_id'], $jobFollow))
-                        <i class="fa-regular fa-heart follow-job" data-id="{{encode($job['job_id'])}}"></i>
+                        <i class="fa-solid fa-heart follow-job followjob" data-id="{{encode($job['job_id'])}}"></i>
                         {{__('message.unfollow_job')}}
                         @else
-                        <i class="fa-regular fa-heart unFollow-job" data-id="{{encode($job['job_id'])}}"></i>
+                        <i class="fa-regular fa-heart follow-job" data-id="{{encode($job['job_id'])}}"></i>
                         {{__('message.follow_job')}}
                         @endif    
                     </button>

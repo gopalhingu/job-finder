@@ -402,7 +402,9 @@ class Job  extends Model
                 });
             }
         }
-        $query->where('jobs.employer_id', employerId());
+        $query->where('job_follow.status', 1)
+        ->orwhere('jobs.employer_id', employerId());
+
         $query->leftJoin('departments', 'departments.department_id', '=', 'jobs.department_id');
         $query->leftJoin('job_applications', 'job_applications.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_favorites', 'job_favorites.job_id', '=', 'jobs.job_id');
@@ -410,6 +412,7 @@ class Job  extends Model
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_values', 'job_filter_values.job_filter_value_id', '=', 'job_filter_value_assignments.job_filter_value_id');
+        $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
         $query->groupBy('jobs.job_id');
         
         //Enabling multi cross relationed filter search
