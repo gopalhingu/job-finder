@@ -365,6 +365,7 @@ class Job  extends Model
         $query = Self::whereNotNull('jobs.job_id');
         $query->select(
             'jobs.job_id',
+            'job_follow.id as jobFollowId',
             'jobs.department_id',
             'jobs.title',
             'jobs.status',
@@ -415,6 +416,7 @@ class Job  extends Model
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_values', 'job_filter_values.job_filter_value_id', '=', 'job_filter_value_assignments.job_filter_value_id');
+        $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
         $query->groupBy('jobs.job_id');
         
         //Enabling multi cross relationed filter search
@@ -636,9 +638,11 @@ class Job  extends Model
                 <button type="button" class="btn btn-danger btn-xs delete-job" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
             ';
             }
+            if ($j['jobFollowId'] != '' && $j['jobFollowId'] > 0) { 
             $actions .= '
                 <button type="button" class="btn btn-primary btn-xs get-job-follow-values" data-id="'.$id.'"><i class="fas fa-list"></i></button>
             ';
+            }
             $sorted[] = array(
                 "<input type='checkbox' class='minimal single-check' data-id='".$id."' />",
                 esc_output($j['title']),

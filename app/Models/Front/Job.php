@@ -525,6 +525,16 @@ class Job extends Model
         return $result;
     }
 
+    public static function getJobFollow()
+    {
+        $query = DB::table('job_follow')->whereNotNull('job_follow.job_id');
+        $query->select(DB::Raw('GROUP_CONCAT('.dbprfx().'job_follow.job_id) as ids'));
+        $query->where('employer_id', employerSession());
+        $result = $query->first();
+        $result = isset($result->ids) && $result->ids !== null ? explode(',', $result->ids) : array();
+        return $result;
+    }
+
     public static function getReferredJobsList($limit = '')
     {
         $limit = $limit ? $limit : 5;

@@ -891,10 +891,6 @@ function Main() {
         });
     };
 
-    // $('.follow-job').on('click', function() {
-    //     alert("ASd")
-    // });
-
     this.initFollowUnfollowJob = function () {
         $('.follow-job').on('click', function() {
             var item = $(this);

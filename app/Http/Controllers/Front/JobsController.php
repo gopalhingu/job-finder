@@ -94,6 +94,7 @@ class JobsController extends Controller
         $data['resumes'] = FrontResume::getCandidateResumesList();
         $data['applied'] = Job::getAppliedJobs();
         $data['favorites'] = Job::getFavorites();
+        $data['jobFollow'] = Job::getJobFollow();
         $data['resume_id'] = FrontResume::getFirstDetailedResume();
         $data['similar'] = Job::getSimilar($job['title'], $job['job_id']);
         $data['employer'] = Employer::getEmployer('employers.employer_id', $job['employer_id']);

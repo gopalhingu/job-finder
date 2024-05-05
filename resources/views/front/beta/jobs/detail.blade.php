@@ -51,8 +51,13 @@
                         @endif                        
                     </button>
                     <button class="btn">
+                        @if(in_array($job['job_id'], $jobFollow))
                         <i class="fa-regular fa-heart follow-job" data-id="{{encode($job['job_id'])}}"></i>
+                        {{__('message.unfollow_job')}}
+                        @else
+                        <i class="fa-regular fa-heart unFollow-job" data-id="{{encode($job['job_id'])}}"></i>
                         {{__('message.follow_job')}}
+                        @endif    
                     </button>
                     <button class="btn refer-job" data-id="{{encode($job['job_id'])}}">
                         <i class="fa-regular fa-paper-plane"></i> {{__('message.refer_this_job')}}
