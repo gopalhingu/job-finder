@@ -17,6 +17,22 @@
     </div>
 </div>
 
+<!-- follow-Job Modal -->
+<div class="modal fade in follow-Job-modal " id="modal-follow-Job" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header resume-modal-header">
+                <h4 class="modal-title resume-modal-title">{{__('message.follow_job')}}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body-container p-3">
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
 <div class="section-footer-alpha">
     <div class="container">
         <div class="row">

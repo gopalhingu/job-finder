@@ -4,6 +4,8 @@ $lang["all_job"] = "Tous les emplois";
 $lang["all_listing"] = "Toutes les annonces";
 $lang["job_type"] = "Type d'emploi";
 $lang["as_company"] = "";
+$lang["follow_job"] = "";
+$lang["unfollow_job"] = "";
 $lang["employer_packages"] = "";
 $lang["candidate_packages"] = "";
 $lang["finances"] = "";
@@ -52,6 +54,7 @@ $lang["create_candidate_package"] = "";
 $lang["edit_candidate_membership"] = "";
 $lang["create_candidate_membership"] = "";
 $lang['will_deactivate_all_previos_creation_and_activation_2'] = "";
+$lang["company_without_separate_site"] = "";
 
 $lang["email_password_error"] = "Un e-mail et / ou un mot de passe n'ont pas été trouvés.";
 $lang["add_employer"] = "Ajouter l'employeur";

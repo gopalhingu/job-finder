@@ -894,30 +894,52 @@ function Main() {
     this.initFollowUnfollowJob = function () {
         $('.follow-job').off();
         $('.follow-job').on('click', function() {
-            var item = $(this);
-            if (item.hasClass('followjob')) {
+            var item = $('.follow-job .fa-heart');
+            var data_id = $(this).data('id');
+            if (item.hasClass('fa-solid')) {
                 application.load('/unfollow-job/'+$(this).data('id'), '', function (result) {
                     var result = JSON.parse(application.response);
                     if (result.success == 'true') {
-                        item.removeClass('followedjob');
                         item.removeClass('fa-solid');
                         item.addClass('fa-regular');
-                        item.attr('title', lang['mark_favorite']);
+                        item.attr('title', lang['follow_job']);
                     }
                 });
             } else {
-                application.load('/follow-job/'+$(this).data('id'), '', function (result) {
-                    var result = JSON.parse(application.response);
+                var modal = '.follow-Job-modal';
+                $(modal).modal('show');
+                application.load('/follow-job-view', modal + ' .modal-body-container', function (result) {
+                    setTimeout(() => {
+                        $('#follow_job_id').val(data_id);
+                    }, 1000);
+                    self.initSaveJobFollow();
+                });
+            }
+        });
+    };
+
+    this.initSaveJobFollow = function () {
+        application.onSubmit('#job_follow_form', function (result) {
+            application.showLoader('job_follow_form_button');
+            application.post('/follow-job', '#job_follow_form', function (res) {
+                var result = JSON.parse(application.response);
+                if (result.success == 'false' ) {
+                    application.hideLoader('job_follow_form_button');
+                    application.showMessages(result.messages, 'job_follow_form');
+                } else {
                     if (result.success == 'true') {
-                        item.addClass('followjob');
+                        setTimeout(function() { 
+                            $('.follow-Job-modal').modal('hide');
+                        }, 1000);
+                        var item = $('.follow-job .fa-heart');
                         item.addClass('fa-solid');
                         item.removeClass('fa-regular');
                         item.attr('title', lang['unfollow_job']);
-                    } else {
-                        $('.global-login-btn').trigger('click');
                     }
-                });
-            }
+                    application.hideLoader('job_follow_form_button');
+                    application.showMessages(result.messages, 'job_follow_form');
+                }
+            });
         });
     };
 

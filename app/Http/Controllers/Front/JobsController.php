@@ -204,14 +204,42 @@ class JobsController extends Controller
      *
      * @return html/string
      */
-    public function followJob($id = null)
+
+     public function followJobView()
+     {
+         echo view('front'.viewPrfx().'follow-job', array())->render();
+     }
+
+    public function followJob(Request $request)
     {
-        if (employerSession()) {
-            if (Job::followJob($id)) {
+        $employer = getSession('employer');
+        if (employerSession() && $request->follow_job_id && $request->description) {
+            if (Job::followJob($request->follow_job_id, $request->description)) {
+                try {
+                    $toEmail = $employer['email'];
+                    $subject =  __('message.follow_job');
+                    $message = $request->description;
+                    \Mail::send([], [], function($email) use ($toEmail, $subject, $message) {
+                        $email->to($toEmail)->subject($subject)->setBody($message, 'text/html');
+                    });
+                } catch (\Exception $e) {
+                    $error = array(
+                        'title' => 'Mail Send Error',
+                        'type' => 'mail_send_error',
+                        'description' => $e->getMessage(),
+                        'created_at' => date('y-m-d G:i:s')
+                    );
+                    DB::table('error_logs')->insert($error);
+                }
                 echo json_encode(array('success' => 'true', 'messages' => ''));
+                die;
+            } else {
+                echo json_encode(array('success' => 'false', 'messages' => 'Something went wrong!'));
+                die;
             }
         } else {
-            echo json_encode(array('success' => 'false', 'messages' => ''));
+            echo json_encode(array('success' => 'false', 'messages' => 'Something went wrong!'));
+            die;
         }
     } 
 

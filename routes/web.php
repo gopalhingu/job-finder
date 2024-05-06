@@ -842,7 +842,8 @@ Route::group(['middleware' => ['essset']], function () {
 	Route::get('unmark-favorite/{job_id}', $FrontJobsController.'unmarkFavorite')->name('front-unmark-favourite');
 	Route::get('refer-job-view', $FrontJobsController.'referJobView')->name('front-refer-job-view');
 	Route::post('refer-job', $FrontJobsController.'referJob')->name('front-refer-job');
-	Route::get('follow-job/{job_id}', $FrontJobsController.'followJob')->name('front-follow-job');
+	Route::get('follow-job-view', $FrontJobsController.'followJobView')->name('front-follow-job-view');
+	Route::post('follow-job', $FrontJobsController.'followJob')->name('front-follow-job');
 	Route::get('unfollow-job/{job_id}', $FrontJobsController.'unfollowJob')->name('front-unfollow-job');
 
 });

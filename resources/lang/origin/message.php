@@ -4,6 +4,8 @@ $lang["all_job"] = "All jobs";
 $lang["all_listing"] = "All listing";
 $lang["job_type"] = "Job Type";
 $lang["as_company"] = "As Company";
+$lang["follow_job"] = "Follow Job";
+$lang["unfollow_job"] = "Follow Job";
 
 $lang["email_password_error"] = "Email and/or password was not found.";
 $lang["add_employer"] = "Add Employer";
@@ -41,7 +43,6 @@ $lang["sign_up_now"] = "Sign Up Now";
 $lang["as_candidate"] = "As Candidate";
 $lang["sign_up_as_candidate"] = "Sign Up as Candidate";
 $lang["as_employer"] = "As Employer";
-$lang["as_company"] = "As Company";
 $lang["sign_up_as_employer"] = "Sign Up as Employer";
 $lang["employer_overview"] = "Employer Overview";
 $lang["url"] = "URL";
