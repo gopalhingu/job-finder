@@ -6,6 +6,16 @@ $lang["job_type"] = "Job Type";
 $lang["as_company"] = "As Company";
 $lang["follow_job"] = "Follow Job";
 $lang["unfollow_job"] = "Follow Job";
+$lang["recruiters"] = "Recruiters";
+$lang["search_jobs_by_recruiters"] = "Browse Jobs By Recruiters";
+$lang["company_settings"] = "Company Settings";
+$lang["new_company_msg"] = "A New Company (:name) has registered with :package package on :date";
+$lang["new_company"] = "New Company";
+$lang["new_company_signup"] = "New Company Signup";
+$lang["job_tag"] = "Job Tags";
+$lang["job_tag_name"] = "Name";
+$lang["create_edit_job_tag"] = "Create and Edit Job Tags";
+$lang["job_tag_already_exist"] = "Job Tag already exist";
 
 $lang["email_password_error"] = "Email and/or password was not found.";
 $lang["add_employer"] = "Add Employer";

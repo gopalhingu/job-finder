@@ -1665,12 +1665,12 @@ function employerPath($bySlug = false, $adminSlug = '') {
 if (!function_exists('companyPath')) {
     function companyPath($bySlug = false, $adminSlug = '') {
         if ($adminSlug) { //Since admin can create departments as well, so adjustment for that
-            return config('constants.upload_dirs.company').$adminSlug;
+            return config('constants.upload_dirs.companys').$adminSlug;
         } elseif ($bySlug) {
             $slug_emp = getSession('slug_emp');
-            return config('constants.upload_dirs.company').issetVal($slug_emp, 'slug');
+            return config('constants.upload_dirs.companys').issetVal($slug_emp, 'slug');
         } else {
-            return config('constants.upload_dirs.company').companyId('slug');
+            return config('constants.upload_dirs.companys').companyId('slug');
         }
     }
     }

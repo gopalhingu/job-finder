@@ -14,6 +14,7 @@ use App\Models\Admin\Job;
 use App\Models\Admin\Department;
 use App\Models\Admin\JobFilter;
 use App\Models\Admin\Employer;
+use App\Models\Admin\Company as AdminCompany;
 use App\Models\Admin\Testimonial;
 use App\Models\Admin\Message;
 use App\Models\Admin\Page;
@@ -341,8 +342,8 @@ class GeneralsController extends Controller
         $company['updated_at'] = date('Y-m-d G:i:s');
         $successMessage = __('message.account_created_please_login');
 
-        // Sending email to employer if verification is enabled
-        if (setting('enable_employer_email_verification') == 'yes') {
+        // Sending email to company if verification is enabled
+        if (setting('enable_company_email_verification') == 'yes') {
             $token = token();
             $tagsWithValues = array(
                 '((site_link))' => url('/'),
@@ -350,65 +351,65 @@ class GeneralsController extends Controller
                 '((first_name))' => $company['first_name'],
                 '((last_name))' => $company['last_name'],
                 '((email))' => $company['email'],
-                '((link))' => route('employer-activate-account', $token),
+                '((link))' => route('company-activate-account', $token),
             );
-            $message = replaceTagsInTemplate2(setting('employer_verify_email'), $tagsWithValues);
+            $message = replaceTagsInTemplate2(setting('company_verify_email'), $tagsWithValues);
             $subject = setting('site_name').' : '.__('message.verify_account');
             $this->sendEmail($message, $company['email'], $subject);
             $company['token'] = $token;
             // $company['status'] = 0;
             $successMessage = __('message.a_verification_email_has_been_sent');
         }
-        // echo "<pre>"; print_r($company);die;
+
         //Inserting company
         Company::insert($company);
-        // $employer_id = \DB::getPdo()->lastInsertId();
+        $company_id = \DB::getPdo()->lastInsertId();
 
         //Creating employer settings if no verification is required
         //IF not created at this step, settings will be created when employer activates account
-        // if (setting('enable_employer_email_verification') == 'no') {
-        //     Employer::importEmployerSettings($employer_id);
+        if (setting('enable_company_email_verification') == 'no') {
+            AdminCompany::importCompanySettings($company_id);
 
-        //     if (setting('import_employer_dummy_data_on_signup') == 'yes') {
-        //         Employer::importEmployerDummyData($employer_id);
-        //     }
-        // }
+            if (setting('import_company_dummy_data_on_signup') == 'yes') {
+                AdminCompany::importCompanyDummyData($company_id);
+            }
+        }
 
-        // //Creating membership
-        // $membership['employer_id'] = $employer_id;
-        // $membership['package_id'] = $freePackage->package_id;
-        // $membership['title'] = $freePackage->title;
-        // $membership['payment_type'] = 'Free';
-        // $membership['package_type'] = 'Free';
-        // $membership['price_paid'] = '0.00';
-        // $membership['details'] = json_encode($freePackage->toArray());
-        // $membership['separate_site'] = $freePackage->separate_site;
-        // $membership['status'] = 1;
-        // $membership['created_at'] = date('Y-m-d G:i:s');
-        // $membership['expiry'] = packageExpiry('free');
-        // Membership::insert($membership);
+        //Creating membership
+        $membership['company_id'] = $company_id;
+        $membership['package_id'] = $freePackage->package_id;
+        $membership['title'] = $freePackage->title;
+        $membership['payment_type'] = 'Free';
+        $membership['package_type'] = 'Free';
+        $membership['price_paid'] = '0.00';
+        $membership['details'] = json_encode($freePackage->toArray());
+        $membership['separate_site'] = $freePackage->separate_site;
+        $membership['status'] = 1;
+        $membership['created_at'] = date('Y-m-d G:i:s');
+        $membership['expiry'] = packageExpiry('free');
+        Membership::insert($membership);
 
         //Inserting notification for admin
-        // $newSignupMessage = __('message.new_employer_msg', array(
-        //     'name' => $request->input('company'), 
-        //     'package' => $freePackage->title, 
-        //     'date' => date('D M, Y h:i a'),
-        // ));
-        // Notification::do('employer_signup', __('message.new_employer').' ('.$request->input('company').')');
+        $newSignupMessage = __('message.new_company_msg', array(
+            'name' => $request->input('company'), 
+            'package' => $freePackage->title, 
+            'date' => date('D M, Y h:i a'),
+        ));
+        Notification::do('company_signup', __('message.new_employer').' ('.$request->input('company').')');
 
-        // //Sending email to admin
-        // if (setting('enable_employer_register_notification') == 'yes') {
-        //     $tagsWithValues = array(
-        //         '((site_link))' => url('/'),
-        //         '((site_logo))' => setting('site_logo'),
-        //         '((first_name))' => $employer['first_name'],
-        //         '((last_name))' => $employer['last_name'],
-        //         '((email))' => $employer['email'],
-        //         '((package))' => $membership['details'],
-        //     );
-        //     $message = replaceTagsInTemplate2(setting('employer_signup'), $tagsWithValues);
-        //     $this->sendEmail($message, setting('admin_email'), setting('site_name').' : '.__('message.new_employer_signup'));
-        // }
+        //Sending email to admin
+        if (setting('enable_company_register_notification') == 'yes') {
+            $tagsWithValues = array(
+                '((site_link))' => url('/'),
+                '((site_logo))' => setting('site_logo'),
+                '((first_name))' => $company['first_name'],
+                '((last_name))' => $company['last_name'],
+                '((email))' => $company['email'],
+                '((package))' => $membership['details'],
+            );
+            $message = replaceTagsInTemplate2(setting('company_signup'), $tagsWithValues);
+            $this->sendEmail($message, setting('admin_email'), setting('site_name').' : '.__('message.new_employer_signup'));
+        }
         
         die(json_encode(array(
             'success' => 'true',

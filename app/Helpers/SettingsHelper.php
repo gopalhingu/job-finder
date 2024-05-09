@@ -16,7 +16,8 @@ class SettingsHelper
     public static function Instance($index = '', $sorted = true)
     {
         if (Self::$values === null) {
-            $result = DB::table('settings')->where('employer_id', 0)->get();
+             //$result = DB::table('settings')->where('employer_id', 0)->get();
+            $result = DB::table('settings')->where('employer_id', 0)->orWhere('company_id', NULL)->get();
             if ($sorted) {
                 Self::$values = Self::sort(objToArr($result->toArray()));
             } else {

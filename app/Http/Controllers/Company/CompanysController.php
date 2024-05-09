@@ -8,14 +8,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\Admin\Employer as AdminEmployer;
+use App\Models\Admin\Company as AdminCompany;
 use App\Models\Employer\Employer;
 use App\Models\Employer\Role;
 use App\Rules\MinString;
 use App\Rules\MaxString;
 use App\Rules\MaxFile;
-
-use App\Models\Front\Company;
-use App\Models\Company\Company as CompanyCompany;
+use App\Models\Company\Company as Company;
 
 class CompanysController extends Controller
 {
@@ -29,7 +28,7 @@ class CompanysController extends Controller
         if (companySession()) {
             return redirect(route('company-dashboard'));
         } else if ($request->cookie('remember_me_token_company' . appId())) {
-            $employerWithToken = CompanyCompany::getEmployerWithRememberMeToken($request->cookie('remember_me_token_company' . appId()));
+            $employerWithToken = Company::getEmployerWithRememberMeToken($request->cookie('remember_me_token_company' . appId()));
             if ($employerWithToken) {
                 setSession('company', $employerWithToken);
                 return redirect(route('company-dashboard'));
@@ -57,7 +56,7 @@ class CompanysController extends Controller
             'password.required' => __('validation.required')
         ]);
 
-        $company = objToArr(CompanyCompany::login($request->input('email'), $request->input('password')));
+        $company = objToArr(Company::login($request->input('email'), $request->input('password')));
         if ($company) {
             setSession('company', $company);
             $this->setRememberMe($request->input('email'), $request->input('rememberme'));
@@ -97,9 +96,9 @@ class CompanysController extends Controller
             'email.email' => __('validation.email'),
         ]);
 
-        $company = CompanyCompany::checkCompanyByEmail($request->input('email'));
+        $company = Company::checkCompanyByEmail($request->input('email'));
         if ($company) {
-            $token = CompanyCompany::saveTokenForPasswordReset($request->input('email'));
+            $token = Company::saveTokenForPasswordReset($request->input('email'));
             $message = __('message.an_email_with_a_link_to_reset');
             $tagsWithValues = array(
                 '((site_link))' => url('/'),
@@ -150,11 +149,11 @@ class CompanysController extends Controller
             'retype_new_password.required' => __('validation.required')
         ]);
 
-		if (!CompanyCompany::checkIfTokenExist($request->input('token'))) {
+		if (!Company::checkIfTokenExist($request->input('token'))) {
             return redirect()->route('company-reset-password', ['token' => $request->input('token')])
             	->withErrors([__('message.invalid_request_please_regenerate')]);
         } else {
-            CompanyCompany::updatePasswordByField('token', $request->input('token'), $request->input('new_password'));
+            Company::updatePasswordByField('token', $request->input('token'), $request->input('new_password'));
             return redirect()->route('company-login')->with('message', __('message.your_password_has_been_successfully').'. '.__('message.login_with_new_password'));
         }
     }
@@ -182,7 +181,7 @@ class CompanysController extends Controller
     {
         $data['page'] = __('message.profile');
         $data['menu'] = 'profile';
-        $data['profile'] = objToArr(CompanyCompany::getCompany('company.company_id', encode(companySession())));
+        $data['profile'] = objToArr(Company::getCompany('company.company_id', encode(companySession())));
         return view('company.profile', $data);
     }
 
@@ -290,7 +289,7 @@ class CompanysController extends Controller
 
         //Deleting existing image if new is uploaded
         if (issetVal($imageUpload, 'success') == 'true') {
-        	$company = objToArr(CompanyCompany::getCompany('company_id', encode(companySession())));
+        	$company = objToArr(Company::getCompany('company_id', encode(companySession())));
             $this->deleteOldFile($company['image']);
         }
 
@@ -309,12 +308,12 @@ class CompanysController extends Controller
 
         //Deleting existing logo if new is uploaded
         if (issetVal($logoUpload, 'success') == 'true') {
-            $company = objToArr(CompanyCompany::getCompany('company_id', encode(companySession())));
+            $company = objToArr(Company::getCompany('company_id', encode(companySession())));
             $this->deleteOldFile($company['logo']);
         }
 
     	//updating db recrod
-        CompanyCompany::updateProfile($request->all(), issetVal($imageUpload, 'message'), issetVal($logoUpload, 'message'));
+        Company::updateProfile($request->all(), issetVal($imageUpload, 'message'), issetVal($logoUpload, 'message'));
 
         die(json_encode(array(
             'success' => 'true',
@@ -596,20 +595,20 @@ class CompanysController extends Controller
      */
     public function activateAccount($token = null)
     {
-        $employer = Employer::activateAccount($token);
-        if ($employer) {
-            //Importing employer settings if not imported
-            AdminEmployer::importEmployerSettings($employer);
+        $company = Company::activateAccount($token);
+        if ($company) {
+            //Importing company settings if not imported
+            AdminCompany::importCompanySettings($company);
 
-            if (setting('import_employer_dummy_data_on_signup') == 'yes') {
-                AdminEmployer::importEmployerDummyData($employer);
+            if (setting('import_company_dummy_data_on_signup') == 'yes') {
+                AdminCompany::importCompanyDummyData($company);
             }
 
-            //Removing any previously logged in employer account
-            removeSession('employer');
+            //Removing any previously logged in company account
+            removeSession('company');
 
             $data['page'] = __('message.activate_account');
-            return view('employer.activate-account', $data);
+            return view('company.activate-account', $data);
         } else {
             $content = '';
             $content .= '<strong><h3>'.__('message.some_error_occured').'</h3></strong>';

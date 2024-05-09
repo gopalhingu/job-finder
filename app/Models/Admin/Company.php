@@ -5,9 +5,9 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use App\Models\Employer\Job AS EmployerJob;
-use App\Models\Employer\Quiz AS EmployerQuiz;
-use App\Models\Employer\Traite AS EmployerTraite;
+use App\Models\Company\Job AS CompanyJob;
+use App\Models\Company\Quiz AS CompanyQuiz;
+use App\Models\Company\Traite AS CompanyTraite;
 use App\Models\Admin\JobFilter AS AdminJobFilter;
 
 class Company extends Model
@@ -508,31 +508,31 @@ class Company extends Model
         return array('labels' => $labels, 'values' => $values);
     }     
 
-    public static function getEmployersForCSV($ids)
+    public static function getCompanyForCSV($ids)
     {
-        $query = Self::whereNotNull('employers.employer_id');
-        $query->from('employers');
+        $query = Self::whereNotNull('company.employer_id');
+        $query->from('company');
         $query->select(
-            'employers.*'
+            'company.*'
         );
-        $query->whereIn('employers.employer_id', explode(',', $ids));
-        $query->groupBy('employers.employer_id');
-        $query->orderBy('employers.created_at', 'DESC');
+        $query->whereIn('company.employer_id', explode(',', $ids));
+        $query->groupBy('company.employer_id');
+        $query->orderBy('company.created_at', 'DESC');
         return $query->get();
     }    
 
-    public static function importEmployerSettings($employer_id)
+    public static function importCompanySettings($company_id)
     {
-        $employer = Self::where('employer_id', $employer_id)->first();
+        $company = Self::where('company_id', $company_id)->first();
         $app_url = env('APP_URL');
-        $emp_url = empUrlBySlug($employer->slug);
+        $com_url = empUrlBySlug($company->slug);
         $bannerText = '<h2>Looking for an exciting career path ?<br>Come, Join Us!</h2>';
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'candidatefinder.com';
         $host = str_replace('www.', '', $host);
         $fromEmail = 'hr@'.$host;
         $col1 = '
             <div class="footer-info">
-            <h3>'.$employer->company.'</h3>
+            <h3>'.$company->company.'</h3>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br /></p>
             </div>
         ';
@@ -540,11 +540,11 @@ class Company extends Model
             <div class="footer-links">
                 <h4>Useful Links</h4>
                 <ul>
-                    <li><a href="'.$emp_url.'">How To Apply</a></li>
-                    <li><a href="'.$emp_url.'">Latest Jobs</a></li>
-                    <li><a href="'.$emp_url.'">My Account</a></li>
-                    <li><a href="'.$emp_url.'">News & Announcements</a></li>
-                    <li><a href="'.$emp_url.'">Privacy policy</a></li>
+                    <li><a href="'.$com_url.'">How To Apply</a></li>
+                    <li><a href="'.$com_url.'">Latest Jobs</a></li>
+                    <li><a href="'.$com_url.'">My Account</a></li>
+                    <li><a href="'.$com_url.'">News & Announcements</a></li>
+                    <li><a href="'.$com_url.'">Privacy policy</a></li>
                 </ul>
             </div>
         ';
@@ -552,11 +552,11 @@ class Company extends Model
             <div class="footer-links">
                 <h4>Latest Jobs</h4>
                 <ul>
-                    <li><a href="'.$emp_url.'">Marketing Executive</a></li>
-                    <li><a href="'.$emp_url.'">Accounts Manager</a></li>
-                    <li><a href="'.$emp_url.'">Computer System Analyst</a></li>
-                    <li><a href="'.$emp_url.'">Network Administrator</a></li>
-                    <li><a href="'.$emp_url.'">Project Manager</a></li>
+                    <li><a href="'.$com_url.'">Marketing Executive</a></li>
+                    <li><a href="'.$com_url.'">Accounts Manager</a></li>
+                    <li><a href="'.$com_url.'">Computer System Analyst</a></li>
+                    <li><a href="'.$com_url.'">Network Administrator</a></li>
+                    <li><a href="'.$com_url.'">Project Manager</a></li>
                 </ul>
             </div>
         ';
@@ -572,72 +572,72 @@ class Company extends Model
             </div>
         ';
 
-        $eid = $employer_id;
+        $cid = $company_id;
         $data = array(
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'site_logo', 'value' => 'identities/site-logo.png'),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'site_banner', 'value' => 'identities/site-breadcrumb-image.jpg',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'site_favicon', 'value' => 'identities/site-favicon.png',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'site_name', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'site_keywords', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'site_description', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'banner_text', 'value' => $bannerText,),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'before_blogs_text', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'after_blogs_text', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'before_how_text', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'after_how_text', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'footer_col_1', 'value' => $col1,),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'footer_col_2', 'value' => $col2,),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'footer_col_3', 'value' => $col3,),
-            array('employer_id' => $eid, 'category' => 'Branding', 'key' => 'footer_col_4', 'value' => $col4,),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'site_logo', 'value' => 'identities/site-logo.png'),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'site_banner', 'value' => 'identities/site-breadcrumb-image.jpg',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'site_favicon', 'value' => 'identities/site-favicon.png',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'site_name', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'site_keywords', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'site_description', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'banner_text', 'value' => $bannerText,),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'before_blogs_text', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'after_blogs_text', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'before_how_text', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'after_how_text', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'footer_col_1', 'value' => $col1,),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'footer_col_2', 'value' => $col2,),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'footer_col_3', 'value' => $col3,),
+            array('company_id' => $cid, 'category' => 'Branding', 'key' => 'footer_col_4', 'value' => $col4,),
           
-            array('employer_id' => $eid, 'category' => 'Emails', 'key' => 'candidate_job_app', 'value' => getTextFromFile('candidate-job-application.txt')),
-            array('employer_id' => $eid, 'category' => 'Emails', 'key' => 'employer_job_app', 'value' => getTextFromFile('employer-job-application.txt')),
-            array('employer_id' => $eid, 'category' => 'Emails', 'key' => 'employer_interview_assign', 'value' => getTextFromFile('employer-interview-assign.txt')),
-            array('employer_id' => $eid, 'category' => 'Emails', 'key' => 'candidate_interview_assign', 'value' => getTextFromFile('candidate-interview-assign.txt')),
-            array('employer_id' => $eid, 'category' => 'Emails', 'key' => 'candidate_quiz_assign', 'value' => getTextFromFile('candidate-quiz-assign.txt')),
-            array('employer_id' => $eid, 'category' => 'Emails', 'key' => 'team_creation', 'value' => getTextFromFile('team-creation.txt')),
+            array('company_id' => $cid, 'category' => 'Emails', 'key' => 'candidate_job_app', 'value' => getTextFromFile('candidate-job-application.txt')),
+            array('company_id' => $cid, 'category' => 'Emails', 'key' => 'employer_job_app', 'value' => getTextFromFile('employer-job-application.txt')),
+            array('company_id' => $cid, 'category' => 'Emails', 'key' => 'employer_interview_assign', 'value' => getTextFromFile('employer-interview-assign.txt')),
+            array('company_id' => $cid, 'category' => 'Emails', 'key' => 'candidate_interview_assign', 'value' => getTextFromFile('candidate-interview-assign.txt')),
+            array('company_id' => $cid, 'category' => 'Emails', 'key' => 'candidate_quiz_assign', 'value' => getTextFromFile('candidate-quiz-assign.txt')),
+            array('company_id' => $cid, 'category' => 'Emails', 'key' => 'team_creation', 'value' => getTextFromFile('team-creation.txt')),
 
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'admin_email', 'value' => 'admin@'.$host,),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'from_email', 'value' => $fromEmail,),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'jobs_per_page', 'value' => '10',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'blogs_per_page', 'value' => '10',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'charts_count_on_dashboard', 'value' => '10',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'default_landing_page', 'value' => 'home',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'enable_home_banner', 'value' => 'yes',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'home_how_it_works', 'value' => 'yes',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'home_department_section', 'value' => 'yes',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'home_blogs_section', 'value' => 'yes',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'css', 'value' => '',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'display_jobs_to_only_logged_in_users', 'value' => 'no',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'display_jobs_last_date', 'value' => 'yes',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'display_admin_created_departments', 'value' => 'yes',),
-            array('employer_id' => $eid, 'category' => 'General', 'key' => 'display_admin_created_job_filters', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'admin_email', 'value' => 'admin@'.$host,),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'from_email', 'value' => $fromEmail,),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'jobs_per_page', 'value' => '10',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'blogs_per_page', 'value' => '10',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'charts_count_on_dashboard', 'value' => '10',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'default_landing_page', 'value' => 'home',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'enable_home_banner', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'home_how_it_works', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'home_department_section', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'home_blogs_section', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'css', 'value' => '',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'display_jobs_to_only_logged_in_users', 'value' => 'no',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'display_jobs_last_date', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'display_admin_created_departments', 'value' => 'yes',),
+            array('company_id' => $cid, 'category' => 'General', 'key' => 'display_admin_created_job_filters', 'value' => 'yes',),
         );
 
         foreach ($data as $d) {
             $d['value'] = str_replace('"', "'", $d['value']);
-            $result = DB::table('settings')->where(array('key' => $d['key'], 'employer_id' => $d['employer_id']))->first();
+            $result = DB::table('settings')->where(array('key' => $d['key'], 'company_id' => $d['company_id']))->first();
             if (!$result) {
                 DB::table('settings')->insert($d);
             }
         }
     }
 
-    public static function importEmployerDummyData($employer_id)
+    public static function importCompanyDummyData($company_id)
     {   
         //Getting essentials
-        $employer = Self::where('employer_id', $employer_id)->first();
-        if (!$employer || $employer->type == 'team') {
+        $company = Self::where('company_id', $company_id)->first();
+        if (!$company || $company->type == 'team') {
             return false;
         }
         $dataDir = storage_path('/app/'.config('constants.upload_dirs.main').'/dummy-data/');
 
-        //Creating employer directory if not exists
-        $employerDir = storage_path('/app/'.config('constants.upload_dirs.main').'/'.config('constants.upload_dirs.employers').$employer->slug.'/');
+        //Creating company directory if not exists
+        $companyDir = storage_path('/app/'.config('constants.upload_dirs.main').'/'.config('constants.upload_dirs.companys').$company->slug.'/');
 
         $emti = '';
         $date = date('Y-m-d G:i:s');
-        $additional = array('created_at' => $date, 'updated_at' => $date, 'employer_id' => $employer_id);
+        $additional = array('created_at' => $date, 'updated_at' => $date, 'company_id' => $company_id);
         $jd = getTextFromFile('job.txt');
         $dids = array();
         $jids = array();
@@ -659,17 +659,17 @@ class Company extends Model
             array('title' => 'Maintenance'.$emti, 'image' => 'maintenance.png', 'status' => 1,),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('departments')->where($condition)->first();
             if (!$result) {
                 $original_image = $d['image'];
-                $d['image'] = config('constants.upload_dirs.employers').$employer->slug.'/'.config('constants.upload_dirs.departments').$d['image'];
+                $d['image'] = config('constants.upload_dirs.companys').$company->slug.'/'.config('constants.upload_dirs.departments').$d['image'];
                 DB::table('departments')->insert(array_merge($d, $additional));
                 $dids[] = DB::getPdo()->lastInsertId();
 
-                //Copying image from uploads/dummy-data to newly created employer folder.
-                createDirectoryIfNotExists($employerDir.config('constants.upload_dirs.departments').$original_image);
-                $cr = copy($dataDir.$original_image, $employerDir.config('constants.upload_dirs.departments').'/'.$original_image);
+                //Copying image from uploads/dummy-data to newly created company folder.
+                createDirectoryIfNotExists($companyDir.config('constants.upload_dirs.departments').$original_image);
+                $cr = copy($dataDir.$original_image, $companyDir.config('constants.upload_dirs.departments').'/'.$original_image);
             }
         }
 
@@ -690,14 +690,14 @@ class Company extends Model
         );
         $dids = $dids ? $dids : array(0,1,2,3,4,5,6,7,8,9,10,11);
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('jobs')->where($condition)->first();
             if (!$result) {
                 $job_title = $data[rand(0,11)]['title'];
-                $d['slug'] = EmployerJob::getSlug($job_title, '', '');
+                $d['slug'] = CompanyJob::getSlug($job_title, '', '');
                 $d['department_id'] = array_rand($dids);
                 $d['description'] = $jd;
-                $d['employer_id'] = $employer_id;
+                $d['company_id'] = $company_id;
                 $d['title'] = $job_title;
                 DB::table('jobs')->insert($d);
                 $jids[] = DB::getPdo()->lastInsertId();
@@ -711,7 +711,7 @@ class Company extends Model
             array('title' => 'Category 3'.$emti, 'status' => 1,),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('blog_categories')->where($condition)->first();
             if (!$result) {
                 DB::table('blog_categories')->insert(array_merge($d, $additional));
@@ -727,27 +727,27 @@ class Company extends Model
             array('title' => 'Privacy Policy'.$emti, 'description' => $jd, 'blog_category_id' => $bcid, 'status' => 1, 'image' => 'privacy-policy.jpg'),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('blogs')->where($condition)->first();
             $original_image = $d['image'];
             if (!$result) {
-                $d['image'] = config('constants.upload_dirs.employers').$employer->slug.'/'.config('constants.upload_dirs.blogs').$d['image'];
+                $d['image'] = config('constants.upload_dirs.companys').$company->slug.'/'.config('constants.upload_dirs.blogs').$d['image'];
                 DB::table('blogs')->insert(array_merge($d, $additional));
 
-                //Copying image from uploads/dummy-data to newly created employer folder.
-                createDirectoryIfNotExists($employerDir.config('constants.upload_dirs.blogs').$original_image);
-                $cr = copy($dataDir.$original_image, $employerDir.config('constants.upload_dirs.blogs').'/'.$original_image);
+                //Copying image from uploads/dummy-data to newly created company folder.
+                createDirectoryIfNotExists($companyDir.config('constants.upload_dirs.blogs').$original_image);
+                $cr = copy($dataDir.$original_image, $companyDir.config('constants.upload_dirs.blogs').'/'.$original_image);
             }
         }
 
-        //5 : Importing employer roles
+        //5 : Importing company roles
         $data = array(
             array('title' => 'Admin',),
             array('title' => 'Interviewer',),
             array('title' => 'Blog Manager',),
         );
         foreach ($data as $d) {
-            $condition = array('type' => 'employer', 'employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('type' => 'company', 'company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('roles')->where($condition)->first();
             if (!$result) {
                 DB::table('roles')->insert(array_merge($condition, $additional));
@@ -761,7 +761,7 @@ class Company extends Model
             array('title' => 'General',),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('question_categories')->where($condition)->first();
             if (!$result) {
                 DB::table('question_categories')->insert(array_merge($condition, $additional));
@@ -806,7 +806,7 @@ class Company extends Model
             ),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('questions')->where($condition)->first();
             if (!$result) {
                 $condition['question_category_id'] = $question_category_id;
@@ -827,7 +827,7 @@ class Company extends Model
             array('title' => 'General',),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('quiz_categories')->where($condition)->first();
             if (!$result) {
                 DB::table('quiz_categories')->insert(array_merge($condition, $additional));
@@ -844,7 +844,7 @@ class Company extends Model
             array('quiz_category_id' => $qcid, 'title' => 'General Knowledge Quiz', 'description' => $description, 'allowed_time' => '30',),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('quizes')->where($condition)->first();
             if (!$result) {
                 $condition['quiz_category_id'] = $qcid;
@@ -891,7 +891,7 @@ class Company extends Model
             ),
         );
         foreach ($data as $d) {
-            $condition = array('employer_id' => $employer_id, 'title' => $d['title']);
+            $condition = array('company_id' => $company_id, 'title' => $d['title']);
             $result = DB::table('quiz_questions')->where($condition)->first();
             if (!$result) {
                 $answers = $d['answers'];
@@ -906,10 +906,10 @@ class Company extends Model
         }
 
         //6f : Attaching Quizes and Traites to Jobs
-        $traites = EmployerTraite::where('employer_id', 0)->get();
+        $traites = CompanyTraite::where('company_id', 0)->get();
         $traites = $traites ? objToArr($traites->toArray()) : array();
         $job_filters = AdminJobFilter::getAll();
-        $quiz_data = EmployerQuiz::getCompleteQuiz(encode($quiz_id));
+        $quiz_data = CompanyQuiz::getCompleteQuiz(encode($quiz_id));
         foreach ($jids as $jid) {
             $jquiz = array(
                 'job_id' => $jid,
@@ -918,7 +918,7 @@ class Company extends Model
                 'total_questions' => count($quiz_data['questions']),
                 'allowed_time' => $quiz_data['quiz']['allowed_time'],
                 'quiz_data' => json_encode($quiz_data),
-                'employer_id' => $employer_id, 
+                'company_id' => $company_id, 
             );
             DB::table('job_quizes')->insert($jquiz);
             
@@ -927,7 +927,7 @@ class Company extends Model
                 $jtraite = array(
                     'job_id' => $jid,
                     'traite_id' => $traite['traite_id'],
-                    'employer_id' => $employer_id, 
+                    'company_id' => $company_id, 
                     'title' => $traite['title'],
                 );
                 DB::table('job_traites')->insert($jtraite);
@@ -937,7 +937,7 @@ class Company extends Model
             foreach ($job_filters as $jf) {
                 $jfva = array(
                     'job_id' => $jid,
-                    'employer_id' => $employer_id, 
+                    'company_id' => $company_id, 
                     'job_filter_id' => $jf['job_filter_id'],
                     'job_filter_value_id' => $jf['values'][rand(0,2)]['id'],
                 );

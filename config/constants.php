@@ -7,7 +7,7 @@ return [
         'candidates' => 'candidates/',
         'resumes' => 'resumes/',
         'employers' => 'employers/',
-        'company' => 'company/',
+        'companys' => 'company/',
         'questions' => 'questions/',
         'departments' => 'departments/',
         'blogs' => 'blogs/',

@@ -17,6 +17,7 @@ class Membership extends Model
     protected $fillable = [
         'membership_id',
         'employer_id',
+        'company_id',
         'package_id',
         'title',
         'payment_type',

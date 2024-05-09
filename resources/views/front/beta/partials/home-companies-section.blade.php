@@ -6,10 +6,10 @@
 			<div class="col-md-12 col-sm-12">
 				<div class="section-heading-style-alpha">
 					<div class="section-heading">
-						<h2>{{__('message.companies')}}</h2>
+						<h2>{{__('message.recruiters')}}</h2>
 					</div>
 					<div class="section-intro-text">
-						<p>{{__('message.search_jobs_by_companies')}}</p>
+						<p>{{__('message.search_jobs_by_recruiters')}}</p>
 					</div>
 				</div>
 			</div>

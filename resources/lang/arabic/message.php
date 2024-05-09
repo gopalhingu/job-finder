@@ -6,6 +6,17 @@ $lang["job_type"] = "نوع الوظيفة";
 $lang["as_company"] = "";
 $lang["follow_job"] = "";
 $lang["unfollow_job"] = "";
+$lang["recruiters"] = "";
+$lang["search_jobs_by_recruiters"] = "";
+$lang["company_settings"] = "";
+$lang["new_company_msg"] = "";
+$lang["new_company"] = "";
+$lang["new_company_signup"] = "";
+$lang["job_tag"] = "";
+$lang["job_tag_name"] = "";
+$lang["create_edit_job_tag"] = "";
+$lang["job_tag_already_exist"] = "";
+
 $lang["employer_packages"] = "";
 $lang["candidate_packages"] = "";
 $lang["finances"] = "";
@@ -55,7 +66,6 @@ $lang["edit_candidate_membership"] = "";
 $lang["create_candidate_membership"] = "";
 $lang['will_deactivate_all_previos_creation_and_activation_2'] = "";
 $lang["company_without_separate_site"] = "";
-
 $lang["email_password_error"] = "لم يتم العثور على البريد الإلكتروني و/أو كلمة المرور.";
 $lang["add_employer"] = "إضافة صاحب العمل";
 $lang["add_candidate"] = "أضف المرشح";
