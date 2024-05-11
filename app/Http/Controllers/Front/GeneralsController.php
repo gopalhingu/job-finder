@@ -48,6 +48,7 @@ class GeneralsController extends Controller
         if (setting('home_highlights_section') == 'enabled') {
             $data['jobs_count'] = Job::where('status', 1)->count();
             $data['employers_count'] = Employer::where('status', 1)->where('type', 'main')->count();
+            $data['company_count'] = AdminCompany::where('status', 1)->where('type', 'main')->count();
             $data['candidates_count'] = AdminCandidate::where('status', 1)->count();
         }
         if (setting('home_departments_section') == 'enabled') {
@@ -57,12 +58,19 @@ class GeneralsController extends Controller
             $orderByDir = issetVal($orderBy, 1, 'DESC');
             $data['departments'] = Department::getAll(true, $limit, $orderByCol, $orderByDir);
         }
+        if (setting('home_employer_section') == 'enabled') {
+            $limit = setting('home_employer_section_limit');
+            $orderBy = explode(' ', setting('home_employer_section_sort_order'));
+            $orderByCol = issetVal($orderBy, 0, 'employers.employer_id');
+            $orderByDir = issetVal($orderBy, 1, 'DESC');
+            $data['employer'] = Employer::getForFront(true, $limit, $orderByCol, $orderByDir);
+        }
         if (setting('home_companies_section') == 'enabled') {
             $limit = setting('home_companies_section_limit');
             $orderBy = explode(' ', setting('home_companies_section_sort_order'));
-            $orderByCol = issetVal($orderBy, 0, 'employers.employer_id');
+            $orderByCol = issetVal($orderBy, 0, 'company.company_id');
             $orderByDir = issetVal($orderBy, 1, 'DESC');
-            $data['companies'] = Employer::getForFront(true, $limit, $orderByCol, $orderByDir);
+            $data['companies'] = AdminCompany::getForFront(true, $limit, $orderByCol, $orderByDir);
         }
         if (setting('home_jobs_section') == 'enabled') {
             $limit = setting('home_jobs_section_limit');
@@ -634,11 +642,20 @@ class GeneralsController extends Controller
      *
      * @return html/string
      */
-    public function companyDetail($slug)
+    public function employerCompanyDetail($slug)
     {
         $data['page_title'] = __('message.companies');
         $data['employer'] = Employer::getEmployer('employers.slug', $slug);
         $data['jobs'] = FrontJob::getForEmployer($slug);
+        $data['favorites'] = FrontJob::getFavorites();
+        return view('front'.viewPrfx().'companies.detail', $data);
+    }
+
+    public function companyDetail($slug)
+    {
+        $data['page_title'] = __('message.companies');
+        $data['employer'] = AdminCompany::getCompany('company.slug', $slug);
+        $data['jobs'] = FrontJob::getForCompany($slug);
         $data['favorites'] = FrontJob::getFavorites();
         return view('front'.viewPrfx().'companies.detail', $data);
     }

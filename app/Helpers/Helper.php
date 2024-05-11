@@ -1874,7 +1874,7 @@ if(!function_exists('frontEmpUrl')) {
 function frontEmpUrl($employer_slug, $separate_site, $selfCall = '') {
     $separate_site_setting = $selfCall ? $selfCall : setting('enable_separate_employer_site');
     if ($separate_site_setting == 'no') {
-        $url = route('company-detail', $employer_slug);
+        $url = route('employer-company-detail', $employer_slug);
         return $url;
     } elseif ($separate_site_setting == 'yes') {
         return empUrlBySlug($employer_slug);
@@ -1884,6 +1884,21 @@ function frontEmpUrl($employer_slug, $separate_site, $selfCall = '') {
     }
 }
 }
+
+if(!function_exists('frontCmpUrl')) {
+    function frontCmpUrl($employer_slug, $separate_site, $selfCall = '') {
+        $separate_site_setting = $selfCall ? $selfCall : setting('enable_separate_employer_site');
+        if ($separate_site_setting == 'no') {
+            $url = route('company-detail', $employer_slug);
+            return $url;
+        } elseif ($separate_site_setting == 'yes') {
+            return empUrlBySlug($employer_slug);
+        } else {
+            $self_call = $separate_site == 1 ? 'yes' : 'no';
+            return frontCmpUrl($employer_slug, $separate_site, $self_call);
+        }
+    }
+    }
 
 if(!function_exists('empUrlByValue')) {
 function empUrlByValue($value) {

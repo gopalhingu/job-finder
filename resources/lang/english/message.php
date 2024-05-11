@@ -16,6 +16,7 @@ $lang["job_tag"] = "Job Tags";
 $lang["job_tag_name"] = "Name";
 $lang["create_edit_job_tag"] = "Create and Edit Job Tags";
 $lang["job_tag_already_exist"] = "Job Tag already exist";
+$lang["search_jobs_by_company"] = "Browse Jobs By Companys";
 
 $lang["email_password_error"] = "Email and/or password was not found.";
 $lang["add_employer"] = "Add Employer";

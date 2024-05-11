@@ -925,7 +925,8 @@ function Main() {
                 var result = JSON.parse(application.response);
                 if (result.success == 'false' ) {
                     application.hideLoader('job_follow_form_button');
-                    application.showMessages(result.messages, 'job_follow_form');
+                    // application.showMessages(result.messages, 'job_follow_form');
+                    $('#job_follow_form').html(result.messages);
                 } else {
                     if (result.success == 'true') {
                         setTimeout(function() { 

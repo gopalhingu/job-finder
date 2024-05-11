@@ -268,23 +268,23 @@ class Company extends Model
 
     public static function getForFront($active = true, $limit = '', $orderByCol = '', $orderByDir = '')
     {
-        $query = Self::whereNotNull('employers.employer_id');
+        $query = Self::whereNotNull('company.company_id');
         $query->select(
-            'employers.*',
+            'company.*',
             'memberships.separate_site',
             DB::Raw('COUNT('.dbprfx().'jobs.job_id) AS jobs_count'),
         );
-        $query->leftJoin('jobs','jobs.employer_id', '=', 'employers.employer_id');
-        $query->where('employers.type', 'main');
+        $query->leftJoin('jobs','jobs.company_id', '=', 'company.company_id');
+        $query->where('company.type', 'main');
         if ($active) {
-            $query->where('employers.status', 1);
+            $query->where('company.status', 1);
         }
         if ($orderByCol) {
             $query->orderBy($orderByCol, $orderByDir);
         }        
-        $query->groupBy('employers.employer_id');
+        $query->groupBy('company.company_id');
         $query->leftJoin('memberships', function($join) {
-            $join->on('memberships.employer_id', '=', 'employers.employer_id');
+            $join->on('memberships.company_id', '=', 'company.company_id');
             $join->where('memberships.status', '=', '1');
             $join->where('memberships.expiry', '>', \DB::raw('NOW()'));
         });        

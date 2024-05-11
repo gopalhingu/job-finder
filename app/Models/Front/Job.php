@@ -262,6 +262,54 @@ class Job extends Model
         return Self::sorted($results);
     }
 
+    public static function getForCompany($slug)
+    {
+        $query = Self::whereNotNull('jobs.job_id');
+        $query->select(
+            'jobs.*',
+            'departments.title as department',
+            'employers.company', 
+            'employers.slug as employer_slug', 
+            'employers.image as employer_image',
+            'employers.logo as employer_logo',
+            'memberships.separate_site',
+            DB::Raw('COUNT(DISTINCT('.dbprfx().'job_quizes.job_quiz_id)) as quizes_count'),
+            DB::Raw('COUNT(DISTINCT('.dbprfx().'job_traites.job_traite_id)) as traites_count'),
+            DB::Raw('GROUP_CONCAT(DISTINCT(CONCAT('.dbprfx().'job_filter_values.job_filter_value_id, "(--)", '.dbprfx().'job_filter_values.title)) SEPARATOR "-=-++-=-") as job_filter_values'),
+            DB::Raw('GROUP_CONCAT(DISTINCT(CONCAT('.dbprfx().'job_filters.job_filter_id, "(--)", '.dbprfx().'job_filters.title, "(--)", '.dbprfx().'job_filters.icon)) SEPARATOR "-=-++-=-") as job_filter_titles'),
+            DB::Raw('GROUP_CONCAT(DISTINCT(CONCAT('.dbprfx().'job_filter_value_assignments.job_filter_id, "-", '.dbprfx().'job_filter_value_assignments.job_filter_value_id))) AS combined') 
+        );
+        $query->where('jobs.status', 1);
+        $query->where('company.slug', $slug);
+        $query->where(function($q) {
+            $q->where('jobs.last_date', '>=', \DB::raw('NOW()'))->orWhere('jobs.hide_job_after_last_date', 0);
+        });
+        $query->where(function($q) {
+            if (env('CFSAAS_DEV')) {
+                $q->where('memberships.status', '1', '1');
+                $q->where('memberships.expiry', '>', \DB::raw('NOW()'));
+            }
+        });
+        $query->leftJoin('company', 'company.company_id', '=', 'jobs.company_id');
+        $query->leftJoin('employers', 'employers.employer_id', '=', 'jobs.employer_id');
+        $query->leftJoin('departments', 'departments.department_id', '=', 'jobs.department_id');
+        $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_quizes', 'job_quizes.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_filter_values', 'job_filter_values.job_filter_value_id', '=', 'job_filter_value_assignments.job_filter_value_id');
+        $query->leftJoin('job_filters', 'job_filters.job_filter_id', '=', 'job_filter_values.job_filter_id');
+        $query->leftJoin('memberships', function($join) {
+            $join->on('memberships.employer_id', '=', 'employers.employer_id');
+            $join->where('memberships.status', '=', '1');
+            $join->where('memberships.expiry', '>', \DB::raw('NOW()'));
+        });
+        $query->orderBy('jobs.created_at', 'DESC');
+        $query->groupBy('jobs.job_id');
+        $result = $query->get();
+        $results = $result ? objToArr($result->toArray()) : array();
+        return Self::sorted($results);
+    }
+
     public static function getForFront($status = true, $limit, $orderByCol, $orderByDir)
     {
         $query = Self::whereNotNull('jobs.job_id');
@@ -269,6 +317,8 @@ class Job extends Model
             'jobs.*',
             'departments.title as department',
             'employers.company', 
+            'company.companyname',
+            'company.slug as company_slug',
             'employers.slug as employer_slug', 
             'employers.image as employer_image',
             'employers.logo as employer_logo',
@@ -288,6 +338,7 @@ class Job extends Model
         if (setting('display_jobs_front') == 'employers_without_separate_site' && env('CFSAAS_DEMO') == false) {
             $query->where('memberships.separate_site', 0);
         }
+        $query->leftJoin('company', 'company.company_id', '=', 'jobs.company_id');
         $query->leftJoin('employers', 'employers.employer_id', '=', 'jobs.employer_id');
         $query->leftJoin('departments', 'departments.department_id', '=', 'jobs.department_id');
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
@@ -365,7 +416,6 @@ class Job extends Model
         $results = $result ? objToArr($result->toArray()) : array();
         return Self::sorted($results);
     }
-
 
     public static function getForFrontwithCompany($status = true, $company_id, $limit, $orderByCol, $orderByDir)
     {

@@ -45,6 +45,9 @@
 									<a href="{{frontJobLink($job['employer_slug'], $job['separate_site'])}}{{$job['slug'] ? $job['slug'] : encode($job['job_id'])}}">		
 										<h2>{{$job['title']}}</h2>
 									</a>
+									<a href="#">		
+										<p>{{$job['companyname']}}</p>
+									</a>
 								</div>
 								<div class="section-jobs-alpha-item-right-content">
 									<span><i class="fa-regular fa-calendar"></i> Posted : {{timeAgoByTimeStamp($job['created_at'])}}</span>

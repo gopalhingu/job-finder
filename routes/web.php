@@ -828,6 +828,7 @@ Route::group(['middleware' => ['essset']], function () {
 	Route::get('/news', $FrontNewsController.'news')->name('front-news-list');
 	Route::get('/news/{slug}', $FrontNewsController.'newsDetail')->name('front-news-detail');
 	Route::get('/companies', $GeneralsController.'companies')->name('companies');
+	Route::get('/employer/{slug}', $GeneralsController.'employerCompanyDetail')->name('employer-company-detail');
 	Route::get('/company/{slug}', $GeneralsController.'companyDetail')->name('company-detail');
 	Route::get('/candidates', $FrontCanController.'candidates')->name('front-candidates');
 	Route::get('/candidate/{slug}', $FrontCanController.'candidatesDetail')->name('front-candidate-detail');
