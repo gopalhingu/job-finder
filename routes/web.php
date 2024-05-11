@@ -499,6 +499,14 @@ Route::group(['prefix'=>'admin', 'middleware'=>['admin.auth', 'xss.sanitizer', '
 	Route::get('/roles/delete/{role_id}', $AdRolesCont.'@delete')->name('admin-role-delete');
 	Route::get('/roles/rolesAsSelect2/{type?}', $AdRolesCont.'@rolesAsSelect2')->name('admin-role-bulk-assign-view');
 
+	//Admin job tags module
+	$AdJobTagsCont = 'App\Http\Controllers\Admin\JobTagsController';
+	Route::get('/job-tags', $AdJobTagsCont.'@listView')->name('admin-job-tags-list');
+	Route::get('/job-tags/create-or-edit', $AdJobTagsCont.'@createOrEdit')->name('admin-job-tags-create');
+	Route::post('/job-tags/save', $AdJobTagsCont.'@saveJobTags')->name('admin-job-tags-save');
+	Route::get('/job-tags/create-or-edit/{user_id?}', $AdJobTagsCont.'@createOrEdit')->name('admin-job-tags-edit');
+	Route::get('/job-tags/delete/{id}', $AdJobTagsCont.'@delete')->name('admin-job-tags-delete');
+
 	//Admin Roles module routes
 	$AdMenusCont = 'App\Http\Controllers\Admin\MenusController';
 	Route::get('/menus', $AdMenusCont.'@listView')->name('admin-menus-list');
@@ -720,6 +728,8 @@ Route::group(['prefix'=>'admin', 'middleware'=>['admin.auth', 'xss.sanitizer', '
 	Route::post('/settings/home', $AdSetCont.'@updateHomeSettings')->name('admin-settings-home-post');
 	Route::get('/settings/employer', $AdSetCont.'@employerSettings')->name('admin-settings-employer');
 	Route::post('/settings/employer', $AdSetCont.'@updateEmployerSettings')->name('admin-settings-employer-post');
+	Route::get('/settings/company', $AdSetCont.'@companySettings')->name('admin-settings-company');
+	Route::post('/settings/company', $AdSetCont.'@updateCompanySettings')->name('admin-settings-company-post');
 	Route::get('/settings/job-portal-vs-saas', $AdSetCont.'@jobPortalVsSaasSettings')->name('admin-settings-jpvssaas');
 	Route::post('/settings/job-portal-vs-saas', $AdSetCont.'@updateJobPortalVsSaasSettings')->name('admin-settings-jpvssaas-post');
 

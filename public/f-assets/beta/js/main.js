@@ -824,9 +824,9 @@ function Main() {
             $(this).addClass('active');
             var type = $(this).prev('input[type="radio"]').val();
             if (type == 'candidate' ) {
-                $('#register-company-field-container').show();
-                $('#register-company-field').show();
-                $('#register-company-field').prop('disabled', false);
+                $('#register-company-field-container').hide();
+                $('#register-company-field').hide();
+                $('#register-company-field').prop('disabled', true);
                 $('#linkedin-link').prop('href', $('#linkedin-link-employer').val());
                 $('#google-link').prop('href', $('#google-link-employer').val());
             } else if( type == 'company') {
@@ -836,9 +836,9 @@ function Main() {
                 $('#linkedin-link').prop('href', $('#linkedin-link-employer').val());
                 $('#google-link').prop('href', $('#google-link-employer').val());
             }else {
-                $('#register-company-field-container').hide();
-                $('#register-company-field').hide();
-                $('#register-company-field').prop('disabled', true);
+                $('#register-company-field-container').show();
+                $('#register-company-field').show();
+                $('#register-company-field').prop('disabled', false);
                 $('#linkedin-link').prop('href', $('#linkedin-link-candidate').val());
                 $('#google-link').prop('href', $('#google-link-candidate').val());
             }

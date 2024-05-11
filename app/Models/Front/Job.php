@@ -941,4 +941,9 @@ class Job extends Model
         $result = $query->get();
         return $result ? objToArr($result->toArray()) : array();
     }
+
+    public function company()
+    {
+        return $this->hasOne('App\Models\Front\Company', 'company_id', 'company_id');
+    }
 }

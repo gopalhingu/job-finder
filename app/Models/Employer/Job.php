@@ -403,7 +403,7 @@ class Job  extends Model
             }
         }
         $query->where('job_follow.status', 1)
-        ->orwhere('jobs.employer_id', employerId());
+        ->orWhere('jobs.employer_id', employerId());
 
         $query->leftJoin('departments', 'departments.department_id', '=', 'jobs.department_id');
         $query->leftJoin('job_applications', 'job_applications.job_id', '=', 'jobs.job_id');

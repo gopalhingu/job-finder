@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 
+use Google\Service\Batch\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -210,38 +211,55 @@ class JobsController extends Controller
          echo view('front'.viewPrfx().'follow-job', array())->render();
      }
 
-    public function followJob(Request $request)
-    {
-        $employer = getSession('employer');
-        if (employerSession() && $request->follow_job_id && $request->description) {
-            if (Job::followJob($request->follow_job_id, $request->description)) {
-                try {
-                    $toEmail = $employer['email'];
-                    $subject =  __('message.follow_job');
-                    $message = $request->description;
-                    \Mail::send([], [], function($email) use ($toEmail, $subject, $message) {
-                        $email->to($toEmail)->subject($subject)->setBody($message, 'text/html');
-                    });
-                } catch (\Exception $e) {
-                    $error = array(
-                        'title' => 'Mail Send Error',
-                        'type' => 'mail_send_error',
-                        'description' => $e->getMessage(),
-                        'created_at' => date('y-m-d G:i:s')
-                    );
-                    DB::table('error_logs')->insert($error);
-                }
-                echo json_encode(array('success' => 'true', 'messages' => ''));
-                die;
-            } else {
-                echo json_encode(array('success' => 'false', 'messages' => 'Something went wrong!'));
-                die;
-            }
-        } else {
-            echo json_encode(array('success' => 'false', 'messages' => 'Something went wrong!'));
-            die;
-        }
-    } 
+     public function followJob(Request $request)
+     {
+         $employer = getSession('employer');
+         if (employerSession() && $request->follow_job_id && $request->description) {
+ 
+             $company = Job::with('company')->where('job_id', decode($request->follow_job_id))->first();
+             if (isset($company->company->email) && $company->company->email) {
+ 
+                 if (Job::followJob($request->follow_job_id, $request->description)) {
+                     try {
+                         $tagsWithValues = array(
+                             '((site_link))' => url('/'),
+                             '((site_logo))' => setting('site_logo'),
+                             '((job_title))' => $company->title ?? '',
+                             '((job_description))' => $company->description,
+                             '((emp_name))' => $employer['first_name'].' '.$employer['last_name'],
+                             '((emp_description))' => $request->description,
+                             '((emp_email))' => $employer['email'],
+                             '((emp_phone))' => $employer['phone1'],
+                         );
+ 
+                         $toEmail = $company->company->email;
+                         $subject =  __('message.follow_job');
+                         $message = replaceTagsInTemplate2(setting('employer_follow_job'), $tagsWithValues);
+                         $this->sendEmail($message, $toEmail, $subject);
+                     } catch (\Exception $e) {
+                         $error = array(
+                             'title' => 'Follow Job Error',
+                             'type' => 'follow_job_error',
+                             'description' => $e->getMessage(),
+                             'created_at' => date('y-m-d G:i:s')
+                         );
+                         DB::table('error_logs')->insert($error);
+                     }
+                     echo json_encode(array('success' => 'true', 'messages' => ''));
+                     die;
+                 } else {
+                     echo json_encode(array('success' => 'false', 'messages' => 'Following request already sended.'));
+                     die;
+                 }
+             } else {
+                 echo json_encode(array('success' => 'false', 'messages' => 'Something went wrong!'));
+                 die;
+             }
+         } else {
+             echo json_encode(array('success' => 'false', 'messages' => 'First, login as a '.__('message.recruiters').'.'));
+             die;
+         }
+     } 
 
     /**
      * Function to unmark jobs as favorite
