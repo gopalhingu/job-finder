@@ -208,7 +208,7 @@ class JobsController extends Controller
 
      public function followJobView()
      {
-         echo view('front'.viewPrfx().'follow-job', array())->render();
+        echo view('front'.viewPrfx().'follow-job', array())->render();
      }
 
      public function followJob(Request $request)

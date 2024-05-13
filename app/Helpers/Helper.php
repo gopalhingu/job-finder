@@ -1888,6 +1888,8 @@ function frontEmpUrl($employer_slug, $separate_site, $selfCall = '') {
 if(!function_exists('frontCmpUrl')) {
     function frontCmpUrl($employer_slug, $separate_site, $selfCall = '') {
         $separate_site_setting = $selfCall ? $selfCall : setting('enable_separate_employer_site');
+        $url = route('company-detail', $employer_slug);
+        return $url;
         if ($separate_site_setting == 'no') {
             $url = route('company-detail', $employer_slug);
             return $url;
