@@ -4,6 +4,9 @@
         @csrf
         <div class="row">
             <div class="col-md-12">
+                <p id="job_follow_form_error"></p>
+            </div>
+            <div class="col-md-12">
                 <div class="input-group">
                     <input type="hidden" name="follow_job_id" id="follow_job_id">
                     <textarea class="form-control" id="description" name="description" rows="5" placeholder="{{ __('message.enter_person_name') }}" required="required"></textarea>

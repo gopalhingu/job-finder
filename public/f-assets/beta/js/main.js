@@ -926,7 +926,7 @@ function Main() {
                 if (result.success == 'false' ) {
                     application.hideLoader('job_follow_form_button');
                     // application.showMessages(result.messages, 'job_follow_form');
-                    $('#job_follow_form').html(result.messages);
+                    $('#job_follow_form_error').html(result.messages);
                 } else {
                     if (result.success == 'true') {
                         setTimeout(function() { 
