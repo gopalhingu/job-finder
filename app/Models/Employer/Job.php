@@ -18,8 +18,11 @@ class Job  extends Model
     {
         $value = $column == 'job_id' || $column == 'jobs.job_id' ? decode($value) : $value;
         $query = Self::whereNotNull('jobs.job_id');
-        $query->where($column, $value);
-        $query->where('jobs.employer_id', employerId());        
+        $query->where(function ($query) use ($column, $value) {
+            $query->where($column, $value)
+                ->orWhere('jobs.employer_id', employerId());
+        });
+        $query->where('job_follow.status', 1);
         $query->select(
             'jobs.*',
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_traites.traite_id)) as traites'),
@@ -30,6 +33,7 @@ class Job  extends Model
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_quizes', 'job_quizes.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
         $query->groupBy('jobs.job_id');
         $result = $query->first();
         return $result ? $result : emptyTableColumns(Self::$tbl, array('traites', 'quizes', 'job_filter_ids', 'job_filter_value_ids'));
@@ -52,11 +56,17 @@ class Job  extends Model
     public static function getTotalJobs($id = '')
     {
         $query = Self::whereNotNull('jobs.job_id');
-        $query->where('status', 1);
-        $query->where('employer_id', employerId());
+        $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
+        $query->where('jobs.status', 1);
+        $query->where(function ($query) use ($id) {
+            $query->where('job_follow.status', 1)
+                ->where('job_follow.employer_id', employerId())
+                ->orWhere('jobs.employer_id', employerId());
+        });
         if ($id) {
             $query->where('jobs.job_id', '!=', decode($id));
         }
+        $query->groupBy('jobs.job_id');
         return $query->get()->count();
     }
 

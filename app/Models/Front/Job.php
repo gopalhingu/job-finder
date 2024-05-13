@@ -233,9 +233,10 @@ class Job extends Model
             DB::Raw('GROUP_CONCAT(DISTINCT(CONCAT('.dbprfx().'job_filter_value_assignments.job_filter_id, "-", '.dbprfx().'job_filter_value_assignments.job_filter_value_id))) AS combined') 
         );
         $query->where('jobs.status', 1);
-        $query->where('employers.slug', $slug);
+        $query->where('job_follow.status', 1);
         $query->where(function($q) {
             $q->where('jobs.last_date', '>=', \DB::raw('NOW()'))->orWhere('jobs.hide_job_after_last_date', 0);
+            
         });
         $query->where(function($q) {
             if (env('CFSAAS_DEV')) {
@@ -243,6 +244,8 @@ class Job extends Model
                 $q->where('memberships.expiry', '>', \DB::raw('NOW()'));
             }
         });
+        
+        $query->orWhere('employers.slug', $slug);
         $query->leftJoin('employers', 'employers.employer_id', '=', 'jobs.employer_id');
         $query->leftJoin('departments', 'departments.department_id', '=', 'jobs.department_id');
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
@@ -250,6 +253,7 @@ class Job extends Model
         $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_values', 'job_filter_values.job_filter_value_id', '=', 'job_filter_value_assignments.job_filter_value_id');
         $query->leftJoin('job_filters', 'job_filters.job_filter_id', '=', 'job_filter_values.job_filter_id');
+        $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
         $query->leftJoin('memberships', function($join) {
             $join->on('memberships.employer_id', '=', 'employers.employer_id');
             $join->where('memberships.status', '=', '1');
