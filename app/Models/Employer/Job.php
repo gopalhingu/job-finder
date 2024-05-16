@@ -18,11 +18,12 @@ class Job  extends Model
     {
         $value = $column == 'job_id' || $column == 'jobs.job_id' ? decode($value) : $value;
         $query = Self::whereNotNull('jobs.job_id');
-        $query->where(function ($query) use ($column, $value) {
-            $query->where($column, $value)
-                ->orWhere('jobs.employer_id', employerId());
-        });
-        $query->where('job_follow.status', 1);
+        $query->where($column, $value);
+        // $query->where(function ($query) use ($column, $value) {
+        //     $query->where($column, $value);
+        //         ->orWhere('jobs.employer_id', employerId());
+        // });
+        // $query->where('job_follow.status', 1);
         $query->select(
             'jobs.*',
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_traites.traite_id)) as traites'),
@@ -33,7 +34,7 @@ class Job  extends Model
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_quizes', 'job_quizes.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
-        $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
+        // $query->leftJoin('job_follow', 'job_follow.job_id', '=', 'jobs.job_id');
         $query->groupBy('jobs.job_id');
         $result = $query->first();
         return $result ? $result : emptyTableColumns(Self::$tbl, array('traites', 'quizes', 'job_filter_ids', 'job_filter_value_ids'));
