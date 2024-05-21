@@ -75,7 +75,7 @@ function Company() {
                 application.hideLoader('employer_company_import_form_button');
                 application.showMessages(result.messages, 'employer_company_import_form');
                 if (result.data) {
-                    window.location = application.url+'/employer/companys/create-or-edit/'+result.data;
+                    window.location = application.url+'/employer/companys/import/';
                 }                
             });
         });

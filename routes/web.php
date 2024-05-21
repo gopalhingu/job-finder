@@ -144,7 +144,7 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	Route::get('/companys/status/{company_id}/{status}', $EmComCont.'@changeStatus')->name('employer-companys-status');
 	Route::get('/companys/delete/{job_id}', $EmComCont.'@delete')->name('employer-companys-delete');
 	Route::post('/companys/excel', $EmComCont.'@excel')->name('employer-companys-excel');
-	Route::get('import/companys', $EmComCont.'@importView')->name('employer-import-companys');
+	Route::get('/companys/import', $EmComCont.'@importView')->name('employer-import-companys');
 	Route::post('/companys/save', $EmComCont.'@save')->name('employer-companys-save');
 	Route::post('/companys/import-save', $EmComCont.'@importSave')->name('employer-companys-import-save');
 

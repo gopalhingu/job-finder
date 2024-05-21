@@ -128,7 +128,7 @@ class CompanysController extends Controller
 
     public function importSave(Request $request)
     {
-        $rules['import_file'] = ['required', 'mimes:csv,xlsx'];
+        $rules['import_file'] = ['required', 'mimes:csv,xlsx,xls'];
 
         $validator = Validator::make($request->all(), $rules, [
             'import_file.required' => __('validation.required'),
@@ -143,16 +143,14 @@ class CompanysController extends Controller
         }
 
         $file = $request->file('import_file');
-        $path = $file->getRealPath();
         $extension = $file->getClientOriginalExtension();
-
-        
+        $fileName = time().'.'.$extension;
 
         try {
             if ($extension == 'csv') {
-                // 
-            } elseif ($extension == 'xlsx') {
-                // 
+                $extension = 'csv';
+            } elseif ($extension == 'xlsx' || $extension == 'xls') {
+                $extension = 'xlsx';
             } else {
                 die(json_encode(array(
                     'success' => 'false',
@@ -160,17 +158,60 @@ class CompanysController extends Controller
                 )));
             }
 
+            $path = $file->storeAs(config('constants.upload_dirs.employers').'excel', $fileName, 'public');
+            $filePath = storage_path('app\public\\'.$path);
+
             $data = [];
-        $excel = new SimpleExcel(strtolower($extension));
-
-        $path = public_path("e-assets/excel/sample_companys.csv");
-
-            $excel->parser->loadFile($path);
+            $excel = new SimpleExcel(strtolower($extension));
+            $excel->parser->loadFile($filePath);
             $data = $excel->parser->getField();
 
-            echo "<pre>";
-            print_r($data);
-            die;
+            if(count($data) <= 1) {
+                die(json_encode(array(
+                    'success' => 'false',
+                    'messages' => $this->ajaxErrorMessage(array('error' => __('validation.file_not_supported')))
+                )));
+            }
+
+            $header = array_shift($data);
+            $formattedArray = [];
+            foreach ($data as $row) {
+                $formattedArray[] = array_combine($header, $row);
+            }
+            $edit = null;
+            $company_id = [];
+            foreach ($formattedArray as $key => $value) {
+                if(isset($value['company_id'])) {
+                    unset($value['company_id']);
+                }
+                if(!isset($value['slug']) || empty($value['slug'])) {
+                    $value['slug'] = $value['companyname'];
+                }
+                $value['slug'] = $value['slug'].'-'.time();
+                if(isset($value['first_name']) && isset($value['last_name']) && isset($value['companyname']) && isset($value['email']) && isset($value['password'])) {
+                    
+                    if(!empty($value['first_name']) && !empty($value['last_name']) && !empty($value['companyname']) && !empty($value['email']) && !empty($value['password'])) {
+                        
+                        $getRow = Company::where('companyname', $value['companyname'])->orWhere('email', $value['email'])->count();
+                        if($getRow == 0) {
+                            $insertData = $value;
+                            $company_id[] = Company::storeCompany($insertData, $edit);
+                        }
+                    }
+                }
+            }
+            if(count($company_id) > 0) {
+                echo json_encode(array(
+                    'success' => 'true',
+                    'messages' => $this->ajaxErrorMessage(array('success' => __('message.company') . ($edit ? __('message.updated') : __('message.created')))),
+                    'data' => $company_id
+                ));
+            } else {
+                die(json_encode(array(
+                    'success' => 'false',
+                    'messages' => $this->ajaxErrorMessage(array('error' => __('message.oops_some_error_occured')))
+                )));
+            }
         } catch (\Exception $e) {
             die(json_encode(array(
                 'success' => 'false',

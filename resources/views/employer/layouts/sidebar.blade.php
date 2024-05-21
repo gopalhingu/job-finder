@@ -40,7 +40,7 @@
                     @endif
                     @if(empAllowedTo('import_companys'))
                     <li {{ selMenu($menu, 'import_companys') }}>
-                    <a href="{{ $l }}import/companys"><i class="fas fa-cube"></i> {{ __('message.import') }}</a>
+                    <a href="{{ $l }}companys/import"><i class="fas fa-cube"></i> {{ __('message.import') }}</a>
                     </li>
                     @endif
                 </ul>
