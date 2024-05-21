@@ -1,5 +1,8 @@
 <?php 
 
+$langValidation['import_excel_file_type'] = '';
+$langValidation['file_not_supported'] = '';
+
 $langValidation["accepted"] = "يجب قبول السمة.";
 $langValidation["active_url"] = ": السمة ليست عنوان URL صالح.";
 $langValidation["after"] = "يجب أن تكون السمة تاريخًا بعد: التاريخ.";

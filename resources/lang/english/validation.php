@@ -1,5 +1,8 @@
 <?php
 
+$langValidation['import_excel_file_type'] = 'The import file must be a file of type: csv, xlsx, xls.';
+$langValidation['file_not_supported'] = 'File not supported.';
+
 $langValidation['accepted'] = 'The :attribute must be accepted.';
 $langValidation['active_url'] = 'The :attribute is not a valid URL.';
 $langValidation['after'] = 'The :attribute must be a date after :date.';

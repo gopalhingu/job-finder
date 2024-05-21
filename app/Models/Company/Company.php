@@ -150,10 +150,8 @@ class Company  extends Model
         }
 
         $data['parent_id'] = employerId();
-        $data['employername'] = employerId('slug').'-'.strtotime(date('Y-m-d G:i:s'));
-        $data['slug'] = employerId('slug').'-'.curRand();
-        $data['company'] = employerId('company').' ('.$data['first_name'].' '.$data['first_name'].')';
-        $data['type'] = 'team';
+        $data['slug'] = slugify($data['slug']);
+        $data['type'] = 'main';
         if ($data['password']) {
             $data['password'] = \Hash::make($data['password']);
         } else {
@@ -164,7 +162,6 @@ class Company  extends Model
             $data['updated_at'] = date('Y-m-d G:i:s');
             $data['updated_at'] = date('Y-m-d G:i:s');
             Self::where('company_id', decode($edit))->update($data);
-            Self::insertRoles($roles, $edit);
             return $edit;
         } else {
             $data['password'] = \Hash::make($data['password']);
@@ -172,7 +169,6 @@ class Company  extends Model
             $data['status'] = 1;
             Self::insert($data);
             $id = DB::getPdo()->lastInsertId();
-            Self::insertRoles($roles, $id);
             return $id;
         }
     }
@@ -196,7 +192,6 @@ class Company  extends Model
     {
         $condition = array('company_id' => decode($company_id));
         Self::where($condition)->delete();
-        DB::table('employer_roles')->where($condition)->delete();
     }
 
     public static function getAll($active = true, $srh = '')
@@ -230,10 +225,11 @@ class Company  extends Model
             "",
             "company.first_name",
             "company.last_name",
+            "company.companyname",
             "company.email",
-            "",
             "company.created_at",
             "company.status",
+            ""
         );
         $orderColumn = $columns[($request['order'][0]['column'] == 0 ? 5 : $request['order'][0]['column'])];
         $orderDirection = $request['order'][0]['dir'];
@@ -242,10 +238,7 @@ class Company  extends Model
         $offset = $request['start'];
 
         $query = Self::whereNotNull('company.company_id');
-        $query->select(
-            'company.*',
-            DB::Raw('GROUP_CONCAT('.dbprfx().'roles.title SEPARATOR ", ") as employer_roles'),
-        );
+        $query->select('company.*');
         if ($srh) {
             $query->where(function($q) use ($srh) {
                 $q->where('company', 'like', '%'.$srh.'%');
@@ -257,14 +250,7 @@ class Company  extends Model
         if (isset($request['status']) && $request['status'] != '') {
             $query->where('company.status', $request['status']);
         }
-        if (isset($request['role']) && $request['role'] != '') {
-            $query->where('employer_roles.role_id', decode($request['role']));
-        }
-        $query->leftJoin('employer_roles','employer_roles.company_id', '=', 'company.company_id');
-        $query->leftJoin('roles', function($join) {
-            $join->on('roles.role_id', '=', 'employer_roles.role_id')->where('roles.type', '=', 'employer');
-        });
-        $query->where('company.type', 'team');
+        $query->where('company.type', 'main');
         $query->where('company.parent_id', employerId());
         $query->groupBy('company.company_id');
         $query->orderBy($orderColumn, $orderDirection);
@@ -295,14 +281,7 @@ class Company  extends Model
         if (isset($request['status']) && $request['status'] != '') {
             $query->where('company.status', $request['status']);
         }
-        if (isset($request['role']) && $request['role'] != '') {
-            $query->where('employer_roles.role_id', decode($request['role']));
-        }
-        $query->leftJoin('employer_roles','employer_roles.company_id', '=', 'company.company_id');
-        $query->leftJoin('roles', function($join) {
-            $join->on('roles.role_id', '=', 'employer_roles.role_id')->where('roles.type', '=', 'employer');
-        });
-        $query->where('company.type', 'team');
+        $query->where('company.type', 'main');
         $query->where('company.parent_id', employerId());
         $query->groupBy('company.company_id');
         return $query->get()->count();
@@ -324,14 +303,14 @@ class Company  extends Model
                 $button_class = 'danger';
                 $button_title = __('message.click_to_activate');
             }
-            if (empAllowedTo('edit_team_member')) { 
+            if (empAllowedTo('edit_company')) { 
             $actions .= '
-                <button type="button" class="btn btn-primary btn-xs create-or-edit-team" data-id="'.$id.'"><i class="far fa-edit"></i></button>
+                <button type="button" class="btn btn-primary btn-xs create-or-edit-company" data-id="'.$id.'"><i class="far fa-edit"></i></button>
             ';
             }
-            if (empAllowedTo('delete_team_member')) { 
+            if (empAllowedTo('delete_company')) { 
             $actions .= '
-                <button type="button" class="btn btn-danger btn-xs delete-team" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
+                <button type="button" class="btn btn-danger btn-xs delete-company" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
             ';
             }
             $thumb = employerThumb($u['image']);
@@ -340,10 +319,10 @@ class Company  extends Model
                 "<img class='employer-thumb-table' src='".$thumb['image']."' onerror='this.src=\"".$thumb['error']."\"'/>",
                 esc_output($u['first_name']),
                 esc_output($u['last_name']),
+                esc_output($u['companyname']),
                 esc_output($u['email']),
-                ($u['employer_roles'] && empMembership(employerId(), 'role_permissions') == 1) ? esc_output($u['employer_roles']) : '---',
                 date('d M, Y', strtotime($u['created_at'])),
-                '<button type="button" title="'.$button_title.'" class="btn btn-'.$button_class.' btn-xs change-team-status" data-status="'.$u['status'].'" data-id="'.$id.'">'.$button_text.'</button>',
+                '<button type="button" title="'.$button_title.'" class="btn btn-'.$button_class.' btn-xs change-company-status" data-status="'.$u['status'].'" data-id="'.$id.'">'.$button_text.'</button>',
                 $actions
             );
         }
@@ -496,4 +475,18 @@ class Company  extends Model
             fclose($fp);
         }
     }    
+    
+    public static function getCompanysForCSV($ids)
+    {
+        $ids = explode(',', $ids);
+        $ids = decodeArray($ids);
+
+        $query = Self::whereNotNull('company.company_id');
+        $query->select('company.*');
+        $query->whereIn('company.company_id', $ids);
+        $query->where('company.type', 'main');
+        $query->where('company.parent_id', employerId());
+        $query->groupBy('company.company_id');
+        return $query->get();
+    }
 }

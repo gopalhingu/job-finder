@@ -18,6 +18,34 @@
             <a href="{{ $l }}candidate-interviews"><i class="fas fa-gavel"></i> <span>{{ __('message.interviews') }}</span></a>
             </li>
             @endif
+            @if(empAllowedTo(array('view_companys', 'import_companys', 'create_companys')))
+            <li class="header">{{ __('message.companys_management') }}</li>
+            <li class="treeview {{ selMenu($menu, array('company', 'companys', 'import_companys')) }}">
+                <a href="#">
+                <i class="fa fa-suitcase"></i> <span>{{ __('message.companys') }}</span>
+                <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+                </span>
+                </a>
+                <ul class="treeview-menu">
+                    @if(empAllowedTo('create_companys'))
+                    <li {{ selMenu($menu, 'company') }}>
+                    <a href="{{ $l }}companys/create-or-edit"><i class="fas fa-cube"></i> {{ __('message.create') }}</a>
+                    </li>
+                    @endif
+                    @if(empAllowedTo('view_companys'))
+                    <li {{ selMenu($menu, 'companys') }}>
+                    <a href="{{ $l }}companys"><i class="fas fa-cube"></i> {{ __('message.listing') }}</a>
+                    </li>
+                    @endif
+                    @if(empAllowedTo('import_companys'))
+                    <li {{ selMenu($menu, 'import_companys') }}>
+                    <a href="{{ $l }}import/companys"><i class="fas fa-cube"></i> {{ __('message.import') }}</a>
+                    </li>
+                    @endif
+                </ul>
+            </li>
+            @endif
             @if(empAllowedTo(array('view_jobs', 'view_all_jobs', 'create_jobs', 'view_departments', 'view_job_filters')))
             <li class="header">{{ __('message.jobs_management') }}</li>
             <li class="treeview {{ selMenu($menu, array('job', 'jobs', 'all_job', 'departments', 'job_filters')) }}">

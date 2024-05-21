@@ -1,5 +1,12 @@
 <?php
 
+$lang['companys_management'] = "COMPANYS MANAGEMENT";
+$lang['companys'] = "Companys";
+$lang['enter_company_name'] = "Enter Company Name";
+$lang['import'] = "Import";
+$lang["download_companys"] = "Download Companys (EXCEL)";
+$lang["download_sample_import_excel_file"] = "Download Sample EXCEL File";
+
 $lang["all_job"] = "All jobs";
 $lang["all_listing"] = "All listing";
 $lang["job_type"] = "Job Type";
@@ -17,7 +24,6 @@ $lang["job_tag_name"] = "Name";
 $lang["create_edit_job_tag"] = "Create and Edit Job Tags";
 $lang["job_tag_already_exist"] = "Job Tag already exist";
 $lang["search_jobs_by_company"] = "Browse Jobs By Companys";
-
 $lang["email_password_error"] = "Email and/or password was not found.";
 // $lang["add_employer"] = "Add Employer";
 $lang["add_employer"] = "Add Recruiter";

@@ -1,5 +1,8 @@
 <?php 
 
+$langValidation['import_excel_file_type'] = '';
+$langValidation['file_not_supported'] = '';
+
 $langValidation["accepted"] = "L'attribut doit être accepté.";
 $langValidation["active_url"] = "L'attribut n'est pas une URL valide.";
 $langValidation["after"] = "L'attribut doit être une date après: date.";

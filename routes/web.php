@@ -137,6 +137,17 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	Route::get('/jobs/add-custom-field', $EmJobCont.'@addCustomField')->name('employer-jobs-add-custom-field');
 	Route::get('/jobs/remove-custom-field/{job_id}', $EmJobCont.'@removeCustomField')->name('employer-jobs-remove-custom-field');
 
+	$EmComCont = 'App\Http\Controllers\Employer\CompanysController';
+	Route::get('/companys/create-or-edit/{company_id?}', $EmComCont.'@createOrEdit')->name('employer-companys-create-or-edit');
+	Route::get('/companys', $EmComCont.'@listView')->name('employer-companys');
+	Route::post('/companys/data', $EmComCont.'@data')->name('employer-companys-data');
+	Route::get('/companys/status/{company_id}/{status}', $EmComCont.'@changeStatus')->name('employer-companys-status');
+	Route::get('/companys/delete/{job_id}', $EmComCont.'@delete')->name('employer-companys-delete');
+	Route::post('/companys/excel', $EmComCont.'@excel')->name('employer-companys-excel');
+	Route::get('import/companys', $EmComCont.'@importView')->name('employer-import-companys');
+	Route::post('/companys/save', $EmComCont.'@save')->name('employer-companys-save');
+	Route::post('/companys/import-save', $EmComCont.'@importSave')->name('employer-companys-import-save');
+
 	//Employer job filter module routes
 	$EmJobFilCont = 'App\Http\Controllers\Employer\JobFiltersController';
 	Route::get('/job-filters', $EmJobFilCont.'@listView')->name('employer-job-fil');

@@ -1,5 +1,11 @@
 <?php
 
+$lang['companys_management'] = "";
+$lang['companys'] = "";
+$lang['import'] = "";
+$lang["download_companys"] = "";
+$lang["download_sample_import_excel_file"] = "";
+
 $lang["all_job"] = "جميع الوظائف";
 $lang["all_listing"] = "كل القائمة";
 $lang["job_type"] = "نوع الوظيفة";
@@ -17,7 +23,6 @@ $lang["job_tag_name"] = "";
 $lang["create_edit_job_tag"] = "";
 $lang["job_tag_already_exist"] = "";
 $lang["search_jobs_by_company"] = "";
-
 $lang["employer_packages"] = "";
 $lang["candidate_packages"] = "";
 $lang["finances"] = "";

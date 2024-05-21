@@ -158,7 +158,7 @@ class JobsController extends Controller
                         'messages' => $this->ajaxErrorMessage(array('success' => __('message.job_applied_successfully')))
                     ));
                 }
- 
+                
             } else {
                 $detail = Job::applyJob($request->all());
                 $this->sendEmailToEmployerAndCandidate($job, $detail);
