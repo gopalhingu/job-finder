@@ -125,6 +125,18 @@
                                     <small class="form-text text-muted">{{ __('message.enter_short_biography') }}</small>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <hr />
+                                <div class="form-group">
+                                    <label>{{ __('message.job_tag') }}</label>
+                                    <select class="form-control select2" id="jobTags[]" name="jobTags[]" multiple="multiple">
+                                    @foreach($job_tags as $jobTags)
+                                        @php $jobTagsData = $candidate['candidateJobTags'] ? explode(',', $candidate['candidateJobTags']) : array(); @endphp
+                                        <option value="{{ encode($jobTags['id']) }}" {{ sel($jobTags['id'], $jobTagsData) }}>{{$jobTags['name']}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-12 col-lg-12">
                                 <div class="form-group form-group-account">
                                     <label for="input-file-now-custom-1">{{ __('message.image_file') }}</label>

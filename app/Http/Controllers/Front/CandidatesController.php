@@ -11,6 +11,7 @@ use App\Models\Front\Candidate;
 use App\Models\Front\Resume;
 use App\Models\Admin\Notification;
 use App\Models\Admin\CandidatePackage;
+use App\Models\Admin\JobTags;
 use App\Rules\MinString;
 use App\Rules\MaxString;
 use App\Rules\MaxFile;
@@ -126,7 +127,8 @@ class CandidatesController extends Controller
     {
         $data['page_title'] = __('message.update_profile');
         $data['menu'] = 'profile';
-        $data['candidate'] = Candidate::getFirst('candidates.candidate_id', candidateSession());
+        $data['candidate'] = Candidate::getProfilewithJob('candidates.candidate_id', candidateSession());
+        $data['job_tags'] = JobTags::getAll();
         return view('front'.viewPrfx().'candidates.profile', $data);
     }    
 

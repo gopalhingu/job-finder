@@ -22,6 +22,40 @@ class Candidate extends Model
         return $result ? objToArr($result->toArray()) : emptyTableColumns(Self::$tbl);
     }
 
+    public static function getProfilewithJob($column, $value)
+    {
+        $query = Self::whereNotNull('candidates.candidate_id');
+        $query->from('candidates');
+        $query->select(
+            'candidates.*',
+            'candidate_memberships.show_hide_personal_info',
+            DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'candidate_job_tags.job_tags_id)) as candidateJobTags')
+        );
+        $query->where($column, $value);
+        $query->where('candidates.status', 1);
+        if (setting('enable_candidate_packages') == 'yes') {
+            $default = setting('default_settings_for_candidates');
+            if ($default == 'display') {
+                $query->where(function($q) {
+                    $q->where('candidates.show_profile', 'yes')->where('candidate_memberships.show_hide_personal_info', 1)->orWhere('candidate_memberships.candidate_membership_id', null);
+                });
+            } else {
+                $query->where(function($q) {
+                    $q->where('candidates.show_profile', 'yes')->where('candidate_memberships.show_hide_personal_info', 1)->orWhere('candidate_memberships.candidate_membership_id', '<>', null);
+                });                
+            }
+        }
+        $query->leftJoin('candidate_memberships', function($join) {
+            $join->on('candidate_memberships.candidate_id', '=', 'candidates.candidate_id')
+            ->where('candidate_memberships.status', '=', '1');
+        });        
+        $query->leftJoin('candidate_job_tags', 'candidate_job_tags.candidate_id', '=', 'candidates.candidate_id');
+        $query->groupBy('candidates.candidate_id');
+        $result = $query->first();
+        $result = $result ? Self::sortResumeElements($result->toArray()) : array();
+        return $result;
+    }
+
     public static function valueExist($field, $value, $edit = false)
     {
         $query = Self::whereNotNull('candidates.candidate_id');
@@ -59,7 +93,31 @@ class Candidate extends Model
         if ($image) {
             $data['image'] = $image;
         }
+        
+        $jobTags = isset($data['jobTags']) ? $data['jobTags'] : array();
+        unset($data['jobTags']);
+
+        Self::insertCandidateJobTags($jobTags, candidateSession());
+        
         return Self::where('candidate_id', candidateSession())->update($data);
+    }
+
+    public static function insertCandidateJobTags($jobTags, $candidate_id)
+    {
+        //First deleting
+        DB::table('candidate_job_tags')->where('candidate_id', $candidate_id)->delete();
+
+        //Getting job tags for new
+        $jobTagsData = DB::table('job_tags')->whereIn('id', ($jobTags ? decodeArray($jobTags) : array(0)))->get();
+        $jobTagsData = $jobTagsData ? objToArr($jobTagsData->toArray()) : array();
+
+        //Inserting new jobTags
+        foreach ($jobTagsData as $key => $value) {
+            $data['created_at'] = date('Y-m-d G:i:s');
+            $data['job_tags_id'] = $value['id'];
+            $data['candidate_id'] = $candidate_id;
+            DB::table('candidate_job_tags')->insert($data);
+        }
     }
 
     public static function checkExistingPassword($password)

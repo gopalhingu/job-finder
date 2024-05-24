@@ -107,6 +107,16 @@
                         </li>
                         @endif
                     </ul>
+                    <ul class="nav nav-treeview">
+                        @if(allowedTo('view_job_tag'))
+                        <li class="nav-item">
+                            <a href="{{route('admin-job-tags-list')}}" class="nav-link {{acActive($menu, 'job-tags')}}">
+                                &nbsp;<i class="fas fa-briefcase"></i>
+                                <p>{{__('message.job_tag')}}</p>
+                            </a>
+                        </li>
+                        @endif
+                    </ul>
                 </li>
                 @endif
                 @if(allowedTo(array('portal_vs_multitenancy', 'admin_view_departments', 'admin_view_job_filters')))

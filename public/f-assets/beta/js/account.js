@@ -553,6 +553,10 @@ function Account() {
     this.openInNewTab = function (url) {
         var win = window.open(url, '_blank');
     }    
+
+    this.initDualListBox = function() {
+        $('.select2').select2();
+    }
 }
 
 $(document).ready(function() {
@@ -587,4 +591,5 @@ $(document).ready(function() {
     account.initJobApply();    
     account.initQuizTimer();    
     account.initMembershipRenewForm();    
+    account.initDualListBox(); 
 });

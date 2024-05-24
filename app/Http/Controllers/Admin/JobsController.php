@@ -16,6 +16,7 @@ use App\Models\Admin\Job;
 use App\Models\Admin\JobFilter;
 use App\Models\Admin\Traite;
 use App\Models\Admin\Quiz;
+use App\Models\Admin\JobTags;
 use App\Rules\MinString;
 use App\Rules\MaxString;
 
@@ -61,6 +62,7 @@ class JobsController extends Controller
         $data['quizes'] = objToArr(Quiz::getAll(true));
         $data['job_filters'] = objToArr(JobFilter::getAll());
         $data['employers'] = objToArr(Employer::getAll2());
+        $data['job_tags'] = JobTags::getAll();
         $data['page'] = __('message.job');
         $data['menu'] = 'jobs';
         return view('admin.jobs.create-or-edit', $data);
