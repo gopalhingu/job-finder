@@ -14,6 +14,7 @@ use App\Rules\MaxString;
 use SimpleExcel\SimpleExcel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Support\Facades\DB;
 
 class CandidatesController extends Controller
 {
@@ -168,5 +169,15 @@ class CandidatesController extends Controller
         $excel = new SimpleExcel('csv');                    
         $excel->writer->setData($data);
         $excel->writer->saveFile('candidates'); 
+    }
+
+    public function addOrRemove($candidate_id = null) {
+        $data = DB::table('employer_candidates')->where(['employer_id' => employerId(), 'candidate_id' => decode($candidate_id)])->first();
+        if(!empty($data)) {
+            DB::table('employer_candidates')->where(['employer_id' => employerId(), 'candidate_id' => decode($candidate_id)])->delete();
+        } else {
+            DB::table('employer_candidates')->insert(['employer_id' => employerId(), 'candidate_id' => decode($candidate_id)]);
+        }
+        return true;
     }
 }

@@ -109,6 +109,7 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	$EmCanIntCont = 'App\Http\Controllers\Employer\CandidateInterviewsController';
 	Route::get('/candidates', $EmCanCont.'@listView')->name('employer-candidates');
 	Route::post('/candidates/data', $EmCanCont.'@data')->name('employer-candidates-data');
+	Route::get('/candidates/add-or-remove/{candidate_id}', $EmCanCont.'@addOrRemove')->name('employer-candidate-add-or-remove');
 	Route::post('/candidates/bulk-action', $EmCanCont.'@bulkAction')->name('employer-candidates-bulk-action');
 	Route::get('/candidates/resume/{candidate_id}', $EmCanCont.'@resume')->name('employer-candidates-resume');
 	Route::post('/candidates/resume-download', $EmCanCont.'@resumeDownload')->name('employer-candidates-resume-download');

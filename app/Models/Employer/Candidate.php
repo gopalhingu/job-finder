@@ -96,11 +96,12 @@ class Candidate  extends Model
             "candidates.email",
             "",
             "resumes.experience",
+            "",
             "candidates.account_type",
             "candidates.created_at",
             "candidates.status",
         );
-        $orderColumn = $columns[($request['order'][0]['column'] == 0 ? 5 : $request['order'][0]['column'])];
+        $orderColumn = $columns[($request['order'][0]['column'] == 0 || $request['order'][0]['column'] == 7 ? 5 : $request['order'][0]['column'])];
         $orderDirection = $request['order'][0]['dir'];
         $srh = $request['search']['value'];
         $limit = $request['length'];
@@ -110,6 +111,7 @@ class Candidate  extends Model
         $query->select(
             'candidates.*',
             'resumes.experience',
+            'employer_candidates.employer_id as emp_can_id', 
             DB::Raw('GROUP_CONCAT('.dbprfx().'resume_experiences.title) as job_title')
         );
         if ($srh) {
@@ -134,7 +136,8 @@ class Candidate  extends Model
         $query->leftJoin('resumes', function($join) {
             $join->on('resumes.candidate_id', '=', 'candidates.candidate_id')->where('resumes.is_default', '=', '1');
         });
-        $query->join('employer_candidates', function($join) {
+        // $query->join('employer_candidates', function($join) {
+        $query->leftJoin('employer_candidates', function($join) {
             $join->on('employer_candidates.candidate_id', '=', 'candidates.candidate_id')
                 ->where('employer_candidates.employer_id', '=', employerId());
         });
@@ -204,6 +207,11 @@ class Candidate  extends Model
                 $button_class = 'danger';
                 $button_title = __('message.click_to_activate');
             }          
+            if (isset($u['emp_can_id']) && !empty($u['emp_can_id'])) {
+                $candidateOperation = '<button type="button" class="btn btn-danger btn-xs add-or-remove-candidate" data-id="'.$id.'"><i class="fas fa-trash-alt"></i></button>';
+            } else {
+                $candidateOperation = '<button type="button" class="btn btn-success btn-xs add-or-remove-candidate" data-id="'.$id.'"><i class="fas fa-check"></i></button>';
+            }
             $thumb = candidateThumb($u['image']);
             $sorted[] = array(
                 "<input type='checkbox' class='minimal single-check' data-id='".$id."' />",
@@ -213,6 +221,7 @@ class Candidate  extends Model
                 $u['email'],
                 $u['job_title'] ? $u['job_title'] : '---',
                 $u['experience'],
+                $candidateOperation,
             );
         }
         return $sorted;

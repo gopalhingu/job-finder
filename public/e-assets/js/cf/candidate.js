@@ -32,6 +32,7 @@ function Candidate() {
                     self.initiCheck();
                     self.initAllCheck();
                     self.initLoadResume();
+                    self.initAddOrRemoveCandidate();
                     $('.table-bordered').parent().attr('style', 'overflow:auto'); //For responsive
                 },
             },
@@ -42,6 +43,19 @@ function Candidate() {
             'autoWidth': true,
             'destroy':true,
             'stateSave': true
+        });
+    };
+
+    this.initAddOrRemoveCandidate = function () {
+        $('.add-or-remove-candidate').off();
+        $('.add-or-remove-candidate').on('click', function () {
+            var status = confirm(lang['are_u_sure']);
+            var id = $(this).data('id');
+            if (status === true) {
+                application.load('/employer/candidates/add-or-remove/'+id, '', function (result) {
+                    self.initCandidatesDatatable();
+                });
+            }
         });
     };
 

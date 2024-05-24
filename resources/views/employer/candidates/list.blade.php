@@ -71,6 +71,7 @@
                                     <th>{{ __('message.email') }}</th>
                                     <th>{{ __('message.job_title') }}</th>
                                     <th>{{ __('message.experience_months') }}</th>
+                                    <th>{{ __('message.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
