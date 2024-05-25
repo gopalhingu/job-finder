@@ -288,6 +288,7 @@ class GeneralsController extends Controller
     
     public function registerCompany(Request $request)
     {
+        
         $this->checkIfDemo();
 
         //Checking for reserved words to avoid any conflict with routes
