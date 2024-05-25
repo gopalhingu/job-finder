@@ -16,6 +16,7 @@ use App\Models\Employer\APIjob;
 use App\Models\Employer\JobFilter;
 use App\Models\Employer\Traite;
 use App\Models\Employer\Quiz;
+use App\Models\Admin\JobTags;
 use App\Rules\MinString;
 use App\Rules\MaxString;
 use Illuminate\Support\Facades\DB;
@@ -126,6 +127,7 @@ class JobsController extends Controller
         $data['fields'] = objToArr(Job::getFields($job_id));
         $data['quizes'] = objToArr(Quiz::getAll(true));
         $data['job_filters'] = objToArr(JobFilter::getAll());
+        $data['job_tags'] = JobTags::getAll();
         $data['page'] = __('message.job');
         $data['menu'] = 'job';
         return view('employer.jobs.create-or-edit', $data);
