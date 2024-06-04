@@ -46,7 +46,7 @@
 										<h2>{{$job['title']}}</h2>
 									</a>
 									<a href="#">		
-										<p>{{$job['companyname']}}</p>
+										<p>{{$job['companyname'] ?? ''}}</p>
 									</a>
 								</div>
 								<div class="section-jobs-alpha-item-right-content">

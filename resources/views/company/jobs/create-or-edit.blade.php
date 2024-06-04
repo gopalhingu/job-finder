@@ -152,6 +152,18 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <hr />
+                                    <div class="form-group">
+                                        <label>{{ __('message.job_tag') }}</label>
+                                        <select class="form-control select2" id="jobTags[]" name="jobTags[]" multiple="multiple">
+                                        @foreach($job_tags as $jobTags)
+                                        @php $jobTagsData = $job['userJobTags'] ? explode(',', $job['userJobTags']) : array(); @endphp
+                                        <option value="{{ encode($jobTags['id']) }}" {{ sel($jobTags['id'], $jobTagsData) }}>{{$jobTags['name']}}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12">
                                     <hr />
                                     <div class="form-group">

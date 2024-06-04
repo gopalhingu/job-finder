@@ -10,7 +10,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SendNotification
+namespace App\Events;
+
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+class SendNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,11 +28,13 @@ class SendNotification
         $this->message = $message;
     }
 
-    public function broadcastOn() {
+    public function broadcastOn()
+    {
         return ['my-channel'];
     }
 
-    public function broadcastAs() {
+    public function broadcastAs()
+    {
         return 'my-event';
     }
 }

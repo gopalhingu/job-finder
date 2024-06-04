@@ -109,6 +109,11 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	$EmCanIntCont = 'App\Http\Controllers\Employer\CandidateInterviewsController';
 	Route::get('/candidates', $EmCanCont.'@listView')->name('employer-candidates');
 	Route::post('/candidates/data', $EmCanCont.'@data')->name('employer-candidates-data');
+	Route::get('/my-candidates', $EmCanCont.'@listViewMy')->name('employer-my-candidates');
+	Route::post('/my-candidates/data', $EmCanCont.'@dataMy')->name('employer-my-candidates-data');
+	Route::get('/matched-candidates', $EmCanCont.'@listViewMatched')->name('employer-matched-candidates');
+	Route::post('/matched-candidates/data', $EmCanCont.'@dataMatched')->name('employer-matched-candidates-data');
+	Route::get('/candidates/send-mail/{candidate_id}/{job_id}', $EmCanCont.'@sendMail')->name('employer-matched-candidates-send-mail');
 	Route::get('/candidates/add-or-remove/{candidate_id}', $EmCanCont.'@addOrRemove')->name('employer-candidate-add-or-remove');
 	Route::post('/candidates/bulk-action', $EmCanCont.'@bulkAction')->name('employer-candidates-bulk-action');
 	Route::get('/candidates/resume/{candidate_id}', $EmCanCont.'@resume')->name('employer-candidates-resume');

@@ -16,10 +16,12 @@ use App\Models\Company\APIjob;
 use App\Models\Company\JobFilter;
 use App\Models\Company\Traite;
 use App\Models\Company\Quiz;
+use App\Models\Admin\JobTags;
 use App\Rules\MinString;
 use App\Rules\MaxString;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use App\Events\SendNotification;
 
 class JobsController extends Controller
 {
@@ -145,6 +147,7 @@ class JobsController extends Controller
         $data['fields'] = objToArr(Job::getFields($job_id));
         $data['quizes'] = objToArr(Quiz::getAll(true));
         $data['job_filters'] = objToArr(JobFilter::getAll());
+        $data['job_tags'] = JobTags::getAll();
         $data['page'] = __('message.job');
         $data['menu'] = 'job';
         return view('company.jobs.create-or-edit', $data);

@@ -30,6 +30,7 @@ use App\Models\Candidate\Candidate as CandidateCandidate;
 use App\Models\Front\Job as FrontJob;
 use App\Rules\MinString;
 use App\Rules\MaxString;
+use App\Events\SendNotification;
 
 use App\Models\Front\Company;
 use App\Models\Company\Company as CompanyCompany;
@@ -288,7 +289,6 @@ class GeneralsController extends Controller
     
     public function registerCompany(Request $request)
     {
-        
         $this->checkIfDemo();
 
         //Checking for reserved words to avoid any conflict with routes

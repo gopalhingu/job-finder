@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Employer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Employer;
+use App\Models\Admin\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +28,7 @@ class CandidatesController extends Controller
     public function listView()
     {
         $data['page'] = __('message.candidates');
-        $data['menu'] = 'candidates';
+        $data['menu'] = 'all_candidates';
         return view('employer.candidates.list', $data);
     }
 
@@ -38,6 +40,82 @@ class CandidatesController extends Controller
     public function data(Request $request)
     {
         echo json_encode(Candidate::candidatesList($request->all()));
+    }
+
+    /**
+     * View Function to display candidates list view page
+     *
+     * @return html/string
+     */
+    public function listViewMy()
+    {
+        $data['page'] = __('message.candidates');
+        $data['menu'] = 'my_candidates';
+        return view('employer.candidates.my-list', $data);
+    }
+
+    /**
+     * Function to get data for candidates jquery datatable
+     *
+     * @return json
+     */
+    public function dataMy(Request $request)
+    {
+        echo json_encode(Candidate::myCandidatesList($request->all()));
+    }
+
+    /**
+     * View Function to display candidates list view page
+     *
+     * @return html/string
+     */
+    public function listViewMatched()
+    {
+        $data['page'] = __('message.candidates');
+        $data['menu'] = 'matched_candidates';
+        return view('employer.candidates.matched-list', $data);
+    }
+
+    /**
+     * Function to get data for candidates jquery datatable
+     *
+     * @return json
+     */
+    public function dataMatched(Request $request)
+    {
+        echo json_encode(Candidate::matchedCandidatesList($request->all()));
+    }
+
+    public function sendMail($candidate_id, $job_id) {
+        try {
+            $employer = Employer::where('employer_id', employerId())->first()->toArray();
+            $candidate = Candidate::where("candidate_id", decode($candidate_id))->first()->toArray();
+            $job = Job::where("job_id", decode($job_id))->first()->toArray();
+
+            $tagsWithValues = array(
+                '((site_link))' => url('/'),
+                '((site_logo))' => setting('site_logo'),
+                '((first_name))' => $candidate['first_name'],
+                '((last_name))' => $candidate['last_name'],
+                '((job_title))' => $job['title'],
+                '((job_description))' => $job['description'],
+                '((link))' => route('front-jobs-detail', $job['slug']),
+                '((job_description))' => $job['description'],
+                '((employer_first_name))' => $employer['first_name'],
+                '((employer_last_name))' => $employer['last_name'],
+                '((employer_phone_number))' => $employer['phone1'] ?? $employer['phone1'] ?? '',
+                '((employer_email_address))' => $employer['email'],
+            );
+            $message = replaceTagsInTemplate2(setting('matched_candidate_send_email'), $tagsWithValues);
+            $subject = setting('site_name').' : '.__('message.matched_job');
+            $this->sendEmail($message, $candidate['email'], $subject);
+
+            DB::table("employer_candidates")->where(['employer_id' => employerId(), 'candidate_id' => decode($candidate_id)])->update(['send_mail' => 1]);
+            
+            return response()->json(['status' => true, 'message' => 'Send Mail Successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     /**

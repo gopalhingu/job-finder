@@ -138,10 +138,38 @@
             <a href="{{ $l }}team"><i class="fa fa-users"></i> <span>{{ __('message.team') }}</span></a>
             </li>
             @endif
-            @if(empAllowedTo('view_candidate_listing'))
-            <li {{ selMenu($menu, 'candidates') }}>
-            <a href="{{ $l }}candidates"><i class="fa fa-graduation-cap"></i> <span>{{ __('message.candidates') }}</span></a>
+            @if(empAllowedTo(array('view_candidate_listing', 'all_candidates', 'my_candidates', 'matched_candidates')))
+            <li class="header">{{ __('message.candidate_management') }}</li>
+            <li class="treeview {{ selMenu($menu, array('all_candidates', 'my_candidates', 'matched_candidates')) }}">
+                <a href="#">
+                <i class="fa fa-graduation-cap"></i> <span>{{ __('message.candidates') }}</span>
+                <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+                </span>
+                </a>
+                <ul class="treeview-menu">
+                    @if(empAllowedTo('all_candidates'))
+                    <li {{ selMenu($menu, 'all_candidates') }}>
+                        <a href="{{ $l }}candidates"><i class="fas fa-cube"></i> <span>{{ __('message.all_candidates') }}</span></a>
+                    </li>
+                    @endif
+                    @if(empAllowedTo('my_candidates'))
+                    <li {{ selMenu($menu, 'my_candidates') }}>
+                        <a href="{{ $l }}my-candidates"><i class="fas fa-cube"></i> <span>{{ __('message.my_candidates') }}</span></a>
+                    </li>
+                    @endif
+                    @if(empAllowedTo('matched_candidates'))
+                    <li {{ selMenu($menu, 'matched_candidates') }}>
+                        <a href="{{ $l }}matched-candidates"><i class="fas fa-cube"></i> <span>{{ __('message.matched_candidates') }}</span></a>
+                    </li>
+                    @endif
+                </ul>
             </li>
+            @endif
+            @if(empAllowedTo('view_candidate_listing'))
+            {{-- <li {{ selMenu($menu, 'candidates') }}>
+            <a href="{{ $l }}candidates"><i class="fa fa-graduation-cap"></i> <span>{{ __('message.candidates') }}</span></a>
+            </li> --}}
             @endif
             <li class="header">{{ __('message.others') }}</li>
             @if(empAllowedTo(array('view_blog_listing', 'view_blog_categories')))

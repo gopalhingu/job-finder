@@ -86,6 +86,200 @@ class Candidate  extends Model
         return $query->get()->count();
     }    
 
+    public static function matchedCandidatesList($request)
+    {
+        $columns = array(
+            "",
+            "",
+            "candidates.first_name",
+            "candidates.last_name",
+            "candidates.email",
+            "",
+            "candidates.first_name",
+            "",
+            "candidates.account_type",
+            "candidates.created_at",
+            "candidates.status",
+        );
+        $orderColumn = $columns[($request['order'][0]['column'] == 0 || $request['order'][0]['column'] == 7 ? 5 : $request['order'][0]['column'])];
+        $orderDirection = $request['order'][0]['dir'];
+        $srh = $request['search']['value'];
+        $limit = $request['length'];
+        $offset = $request['start'];
+
+        // CANDIDATE
+        $query = Self::whereNotNull('candidates.candidate_id');
+        $query->select(
+            'candidates.*',
+            'employer_candidates.send_mail',
+            DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_tags.name)) as candidate_tag'),
+        );
+        if ($srh) {
+            $query->where(function($q) use($srh) {
+                $q->where('candidates.first_name', 'like', '%'.$srh.'%');
+                $q->orWhere('candidates.last_name', 'like', '%'.$srh.'%');
+                $q->orWhere('candidates.email', 'like', '%'.$srh.'%');
+            });
+        }
+        $query->join('employer_candidates', function($join) {
+            $join->on('employer_candidates.candidate_id', '=', 'candidates.candidate_id')
+                ->where('employer_candidates.employer_id', '=', employerId());
+        });
+        $query->leftJoin('candidate_job_tags', function($join) {
+            $join->on('candidate_job_tags.candidate_id', '=', 'candidates.candidate_id');
+        });
+        $query->leftJoin('job_tags', function($join) {
+            $join->on('candidate_job_tags.job_tags_id', '=', 'job_tags.id');
+        });
+        $query->groupBy('candidates.candidate_id');
+        $query->orderBy($orderColumn, $orderDirection);
+        $query->skip($offset);
+        $query->take($limit);
+        $result = $query->get();
+        $resultCandidate = $result ? $result->toArray() : array();
+
+        // JOB
+        $query = DB::table('jobs')->whereNotNull('jobs.job_id');
+        $query->select(
+            // 'jobs.*',
+            'jobs.job_id',
+            'jobs.title',
+            'jobs.last_date',
+            DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_tags.name)) as job_tag'),
+        );
+        $query->join('job_follow', function($join) {
+            $join->on('job_follow.job_id', '=', 'jobs.job_id')
+                ->where('job_follow.employer_id', '=', employerId())->orWhere('jobs.employer_id', '=', employerId());
+        });
+        $query->leftJoin('user_job_tags', function($join) {
+            $join->on('user_job_tags.job_id', '=', 'jobs.job_id');
+        });
+        $query->leftJoin('job_tags', function($join) {
+            $join->on('job_tags.id', '=', 'user_job_tags.job_tags_id');
+        });
+        $query->where('jobs.status', '=', 1);
+        $query->groupBy('jobs.job_id');
+        $result = $query->get();
+        $resultJob = $result ? $result->toArray() : array();
+
+        $returnData = [];
+        foreach ($resultCandidate as $key => $value) {
+            $u = objToArr($value);
+            $id = encode($u['candidate_id']);
+            $thumb = candidateThumb($u['image']);
+            $candidate_tag = explode(",", $u['candidate_tag']);
+            foreach ($candidate_tag as $can_v) {
+                foreach ($resultJob as $k => $v) {
+                    $j_id = encode($v->job_id);
+                    $job_tag = explode(",", $v->job_tag);
+                    if(count($job_tag) == 0) {
+                        continue;
+                    }
+                    $candidateOperation = '---';
+                    if(!isset($u['send_mail']) || empty($u['send_mail'])) {
+                        $candidateOperation = '<button type="button" class="btn btn-success btn-xs send-mail" data-job="'.$j_id.'" data-id="'.$id.'"><b>Send Mail</b></button>';
+                    }
+                    if(in_array($can_v, $job_tag)) {
+                        $data = [
+                            "<input type='checkbox' class='minimal single-check' data-id='".$id."' job-id='".$j_id."'/>", 
+                            "<img class='candidate-thumb-table' src='".$thumb['image']."' onerror='this.src=\"".$thumb['error']."\"'/>", 
+                            "<a class='view-resume' title='View Resume' data-id='".$id."' href='#'>".$u['first_name']."</a>",
+                            $u['last_name'],
+                            $u['email'],
+                            $v->title ? $v->title : '---',
+                            $v->last_date ? date("d M Y", strtotime($v->last_date)) : '---',
+                            $candidateOperation,
+                        ];
+                        $returnData[] = $data;
+                    }
+                }
+            }
+        }
+
+        // echo "<pre>";
+        // print_r($returnData);
+        // die;
+
+        $result = array(
+            'data' => $returnData,
+            'recordsTotal' => count($returnData),
+            'recordsFiltered' => count($returnData),
+        );
+
+        return $result;
+    }
+
+    public static function myCandidatesList($request)
+    {
+        $columns = array(
+            "",
+            "",
+            "candidates.first_name",
+            "candidates.last_name",
+            "candidates.email",
+            "",
+            "resumes.experience",
+            "",
+            "candidates.account_type",
+            "candidates.created_at",
+            "candidates.status",
+        );
+        $orderColumn = $columns[($request['order'][0]['column'] == 0 || $request['order'][0]['column'] == 7 ? 5 : $request['order'][0]['column'])];
+        $orderDirection = $request['order'][0]['dir'];
+        $srh = $request['search']['value'];
+        $limit = $request['length'];
+        $offset = $request['start'];
+
+        $query = Self::whereNotNull('candidates.candidate_id');
+        $query->select(
+            'candidates.*',
+            'resumes.experience',
+            'employer_candidates.employer_id as emp_can_id', 
+            DB::Raw('GROUP_CONCAT('.dbprfx().'resume_experiences.title) as job_title')
+        );
+        if ($srh) {
+            $query->where(function($q) use($srh) {
+                $q->where('candidates.first_name', 'like', '%'.$srh.'%');
+                $q->orWhere('candidates.last_name', 'like', '%'.$srh.'%');
+                $q->orWhere('candidates.email', 'like', '%'.$srh.'%');
+            });
+        }
+        if (isset($request['status']) && $request['status'] != '') {
+            $query->where('candidates.status', $request['status']);
+        }
+        if (isset($request['account_type']) && $request['account_type'] != '') {
+            $query->where('candidates.account_type', $request['account_type']);
+        }
+        if (isset($request['job_title']) && $request['job_title'] != '') {
+            $query->where('resume_experiences.title', 'like', '%'.$request['job_title'].'%');
+        }
+        if (isset($request['experience']) && $request['experience'] != '') {
+            $query->where('resumes.experience >=', $request['experience']);
+        }
+        $query->leftJoin('resumes', function($join) {
+            $join->on('resumes.candidate_id', '=', 'candidates.candidate_id')->where('resumes.is_default', '=', '1');
+        });
+        $query->join('employer_candidates', function($join) {
+            $join->on('employer_candidates.candidate_id', '=', 'candidates.candidate_id')
+                ->where('employer_candidates.employer_id', '=', employerId());
+        });
+        $query->leftJoin('resume_experiences', 'resume_experiences.resume_id', '=', 'resumes.resume_id');
+        $query->groupBy('candidates.candidate_id');
+        $query->orderBy($orderColumn, $orderDirection);
+        $query->skip($offset);
+        $query->take($limit);
+        $result = $query->get();
+        $result = $result ? $result->toArray() : array();
+
+        $result = array(
+            'data' => Self::prepareDataForTable($result),
+            'recordsTotal' => Self::getTotal(),
+            'recordsFiltered' => Self::getTotal($srh, $request),
+        );
+
+        return $result;
+    }
+
     public static function candidatesList($request)
     {
         $columns = array(

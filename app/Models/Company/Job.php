@@ -23,16 +23,18 @@ class Job  extends Model
         $query->select(
             'jobs.*',
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_traites.traite_id)) as traites'),
+            DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'user_job_tags.job_tags_id)) as userJobTags'),
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_quizes.quiz_id)) as quizes'),
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_filter_value_assignments.job_filter_id)) as job_filter_ids'),
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_filter_value_assignments.job_filter_value_id)) as job_filter_value_ids'),
         );
         $query->leftJoin('job_traites', 'job_traites.job_id', '=', 'jobs.job_id');
+        $query->leftJoin('user_job_tags', 'user_job_tags.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_quizes', 'job_quizes.job_id', '=', 'jobs.job_id');
         $query->leftJoin('job_filter_value_assignments', 'job_filter_value_assignments.job_id', '=', 'jobs.job_id');
         $query->groupBy('jobs.job_id');
         $result = $query->first();
-        return $result ? $result : emptyTableColumns(Self::$tbl, array('traites', 'quizes', 'job_filter_ids', 'job_filter_value_ids'));
+        return $result ? $result : emptyTableColumns(Self::$tbl, array('traites', 'userJobTags', 'quizes', 'job_filter_ids', 'job_filter_value_ids'));
     }
 
     public static function getAll($active = true, $srh = '')
@@ -116,14 +118,16 @@ class Job  extends Model
         $labels = isset($data['labels']) ? $data['labels'] : array();
         $values = isset($data['values']) ? $data['values'] : array();
         $customFields = array('custom_field_id' => $custom_field_ids, 'label' => $labels, 'value' => $values);
+        $employer_id = employerId();
 
         //Separting traites and quizes and filters
         $traites = isset($data['traites']) ? $data['traites'] : array();
+        $jobTags = isset($data['jobTags']) ? $data['jobTags'] : array();
         $quizes = isset($data['quizes']) ? $data['quizes'] : array();
         $filters = isset($data['filters']) ? $data['filters'] : array();
 
         //Removing variables
-        unset($data['traites'], $data['quizes'], $data['labels'], $data['values'], $data['custom_field_ids'], $data['filters'], $data['_token'], $data['job_id']);
+        unset($data['traites'], $data['jobTags'], $data['quizes'], $data['labels'], $data['values'], $data['custom_field_ids'], $data['filters'], $data['_token'], $data['job_id']);
 
         $data['company_id'] = companyId();
         $data['department_id'] = decode($data['department_id']);
@@ -134,6 +138,7 @@ class Job  extends Model
             $edit = decode($edit);
             Self::where('job_id', $edit)->update($data);
             Self::insertTraites($traites, $edit);
+            Self::insertCandidateUserJobTags($jobTags, $edit, $employer_id);
             Self::insertQuizes($quizes, $edit);
             Self::insertCustomFields($customFields, $edit);
             Self::assignJobFilterValues($filters, $edit);
@@ -144,6 +149,7 @@ class Job  extends Model
             Self::insert($data);
             $id = DB::getPdo()->lastInsertId();
             Self::insertTraites($traites, $id);
+            Self::insertCandidateUserJobTags($jobTags, $id, $employer_id);
             Self::insertQuizes($quizes, $id);
             Self::insertCustomFields($customFields, $id);
             Self::assignJobFilterValues($filters, $id);
@@ -169,6 +175,26 @@ class Job  extends Model
             $data['job_id'] = $job_id;
             $data['company_id'] = companyId();
             DB::table('job_traites')->insert($data);
+        }
+    }
+
+    public static function insertCandidateUserJobTags($userJobTags, $job_id, $employer_id)
+    {
+        //First deleting
+        DB::table('user_job_tags')->where('job_id', $job_id)->delete();
+
+        //Getting job tags for new
+        $userJobTagsData = DB::table('job_tags')->whereIn('id', ($userJobTags ? decodeArray($userJobTags) : array(0)))->get();
+        $userJobTagsData = $userJobTagsData ? objToArr($userJobTagsData->toArray()) : array();
+
+        //Inserting new jobTags
+        foreach ($userJobTagsData  as $key => $value) {
+            $data['created_at'] = date('Y-m-d G:i:s');
+            $data['title'] = $value['name'];
+            $data['job_tags_id'] = $value['id'];
+            $data['job_id'] = $job_id;
+            $data['employer_id'] = $employer_id;
+            DB::table('user_job_tags')->insert($data);
         }
     }
 

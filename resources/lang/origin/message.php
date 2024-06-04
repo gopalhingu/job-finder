@@ -6,6 +6,12 @@ $lang['enter_company_name'] = "Enter Company Name";
 $lang['import'] = "Import";
 $lang["download_companys"] = "Download Companys (EXCEL)";
 $lang["download_sample_import_excel_file"] = "Download Sample EXCEL File";
+$lang['candidate_management'] = "CANDIDATES MANAGEMENT";
+$lang['all_candidates'] = "All Candidates";
+$lang['my_candidates'] = "My Candidates";
+$lang['matched_candidates'] = "Matched Candidates";
+$lang['last_date_of_apply'] = "Last Date of Apply";
+$lang['matched_job'] = "Your skills and experience are a perfect match for our Job";
 
 $lang["all_job"] = "All jobs";
 $lang["all_listing"] = "All listing";

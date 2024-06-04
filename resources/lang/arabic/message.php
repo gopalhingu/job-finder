@@ -5,6 +5,12 @@ $lang['companys'] = "";
 $lang['import'] = "";
 $lang["download_companys"] = "";
 $lang["download_sample_import_excel_file"] = "";
+$lang['candidate_management'] = "";
+$lang['all_candidates'] = "";
+$lang['my_candidates'] = "";
+$lang['matched_candidates'] = "";
+$lang['last_date_of_apply'] = "";
+$lang['matched_job'] = "";
 
 $lang["all_job"] = "جميع الوظائف";
 $lang["all_listing"] = "كل القائمة";
