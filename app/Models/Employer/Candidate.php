@@ -186,7 +186,7 @@ class Candidate  extends Model
                             "<a class='view-resume' title='View Resume' data-id='".$id."' href='#'>".$u['first_name']."</a>",
                             $u['last_name'],
                             $u['email'],
-                            $v->title ? $v->title : '---',
+                            "<a class='view-job-detail' title='View Job Detail' data-id='".$j_id."' href='#'>".$v->title."</a>",
                             $v->last_date ? date("d M Y", strtotime($v->last_date)) : '---',
                             $candidateOperation,
                         ];

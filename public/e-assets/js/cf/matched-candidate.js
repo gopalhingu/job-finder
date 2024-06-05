@@ -24,6 +24,7 @@ function Candidate() {
                     self.initiCheck();
                     self.initAllCheck();
                     self.initLoadResume();
+                    self.initLoadJobDetail();
                     self.initSendMail();
                     $('.table-bordered').parent().attr('style', 'overflow:auto'); //For responsive
                 },
@@ -102,6 +103,18 @@ function Candidate() {
             var button = $(this);
             var id = button.data('id');
             application.load('/employer/candidates/resume/'+id, modal+' .modal-body', function (result) {
+            });
+        });
+    };
+
+    this.initLoadJobDetail = function() {
+        $('.view-job-detail').on('click', function() {
+            var modal = '#modal-right';
+            $(modal).modal('show');
+            $(modal+' .modal-title').html('Job Detail');
+            var button = $(this);
+            var id = button.data('id');
+            application.load('/employer/candidates/job-detail/'+id, modal+' .modal-body', function (result) {
             });
         });
     };

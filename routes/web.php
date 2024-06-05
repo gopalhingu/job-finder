@@ -117,6 +117,7 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	Route::get('/candidates/add-or-remove/{candidate_id}', $EmCanCont.'@addOrRemove')->name('employer-candidate-add-or-remove');
 	Route::post('/candidates/bulk-action', $EmCanCont.'@bulkAction')->name('employer-candidates-bulk-action');
 	Route::get('/candidates/resume/{candidate_id}', $EmCanCont.'@resume')->name('employer-candidates-resume');
+	Route::get('/candidates/job-detail/{job_id}', $EmCanCont.'@jobDetail')->name('employer-candidates-job-detail');
 	Route::post('/candidates/resume-download', $EmCanCont.'@resumeDownload')->name('employer-candidates-resume-download');
 	Route::post('/candidates/excel', $EmCanCont.'@candidatesExcel')->name('employer-candidates-excel');
 	Route::get('/candidates/message-view', $EmCanCont.'@messageView')->name('employer-candidates-message-view');

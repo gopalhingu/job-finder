@@ -150,6 +150,18 @@ class CandidatesController extends Controller
         }
     }
 
+    public function jobDetail($job_id)
+    {
+        $job = Job::where('job_id', decode($job_id))->first()->toArray();
+        if ($job) {
+            $data['job_id'] = $job['job_id'];
+            $data['job'] = $job;
+            echo view('employer.jobs.job-detail', $data)->render();
+        } else {
+            echo __('message.no_jobs_found');
+        }
+    }
+
     /**
      * Function (for ajax) to display form to send email to candidate
      *
