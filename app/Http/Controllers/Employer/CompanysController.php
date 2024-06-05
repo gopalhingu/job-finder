@@ -128,7 +128,7 @@ class CompanysController extends Controller
 
     public function importSave(Request $request)
     {
-        $rules['import_file'] = ['required', 'mimes:csv,xlsx,xls'];
+        $rules['import_file'] = ['required'];
 
         $validator = Validator::make($request->all(), $rules, [
             'import_file.required' => __('validation.required'),
@@ -147,6 +147,13 @@ class CompanysController extends Controller
         $fileName = time().'.'.$extension;
 
         try {
+            $fileTypeAccept = ['csv', 'xlsx', 'xls'];
+            if(!in_array($extension, $fileTypeAccept)) {
+                die(json_encode(array(
+                    'success' => 'false',
+                    'messages' => $this->ajaxErrorMessage(array('error' => __('validation.file_not_supported')))
+                )));
+            }
             if ($extension == 'csv') {
                 $extension = 'csv';
             } elseif ($extension == 'xlsx' || $extension == 'xls') {
@@ -159,7 +166,7 @@ class CompanysController extends Controller
             }
 
             $path = $file->storeAs(config('constants.upload_dirs.employers').'excel', $fileName, 'public');
-            $filePath = storage_path('app\public\\'.$path);
+            $filePath = storage_path('app/public/'.$path);
 
             $data = [];
             $excel = new SimpleExcel(strtolower($extension));
