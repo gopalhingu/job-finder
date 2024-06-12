@@ -111,7 +111,6 @@ class Candidate  extends Model
         $query = Self::whereNotNull('candidates.candidate_id');
         $query->select(
             'candidates.*',
-            'employer_candidates.send_mail',
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_tags.name)) as candidate_tag'),
         );
         if ($srh) {
@@ -146,6 +145,8 @@ class Candidate  extends Model
             'jobs.title',
             'jobs.last_date',
             DB::Raw('GROUP_CONCAT(DISTINCT('.dbprfx().'job_tags.name)) as job_tag'),
+            'jobs_candidates.job_id as job_id_check',
+            'jobs_candidates.candidate_id as candidate_id_check',
         );
         $query->join('job_follow', function($join) {
             $join->on('job_follow.job_id', '=', 'jobs.job_id')
@@ -156,6 +157,9 @@ class Candidate  extends Model
         });
         $query->leftJoin('job_tags', function($join) {
             $join->on('job_tags.id', '=', 'user_job_tags.job_tags_id');
+        });
+        $query->leftJoin('jobs_candidates', function($join) {
+            $join->on('jobs_candidates.job_id', '=', 'jobs.job_id');
         });
         $query->where('jobs.status', '=', 1);
         $query->groupBy('jobs.job_id');
@@ -171,12 +175,15 @@ class Candidate  extends Model
             foreach ($candidate_tag as $can_v) {
                 foreach ($resultJob as $k => $v) {
                     $j_id = encode($v->job_id);
+                    // if (!$v->job_tag) {
+                    //     continue;
+                    // }
                     $job_tag = explode(",", $v->job_tag);
                     if(count($job_tag) == 0) {
                         continue;
                     }
                     $candidateOperation = '---';
-                    if(!isset($u['send_mail']) || empty($u['send_mail'])) {
+                    if($v->job_id_check != $v->job_id || $v->candidate_id_check != $u['candidate_id']) {
                         $candidateOperation = '<button type="button" class="btn btn-success btn-xs send-mail" data-job="'.$j_id.'" data-id="'.$id.'"><b>Send Mail</b></button>';
                     }
                     if(in_array($can_v, $job_tag)) {
@@ -202,8 +209,8 @@ class Candidate  extends Model
 
         $result = array(
             'data' => $returnData,
-            'recordsTotal' => count($returnData),
-            'recordsFiltered' => count($returnData),
+            'recordsTotal' => Self::myGetTotal(),
+            'recordsFiltered' => Self::myGetTotal($srh, $request),
         );
 
         return $result;
@@ -273,8 +280,8 @@ class Candidate  extends Model
 
         $result = array(
             'data' => Self::prepareDataForTable($result),
-            'recordsTotal' => Self::getTotal(),
-            'recordsFiltered' => Self::getTotal($srh, $request),
+            'recordsTotal' => Self::myGetTotal(),
+            'recordsFiltered' => Self::myGetTotal($srh, $request),
         );
 
         return $result;
@@ -353,6 +360,39 @@ class Candidate  extends Model
     }
 
     public static function getTotal($srh = false, $request = '')
+    {
+        $query = Self::whereNotNull('candidates.candidate_id');
+        if ($srh) {
+            $query->where(function($q) use($srh) {
+                $q->where('candidates.first_name', 'like', '%'.$srh.'%');
+                $q->orWhere('candidates.last_name', 'like', '%'.$srh.'%');
+                $q->orWhere('candidates.email', 'like', '%'.$srh.'%');
+            });
+        }
+        if (isset($request['status']) && $request['status'] != '') {
+            $query->where('candidates.status', $request['status']);
+        }
+        if (isset($request['account_type']) && $request['account_type'] != '') {
+            $query->where('candidates.account_type', $request['account_type']);
+        }
+        if (isset($request['job_title']) && $request['job_title'] != '') {
+            $query->where('resume_experiences.title', 'like', '%'.$request['job_title'].'%');
+        }
+        if (isset($request['experience']) && $request['experience'] != '') {
+            $query->where('resumes.experience >=', $request['experience']);
+        }
+        $query->leftJoin('resumes', function($join) {
+            $join->on('resumes.candidate_id', '=', 'candidates.candidate_id')->where('resumes.is_default', '=', '1');
+        });        
+        $query->leftJoin('employer_candidates', function($join) {
+            $join->on('employer_candidates.candidate_id', '=', 'candidates.candidate_id')->where('employer_candidates.employer_id', '=', employerId());
+        });
+        $query->leftJoin('resume_experiences', 'resume_experiences.resume_id', '=', 'resumes.resume_id');
+        $query->groupBy('candidates.candidate_id');
+        return $query->get()->count();
+    }
+
+    public static function myGetTotal($srh = false, $request = '')
     {
         $query = Self::whereNotNull('candidates.candidate_id');
         if ($srh) {

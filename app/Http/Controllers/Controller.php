@@ -58,7 +58,7 @@ class Controller extends BaseController
         $from_email = settingEmp('from_email');
         $from_email = $from_email ? $from_email : env('MAIL_FROM_ADDRESS', 'hello@example.com');
         $from_name = settingEmp('site_name');
-        $from_name = $from_name ? $from_name : env('MAIL_FROM_NAME', 'Example');
+        $from_name = $from_name ? $from_name : env('MAIL_FROM_NAME', 'Sluicebox Solutions');
 
         \Config::set('mail.default', $default);
         \Config::set('mail.from.address', $from_email);

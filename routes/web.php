@@ -24,6 +24,17 @@ There are four sections of routes
 */
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/clear', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    // Artisan::call('migrate');
+
+    return "Done! All clear";
+});
 
 /*----------------------------------------------*/
 /*----------------------------------------------*/
@@ -122,6 +133,7 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	Route::post('/candidates/excel', $EmCanCont.'@candidatesExcel')->name('employer-candidates-excel');
 	Route::get('/candidates/message-view', $EmCanCont.'@messageView')->name('employer-candidates-message-view');
 	Route::post('/candidates/message', $EmCanCont.'@message')->name('employer-candidates-message');
+	Route::get('/candidates-crud', $EmCanCont.'@listViewCrud')->name('employer-candidates-crud');
 
 	//Employer Candidate Interviews module routes
 	Route::get('/candidate-interviews', $EmCanIntCont.'@listView')->name('employer-can-int');

@@ -54,6 +54,13 @@ class CandidatesController extends Controller
         return view('employer.candidates.my-list', $data);
     }
 
+    public function listViewCrud()
+    {
+        $data['page'] = __('message.candidates');
+        $data['menu'] = 'candidates_crud';
+        return view('employer.candidates.crud', $data);
+    }
+
     /**
      * Function to get data for candidates jquery datatable
      *
@@ -110,7 +117,7 @@ class CandidatesController extends Controller
             $subject = setting('site_name').' : '.__('message.matched_job');
             $this->sendEmail($message, $candidate['email'], $subject);
 
-            DB::table("employer_candidates")->where(['employer_id' => employerId(), 'candidate_id' => decode($candidate_id)])->update(['send_mail' => 1]);
+            DB::table("jobs_candidates")->insert(['job_id' => $job['job_id'], 'candidate_id' => $candidate['candidate_id']]);
             
             return response()->json(['status' => true, 'message' => 'Send Mail Successfully.']);
         } catch (\Exception $e) {

@@ -61,6 +61,9 @@ class Candidate extends Model
             $data['status'] = 1;
             Self::insert($data);
             $id = DB::getPdo()->lastInsertId();
+            if($id && employerId()) {
+                DB::table("employer_candidates")->insert(['employer_id' => employerId(), 'candidate_id' => $id]);
+            }
             return $id;
         }
     }
@@ -73,6 +76,9 @@ class Candidate extends Model
     public static function remove($candidate_id)
     {
         Self::where(array('candidate_id' => $candidate_id))->delete();
+        if($candidate_id && employerId()) {
+            DB::table("employer_candidates")->where(['employer_id' => employerId(), 'candidate_id' => $candidate_id])->delete();
+        }
     }
 
     public static function bulkAction($data)
@@ -228,7 +234,7 @@ class Candidate extends Model
                     <button type="button" class="btn btn-danger btn-xs delete-candidate" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
                 ';
             }
-            if (allowedTo('login_as_candidate')) {
+            if (allowedTo('login_as_candidate') && !employerId()) {
             $actions .= '
                 <a target="_blank" href="'.url(route('admin-candidates-loginas', array('candidate_id' => encode($id), 'user_id' =>  encode(adminSession())))).'" title="'.__('message.login_as_candidate').'" class="btn btn-warning btn-xs"><i class="fas fa-external-link-alt"></i></button>
             ';

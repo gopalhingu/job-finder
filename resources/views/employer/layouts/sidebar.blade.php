@@ -138,9 +138,9 @@
             <a href="{{ $l }}team"><i class="fa fa-users"></i> <span>{{ __('message.team') }}</span></a>
             </li>
             @endif
-            @if(empAllowedTo(array('view_candidate_listing', 'all_candidates', 'my_candidates', 'matched_candidates')))
+            @if(empAllowedTo(array('view_candidate_listing', 'all_candidates', 'my_candidates', 'candidates_crud', 'matched_candidates')))
             <li class="header">{{ __('message.candidate_management') }}</li>
-            <li class="treeview {{ selMenu($menu, array('all_candidates', 'my_candidates', 'matched_candidates')) }}">
+            <li class="treeview {{ selMenu($menu, array('all_candidates', 'my_candidates', 'candidates_crud', 'matched_candidates')) }}">
                 <a href="#">
                 <i class="fa fa-graduation-cap"></i> <span>{{ __('message.candidates') }}</span>
                 <span class="pull-right-container">
@@ -148,6 +148,11 @@
                 </span>
                 </a>
                 <ul class="treeview-menu">
+                    @if(empAllowedTo('candidates_crud'))
+                    <li {{ selMenu($menu, 'candidates_crud') }}>
+                        <a href="{{ $l }}candidates-crud"><i class="fas fa-cube"></i> <span>{{ __('message.candidates_crud') }}</span></a>
+                    </li>
+                    @endif
                     @if(empAllowedTo('all_candidates'))
                     <li {{ selMenu($menu, 'all_candidates') }}>
                         <a href="{{ $l }}candidates"><i class="fas fa-cube"></i> <span>{{ __('message.all_candidates') }}</span></a>

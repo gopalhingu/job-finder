@@ -11,6 +11,7 @@ $lang['my_candidates'] = "";
 $lang['matched_candidates'] = "";
 $lang['last_date_of_apply'] = "";
 $lang['matched_job'] = "";
+$lang['candidates_crud'] = "";
 
 $lang["all_job"] = "جميع الوظائف";
 $lang["all_listing"] = "كل القائمة";
