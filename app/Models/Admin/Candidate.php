@@ -224,17 +224,17 @@ class Candidate extends Model
                 $button_class = 'danger';
                 $button_title = __('message.click_to_activate');
             }
-            if (allowedTo('edit_candidate')) { 
+            if (allowedTo('edit_candidate') || empAllowedTo('edit_candidate')) { 
             $actions .= '
                 <button type="button" class="btn btn-primary btn-xs create-or-edit-candidate" data-id="'.$id.'"><i class="far fa-edit"></i></button>
             ';
             }
-            if (allowedTo('delete_candidate')) {
+            if (allowedTo('delete_candidate') || empAllowedTo('delete_candidate')) {
                 $actions .= '
                     <button type="button" class="btn btn-danger btn-xs delete-candidate" data-id="'.$id.'"><i class="far fa-trash-alt"></i></button>
                 ';
             }
-            if (allowedTo('login_as_candidate') && !employerId()) {
+            if (allowedTo('login_as_candidate')) {
             $actions .= '
                 <a target="_blank" href="'.url(route('admin-candidates-loginas', array('candidate_id' => encode($id), 'user_id' =>  encode(adminSession())))).'" title="'.__('message.login_as_candidate').'" class="btn btn-warning btn-xs"><i class="fas fa-external-link-alt"></i></button>
             ';

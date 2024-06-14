@@ -54,13 +54,6 @@ class CandidatesController extends Controller
         return view('employer.candidates.my-list', $data);
     }
 
-    public function listViewCrud()
-    {
-        $data['page'] = __('message.candidates');
-        $data['menu'] = 'candidates_crud';
-        return view('employer.candidates.crud', $data);
-    }
-
     /**
      * Function to get data for candidates jquery datatable
      *

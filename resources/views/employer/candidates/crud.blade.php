@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="datatable-top-controls datatable-top-controls-filter">
-                                    @if(allowedTo('create_candidate'))
+                                    @if(empAllowedTo('create_candidate'))
                                     <button type="button" class="btn btn-primary btn-blue btn-flat create-or-edit-candidate">
                                         <i class="fa fa-plus"></i> {{ __('message.add_candidate') }}
                                     </button>
@@ -37,8 +37,8 @@
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a class="dropdown-item bulk-action" href="#" data-action="activate">{{ __('message.activate') }}</a></li>
                                             <li><a class="dropdown-item bulk-action" href="#" data-action="deactivate">{{ __('message.deactivate') }}</a></li>
-                                            <li><a class="dropdown-item bulk-action" href="#" data-action="email">{{ __('message.email') }}</a></li>
-                                            <li><a class="dropdown-item bulk-action" href="#" data-action="download-resume">{{ __('message.download_resume_pdf') }}</a></li>
+                                            {{-- <li><a class="dropdown-item bulk-action" href="#" data-action="email">{{ __('message.email') }}</a></li> --}}
+                                            {{-- <li><a class="dropdown-item bulk-action" href="#" data-action="download-resume">{{ __('message.download_resume_pdf') }}</a></li> --}}
                                             <li><a class="dropdown-item bulk-action" href="#" data-action="download-excel">{{ __('message.download_candidates_excel') }}</a></li>
                                         </ul>
                                     </div>
@@ -76,7 +76,7 @@
                     <!-- /.card-header -->
                     <div class="box-body">
                         
-                        @if(allowedTo('view_candidate_listing'))
+                        @if(empAllowedTo('view_candidate_listing'))
                         <table class="table table-bordered table-striped" id="candidates_datatable">
                             <thead>
                                 <tr>
@@ -110,10 +110,10 @@
 <!-- /.content-wrapper -->
 
 <!-- Forms for actions -->
-<form id="resume-form" method="POST" action="{{url(route('admin-candidates-resume-pdf'))}}" target='_blank'></form>
-<form id="candidates-form" method="POST" action="{{url(route('admin-candidates-excel'))}}" target='_blank'></form>
+<form id="resume-form" method="POST" action="{{url(route('employer-candidates-crud-resume-pdf'))}}" target='_blank'></form>
+<form id="candidates-form" method="POST" action="{{url(route('employer-candidates-crud-excel'))}}" target='_blank'></form>
 
 @endsection
 @section('page-scripts')
-<script src="{{url('a-assets')}}/js/cf/candidate.js"></script>
+<script src="{{url('e-assets')}}/js/cf/candidate_crud.js"></script>
 @endsection

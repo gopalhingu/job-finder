@@ -133,7 +133,21 @@ Route::group(['prefix'=>'employer','middleware'=>['employer.auth', 'xss.sanitize
 	Route::post('/candidates/excel', $EmCanCont.'@candidatesExcel')->name('employer-candidates-excel');
 	Route::get('/candidates/message-view', $EmCanCont.'@messageView')->name('employer-candidates-message-view');
 	Route::post('/candidates/message', $EmCanCont.'@message')->name('employer-candidates-message');
-	Route::get('/candidates-crud', $EmCanCont.'@listViewCrud')->name('employer-candidates-crud');
+
+	//Employer Candidates Crud module routes
+	$EmCanCrudCont = 'App\Http\Controllers\Employer\CandidatesCrudController';
+	Route::get('/candidates-crud', $EmCanCrudCont.'@candidatesListView')->name('employer-candidates-crud');
+	Route::post('/candidates-crud/data', $EmCanCrudCont.'@candidatesList')->name('employer-candidates-crud-data');
+	Route::get('/candidates-crud/create-or-edit', $EmCanCrudCont.'@createOrEdit')->name('employer-candidates-crud-create');
+	Route::get('/candidates-crud/create-or-edit/{candidate_id?}', $EmCanCrudCont.'@createOrEdit')->name('employer-candidates-crud-edit');
+	Route::post('/candidates-crud/save', $EmCanCrudCont.'@save')->name('employer-candidates-crud-save');
+	Route::get('/candidates-crud/status/{candidate_id}/{status}', $EmCanCrudCont.'@changeStatus')->name('employer-candidates-crud-status');
+	Route::post('/candidates-crud/bulk-action', $EmCanCrudCont.'@bulkAction')->name('employer-candidates-crud-ba');
+	Route::get('/candidates-crud/delete/{candidate_id}', $EmCanCrudCont.'@delete')->name('employer-candidates-crud-delete');
+	Route::post('/candidates-crud/resume-download', $EmCanCrudCont.'@resumeDownload')->name('employer-candidates-crud-resume-pdf');
+	Route::post('/candidates-crud/excel', $EmCanCrudCont.'@candidatesExcel')->name('employer-candidates-crud-excel');
+	Route::get('/candidates-crud/message-view', $EmCanCrudCont.'@messageView')->name('employer-candidates-crud-message-view');
+	Route::post('/candidates-crud/message', $EmCanCrudCont.'@message')->name('employer-candidates-crud-message');
 
 	//Employer Candidate Interviews module routes
 	Route::get('/candidate-interviews', $EmCanIntCont.'@listView')->name('employer-can-int');
